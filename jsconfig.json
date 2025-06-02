@@ -1,0 +1,9 @@
+{
+  "compilerOptions": {
+    "baseUrl": "./src", // Define a pasta "src" como base para importações relativas
+    "paths": {
+      "@/*": ["./*"] // Permite usar "@" para referenciar diretamente qualquer arquivo dentro de "src"
+    }
+  },
+  "exclude": ["node_modules", "build"] // Exclui as pastas "node_modules" e "build" do processo do compilador de TypeScript
+}

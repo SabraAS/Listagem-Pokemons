@@ -1,0 +1,17 @@
+.home {
+  padding: 64px;
+
+  &__title {
+    font-size: 2rem;
+    font-weight: 700;
+    margin-bottom: 24px;
+  }
+
+  &__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+    justify-content: flex-start;
+    max-width: calc(100% - 500px);
+  }
+}
