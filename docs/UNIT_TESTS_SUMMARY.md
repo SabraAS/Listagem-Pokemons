@@ -115,19 +115,19 @@ yarn test:all
 - 🎯 **Error Handling**: Cenários de erro tratados
 - 🎯 **Data Flow**: Fluxo de dados validado
 
-### Integração com CI/CD
+### Git Hooks Integration
 
-**Lint-staged Integration**:
+**Pre-commit hooks** executam:
 
-```bash
-# Executa automaticamente em commits
-yarn test:related  # Apenas testes relacionados aos arquivos modificados
-```
+- ESLint + Prettier em arquivos modificados
+- Testes relacionados apenas aos arquivos alterados
+- Validação de acessibilidade quando aplicável
 
-**Hooks do Git**:
+**Pre-push hooks** executam:
 
-- ✅ **Pre-commit**: Execução automática de testes relacionados
-- ✅ **Validação**: Impede commits que quebram testes
+- Suite completa de testes
+- Validação de cobertura
+- Checks de qualidade geral
 
 ### Benefícios da Implementação
 

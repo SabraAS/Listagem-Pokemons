@@ -171,8 +171,7 @@ describe('Accessibility', () => {
 **Workflow de Desenvolvimento**:
 
 1. **Desenvolvimento**: Testes de a11y em tempo real
-2. **Commit**: Validação automática via lint-staged
-3. **CI/CD**: Execução automática em pipeline
+2. **Git Hooks**: Validação automática em commits
 
 **Detecção Precoce**:
 

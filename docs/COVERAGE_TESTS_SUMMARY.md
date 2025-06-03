@@ -178,7 +178,7 @@ yarn test:ui --coverage
 
 - ✅ **Código crítico 100% coberto**: Todos os componentes, serviços, store e router
 - ✅ **Casos edge identificados e testados**: Performance, usabilidade e error handling
-- ✅ **Regressões prevenidas automaticamente**: 85 testes executando em CI/CD
+- ✅ **Regressões prevenidas automaticamente**: 85 testes executando via git hooks
 - ✅ **Confiança máxima**: Para refactoring e evolução do código
 
 **📊 Distribuição da Cobertura:**

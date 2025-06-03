@@ -5,12 +5,12 @@ import { onCLS, onFCP, onLCP, onTTFB, onINP } from 'web-vitals';
 // ============================================================================
 
 // Official Web Vitals thresholds based on Google's Core Web Vitals recommendations
-// https://web.dev/vitals/
-const webVitalsThresholds = {
+// https://developers.google.com/search/docs/appearance/core-web-vitals
+export const webVitalsThresholds = {
   // Core Web Vitals (most important)
   LCP: { good: 2500, needsImprovement: 4000 }, // Largest Contentful Paint (ms)
   CLS: { good: 0.1, needsImprovement: 0.25 }, // Cumulative Layout Shift
-  INP: { good: 200, needsImprovement: 500 }, // Interaction to Next Paint (ms)
+  INP: { good: 200, needsImprovement: 600 }, // Interaction to Next Paint (ms)
 
   // Other Web Vitals
   FCP: { good: 1800, needsImprovement: 3000 }, // First Contentful Paint (ms)
@@ -25,7 +25,7 @@ const webVitalsThresholds = {
 // ============================================================================
 
 // Rate a Web Vitals metric according to Google's standards
-const getWebVitalRating = (metric) => {
+export const getWebVitalRating = (metric) => {
   const threshold = webVitalsThresholds[metric.name];
   if (!threshold) return 'unknown';
 

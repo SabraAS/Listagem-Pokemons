@@ -3,11 +3,11 @@ import { render } from '@testing-library/react';
 import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
 
-import AppRoutes from './router';
+import Home from './app/Home';
 
-// Mock do módulo de rotas
-vi.mock('./router', () => ({
-  default: () => <div data-testid="mock-routes">App Routes Mock</div>,
+// Mock do componente Home
+vi.mock('./app/Home', () => ({
+  default: () => <div data-testid="mock-home">Home Component Mock</div>,
 }));
 
 // Mock do ReactDOM
@@ -54,16 +54,16 @@ describe('Main Application Entry', () => {
     expect(queryClient).toBeDefined();
   });
 
-  it('should render AppRoutes component correctly', () => {
+  it('should render Home component correctly', () => {
     const queryClient = new QueryClient();
 
     const { getByTestId } = render(
       <QueryClientProvider client={queryClient}>
-        <AppRoutes />
+        <Home />
       </QueryClientProvider>,
     );
 
-    expect(getByTestId('mock-routes')).toBeInTheDocument();
-    expect(getByTestId('mock-routes')).toHaveTextContent('App Routes Mock');
+    expect(getByTestId('mock-home')).toBeInTheDocument();
+    expect(getByTestId('mock-home')).toHaveTextContent('Home Component Mock');
   });
 });

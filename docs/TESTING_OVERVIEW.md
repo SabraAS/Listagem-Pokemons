@@ -23,7 +23,6 @@ Este projeto implementa uma **estratégia abrangente de testes** cobrindo múlti
 - **Base**: Vitest + React Testing Library + jsdom
 - **Linguagem**: JavaScript/JSX
 - **Ambiente**: Node.js com simulação de browser
-- **CI/CD**: Integração com Git hooks e lint-staged
 
 ### Cobertura Total
 
@@ -132,23 +131,10 @@ src/
 
 ## 🚀 Pipeline de Qualidade
 
-### Workflow Automatizado
-
-```mermaid
-graph LR
-    A[Desenvolvimento] --> B[Lint + Format]
-    B --> C[Testes Relacionados]
-    C --> D[Commit]
-    D --> E[CI: Todos os Testes]
-    E --> F[Coverage Check]
-    F --> G[Deploy]
-```
-
 ### Git Hooks Configurados
 
 - **Pre-commit**: `yarn test:related` (apenas arquivos modificados)
-- **CI Pipeline**: Execução completa com métricas de cobertura
-- **Quality Gates**: Build falha se cobertura < 80%
+- **Coverage**: Métricas de cobertura detalhadas para cada tipo de teste
 
 ---
 
@@ -221,24 +207,6 @@ graph LR
 - Aplicação acessível para todos
 - Conformidade com padrões internacionais
 - Redução de riscos legais
-
----
-
-## 📈 Próximos Passos
-
-### Melhorias Planejadas
-
-- 🎯 **E2E Tests**: Implementação com Playwright
-- 📱 **Visual Regression**: Testes de regressão visual
-- 🔄 **Integration Tests**: Mais testes de integração
-- 📊 **Advanced Metrics**: Métricas mais avançadas
-
-### Otimizações
-
-- ⚡ **Performance**: Otimização do tempo de execução
-- 🎨 **Parallel Execution**: Execução paralela de testes
-- 🔧 **Custom Matchers**: Matchers específicos do domínio
-- 📋 **Test Data Management**: Melhor gestão de dados de teste
 
 ---
 
