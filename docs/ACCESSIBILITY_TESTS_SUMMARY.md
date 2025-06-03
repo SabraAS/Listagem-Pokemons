@@ -13,7 +13,7 @@
 
 ### Framework e Ferramentas
 
-- **Framework Principal**: `vitest-axe` + `@axe-core/react`
+- **Framework Principal**: `vitest-axe` (inclui axe-core como dependência)
 - **Engine**: axe-core para análise de violações WCAG
 - **Integração**: Extensão automática dos matchers do Vitest
 - **Setup**: Mock personalizado para HTMLCanvasElement (análise visual)
