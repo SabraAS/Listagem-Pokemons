@@ -2,12 +2,6 @@
 
 import { spawn } from 'child_process';
 
-import {
-  formatResults,
-  runLighthouse,
-  validateThresholds,
-} from './lighthouse-utils.js';
-
 // URLs base para cada ambiente
 const environmentUrls = {
   dev: 'http://localhost:5173',
@@ -41,6 +35,7 @@ const waitForServer = async (url) => {
       return;
     } catch (error) {
       if (i === 0) console.log('⏳ Aguardando servidor iniciar...');
+      if (i === 59) console.error('Error checking server:', error.message);
       await new Promise((resolve) => setTimeout(resolve, 1000));
     }
   }

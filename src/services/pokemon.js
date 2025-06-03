@@ -42,6 +42,7 @@ export const getPokemonCharacteristic = async (id) => {
     );
     return englishDescription ? englishDescription.description : null;
   } catch (error) {
+    console.error('Error fetching pokemon characteristic:', error);
     return '';
   }
 };

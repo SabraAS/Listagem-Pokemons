@@ -147,10 +147,9 @@ export function displayLighthouseReport(result) {
 
   // Mostra categorias principais
   if (lhr.categories) {
-    Object.entries(lhr.categories).forEach(([key, category]) => {
+    Object.entries(lhr.categories).forEach(([_key, category]) => {
       const score = Math.round(category.score * 100);
-      const emoji = score >= 90 ? '🟢' : score >= 70 ? '🟡' : '🔴';
-      console.log(`${emoji} ${category.title.padEnd(20)}: ${score}%`);
+      console.log(`${category.title.padEnd(20)}: ${score}%`);
     });
   }
 
@@ -275,7 +274,7 @@ export async function waitForServer(url, timeout = 30000) {
         return true;
       }
     } catch (error) {
-      // Servidor ainda não está pronto
+      console.error('Server not ready yet:', error.message);
     }
 
     await new Promise((resolve) => setTimeout(resolve, 1000));
