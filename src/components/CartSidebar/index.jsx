@@ -1,16 +1,12 @@
+import PropTypes from 'prop-types';
 import { useState } from 'react';
 
 import ConfirmationModal from '../ConfirmationModal';
 
-import { usePokemonStore } from '@/store/pokemon';
 import './index.scss';
 
-const CartSidebar = () => {
+const CartSidebar = ({ pokemons, removePokemon, clearTeam }) => {
   const [showConfirmation, setShowConfirmation] = useState(false);
-  const pokemons = usePokemonStore((state) => state.pokemons);
-  const removePokemon = usePokemonStore((state) => state.removePokemon);
-  const clearTeam = usePokemonStore((state) => state.clearTeam);
-
   const handleConfirm = () => {
     setShowConfirmation(true);
   };
@@ -57,7 +53,7 @@ const CartSidebar = () => {
           <button
             className="cart-sidebar__checkout-button"
             data-testid="confirm-team-button"
-            disabled={pokemons.length === 0}
+            disabled={pokemons?.length === 0}
             onClick={handleConfirm}
           >
             Confirmar equipe
@@ -74,6 +70,12 @@ const CartSidebar = () => {
       )}
     </>
   );
+};
+
+CartSidebar.propTypes = {
+  pokemons: PropTypes.array.isRequired,
+  removePokemon: PropTypes.func.isRequired,
+  clearTeam: PropTypes.func.isRequired,
 };
 
 export default CartSidebar;

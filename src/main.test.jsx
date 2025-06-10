@@ -28,7 +28,6 @@ vi.mock('./styles/App.scss', () => ({}));
 describe('Main Application Entry', () => {
   beforeEach(() => {
     vi.clearAllMocks();
-    document.body.innerHTML = '<div id="root"></div>';
   });
 
   it('should initialize application with required providers', async () => {

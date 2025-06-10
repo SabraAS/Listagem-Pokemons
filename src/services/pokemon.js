@@ -40,7 +40,7 @@ export const getPokemonCharacteristic = async (id) => {
     const englishDescription = data.descriptions.find(
       (desc) => desc.language.name === 'en',
     );
-    return englishDescription ? englishDescription.description : null;
+    return englishDescription ? englishDescription.description : '';
   } catch (error) {
     console.error('Error fetching pokemon characteristic:', error);
     return '';

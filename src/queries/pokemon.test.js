@@ -3,9 +3,10 @@ import { renderHook, waitFor } from '@testing-library/react';
 import React from 'react';
 import { describe, expect, it, vi } from 'vitest';
 
-import { POKEMON_KEYS, usePokemons } from './pokemon';
+import { usePokemons } from './pokemon';
 
 import { getPokemonList } from '@/services/pokemon';
+import { mockPokemons } from '@/test/mocks/pokemon';
 
 // Mock do serviço
 vi.mock('@/services/pokemon', () => ({
@@ -34,31 +35,12 @@ describe('Pokemon Queries', () => {
     queryClient.clear();
   });
 
-  describe('POKEMON_KEYS', () => {
-    it('should generate correct query keys', () => {
-      expect(POKEMON_KEYS.all).toEqual(['pokemons']);
-      expect(POKEMON_KEYS.list(20)).toEqual(['pokemons', 'list', 20]);
-    });
-  });
-
   describe('usePokemons', () => {
-    const mockPokemonData = [
-      {
-        id: 1,
-        name: 'bulbasaur',
-        image: 'bulbasaur.png',
-        abilities: [{ ability: { name: 'overgrow' } }],
-        types: [{ type: { name: 'grass' } }],
-        characteristic: 'Takes plenty of siestas',
-      },
-    ];
-
     it('should fetch pokemons successfully', async () => {
-      getPokemonList.mockResolvedValue(mockPokemonData);
+      getPokemonList.mockResolvedValue(mockPokemons);
 
       const { result } = renderHook(() => usePokemons(), { wrapper });
 
-      // Inicialmente está carregando
       expect(result.current.isLoading).toBe(true);
 
       // Aguarda a resolução da query
@@ -67,8 +49,24 @@ describe('Pokemon Queries', () => {
       });
 
       // Verifica se os dados foram carregados corretamente
-      expect(result.current.data).toEqual(mockPokemonData);
-      expect(getPokemonList).toHaveBeenCalledWith(20); // valor default
+      expect(result.current.data).toEqual(mockPokemons);
+      expect(getPokemonList).toHaveBeenCalledWith(20);
+    });
+
+    it('should return error when fetch fails', async () => {
+      const errorMessage = 'Fetch failed';
+      const mockError = new Error(errorMessage);
+      getPokemonList.mockRejectedValue(mockError);
+
+      const { result } = renderHook(() => usePokemons(), { wrapper });
+
+      await waitFor(() => {
+        expect(result.current.isError).toBe(true);
+      });
+
+      // Verify error properties
+      expect(result.current.error.message).toBe(errorMessage);
+      expect(result.current.error).toBeInstanceOf(Error);
     });
   });
 });

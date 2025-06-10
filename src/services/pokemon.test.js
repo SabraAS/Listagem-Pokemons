@@ -150,7 +150,7 @@ describe('Pokemon Service', () => {
       expect(result).toBe('');
     });
 
-    it('should return null when english description is not found', async () => {
+    it('should return empty string when english description is not found', async () => {
       const mockResponse = {
         descriptions: [
           {
@@ -167,7 +167,7 @@ describe('Pokemon Service', () => {
       );
 
       const result = await getPokemonCharacteristic(1);
-      expect(result).toBeNull();
+      expect(result).toBe('');
     });
   });
 });

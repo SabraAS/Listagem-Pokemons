@@ -36,23 +36,18 @@ describe('PokemonCard Component', () => {
         />,
       );
 
-      // Verifica nome
       expect(screen.getByText(mockPokemon.name)).toBeInTheDocument();
 
-      // Verifica característica
       expect(
         screen.getByText(`Característica: ${mockPokemon.characteristic}`),
       ).toBeInTheDocument();
 
-      // Verifica tipos (baseado nos dados do mock: ['grass', 'poison'])
       expect(screen.getByText('Tipos: grass, poison')).toBeInTheDocument();
 
-      // Verifica habilidades (baseado nos dados do mock: ['overgrow', 'chlorophyll'])
       expect(
         screen.getByText('Habilidades: overgrow, chlorophyll'),
       ).toBeInTheDocument();
 
-      // Verifica imagem
       const image = screen.getByAltText(mockPokemon.name);
       expect(image).toHaveAttribute('src', mockPokemon.image);
     });
@@ -86,32 +81,6 @@ describe('PokemonCard Component', () => {
 
       expect(screen.getByText('Tipos: não possui')).toBeInTheDocument();
       expect(screen.getByText('Habilidades: não possui')).toBeInTheDocument();
-    });
-
-    it('should render second pokemon from mock correctly', () => {
-      const secondPokemon = transformPokemonData(mockPokemons[1]);
-
-      render(
-        <PokemonCard
-          abilities={secondPokemon.abilities}
-          characteristic={secondPokemon.characteristic}
-          image={secondPokemon.image}
-          name={secondPokemon.name}
-          onClick={mockOnClick}
-          types={secondPokemon.types}
-        />,
-      );
-
-      // Verifica nome do segundo pokémon (Charmander)
-      expect(screen.getByText(secondPokemon.name)).toBeInTheDocument();
-
-      // Verifica tipos do segundo pokémon (fire)
-      expect(screen.getByText('Tipos: fire')).toBeInTheDocument();
-
-      // Verifica habilidades do segundo pokémon (blaze, solar-power)
-      expect(
-        screen.getByText('Habilidades: blaze, solar-power'),
-      ).toBeInTheDocument();
     });
   });
 

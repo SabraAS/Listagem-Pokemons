@@ -1,4 +1,3 @@
-import '@/styles/App.scss';
 import './Home.scss';
 
 import CartSidebar from '@/components/CartSidebar';
@@ -6,20 +5,20 @@ import PokemonCard from '@/components/PokemonCard';
 import { usePokemons } from '@/queries/pokemon';
 import { usePokemonStore } from '@/store/pokemon';
 
-function App() {
-  const { data: pokemons } = usePokemons(30);
-  const { pokemons: pokemonsStore, addPokemon } = usePokemonStore();
+const Home = () => {
+  const { data } = usePokemons(30);
+  const { pokemons, addPokemon, removePokemon, clearTeam } = usePokemonStore();
 
   return (
     <div className="home">
       <h1 className="home__title">Pokémons</h1>
       <div className="home__list">
-        {pokemons &&
-          pokemons?.map((pokemon) => (
+        {data &&
+          data?.map((pokemon) => (
             <PokemonCard
               abilities={pokemon.abilities}
               characteristic={pokemon.characteristic}
-              disabled={Boolean(pokemonsStore.find((p) => p.id === pokemon.id))}
+              disabled={Boolean(pokemons.find((p) => p.id === pokemon.id))}
               image={pokemon.image}
               key={pokemon.id}
               name={pokemon.name}
@@ -30,9 +29,13 @@ function App() {
             />
           ))}
       </div>
-      <CartSidebar />
+      <CartSidebar
+        clearTeam={clearTeam}
+        pokemons={pokemons}
+        removePokemon={removePokemon}
+      />
     </div>
   );
-}
+};
 
-export default App;
+export default Home;

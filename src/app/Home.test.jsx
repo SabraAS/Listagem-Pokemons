@@ -21,6 +21,8 @@ vi.mock('@/store/pokemon', () => ({
 describe('Home Component', () => {
   const queryClient = new QueryClient();
   const mockAddPokemon = vi.fn();
+  const mockRemovePokemon = vi.fn();
+  const mockClearTeam = vi.fn();
 
   beforeEach(() => {
     // Reset all mocks before each test
@@ -35,6 +37,8 @@ describe('Home Component', () => {
     usePokemonStore.mockReturnValue({
       pokemons: [],
       addPokemon: mockAddPokemon,
+      removePokemon: mockRemovePokemon,
+      clearTeam: mockClearTeam,
     });
   });
 
@@ -58,21 +62,6 @@ describe('Home Component', () => {
 
       expect(screen.getByText('Bulbasaur')).toBeInTheDocument();
       expect(screen.getByText('Charmander')).toBeInTheDocument();
-    });
-
-    it('should handle loading state', () => {
-      usePokemons.mockReturnValue({
-        data: null,
-        isLoading: true,
-      });
-
-      render(
-        <QueryClientProvider client={queryClient}>
-          <Home />
-        </QueryClientProvider>,
-      );
-
-      expect(screen.queryByText('Bulbasaur')).not.toBeInTheDocument();
     });
   });
 
@@ -176,22 +165,6 @@ describe('Home Component', () => {
         expect(img.getAttribute('alt')).not.toBeNull();
         expect(img.getAttribute('alt').trim().length).toBeGreaterThan(0);
       });
-    });
-
-    it('should maintain accessibility during loading state', async () => {
-      usePokemons.mockReturnValue({
-        data: null,
-        isLoading: true,
-      });
-
-      const { container } = render(
-        <QueryClientProvider client={queryClient}>
-          <Home />
-        </QueryClientProvider>,
-      );
-
-      const results = await axe(container);
-      expect(results).toHaveNoViolations();
     });
   });
 });

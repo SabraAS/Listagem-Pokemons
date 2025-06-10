@@ -10,15 +10,9 @@ const PokemonCard = ({
   characteristic,
   disabled = false,
 }) => {
-  const getAbilities = () => {
-    return abilities?.length > 0
-      ? abilities?.map((item) => item.ability?.name).join(', ')
-      : ' não possui';
-  };
-
-  const getTypes = () => {
-    return types?.length > 0
-      ? types?.map((item) => item.type?.name).join(', ')
+  const getValues = (values) => {
+    return values?.length
+      ? values.map((item) => Object.values(item)[0]?.name).join(', ')
       : ' não possui';
   };
 
@@ -43,8 +37,10 @@ const PokemonCard = ({
         <p className="pokemon-card__info">
           Característica: {characteristic || 'não possui'}
         </p>
-        <p className="pokemon-card__info">Tipos: {getTypes()}</p>
-        <p className="pokemon-card__info">Habilidades: {getAbilities()}</p>
+        <p className="pokemon-card__info">Tipos: {getValues(types)}</p>
+        <p className="pokemon-card__info">
+          Habilidades: {getValues(abilities)}
+        </p>
       </div>
     </div>
   );

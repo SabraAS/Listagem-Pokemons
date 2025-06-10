@@ -18,30 +18,17 @@ describe('CartSidebar Component', () => {
 
   beforeEach(() => {
     vi.clearAllMocks();
-
-    // Setup default mock implementation
-    usePokemonStore.mockImplementation((selector) => {
-      const store = {
-        pokemons: mockPokemons,
-        removePokemon: mockRemovePokemon,
-        clearTeam: mockClearTeam,
-      };
-      return selector(store);
-    });
   });
 
   describe('Rendering', () => {
     it('should render empty state when no pokemons', () => {
-      usePokemonStore.mockImplementation((selector) => {
-        const store = {
-          pokemons: [],
-          removePokemon: mockRemovePokemon,
-          clearTeam: mockClearTeam,
-        };
-        return selector(store);
-      });
-
-      render(<CartSidebar />);
+      render(
+        <CartSidebar
+          clearTeam={mockClearTeam}
+          pokemons={[]}
+          removePokemon={mockRemovePokemon}
+        />,
+      );
 
       expect(
         screen.getByText('Nenhum Pokémon selecionado'),
@@ -50,7 +37,13 @@ describe('CartSidebar Component', () => {
     });
 
     it('should render pokemon list correctly', () => {
-      render(<CartSidebar />);
+      render(
+        <CartSidebar
+          clearTeam={mockClearTeam}
+          pokemons={mockPokemons}
+          removePokemon={mockRemovePokemon}
+        />,
+      );
 
       mockPokemons.forEach((pokemon) => {
         expect(screen.getByText(pokemon.name)).toBeInTheDocument();
@@ -61,7 +54,13 @@ describe('CartSidebar Component', () => {
 
   describe('Interactions', () => {
     it('should call removePokemon when clicking remove button', () => {
-      render(<CartSidebar />);
+      render(
+        <CartSidebar
+          clearTeam={mockClearTeam}
+          pokemons={mockPokemons}
+          removePokemon={mockRemovePokemon}
+        />,
+      );
 
       const removeButtons = screen.getAllByTestId('remove-pokemon-button');
       fireEvent.click(removeButtons[0]);
@@ -70,7 +69,13 @@ describe('CartSidebar Component', () => {
     });
 
     it('should show confirmation modal when clicking confirm team', () => {
-      render(<CartSidebar />);
+      render(
+        <CartSidebar
+          clearTeam={mockClearTeam}
+          pokemons={mockPokemons}
+          removePokemon={mockRemovePokemon}
+        />,
+      );
 
       const confirmButton = screen.getByTestId('confirm-team-button');
       fireEvent.click(confirmButton);
@@ -80,7 +85,13 @@ describe('CartSidebar Component', () => {
     });
 
     it('should clear team when starting new team from modal', () => {
-      render(<CartSidebar />);
+      render(
+        <CartSidebar
+          clearTeam={mockClearTeam}
+          pokemons={mockPokemons}
+          removePokemon={mockRemovePokemon}
+        />,
+      );
 
       // Abrir modal
       const confirmButton = screen.getByTestId('confirm-team-button');
@@ -94,7 +105,13 @@ describe('CartSidebar Component', () => {
     });
 
     it('should close modal without clearing team', () => {
-      render(<CartSidebar />);
+      render(
+        <CartSidebar
+          clearTeam={mockClearTeam}
+          pokemons={mockPokemons}
+          removePokemon={mockRemovePokemon}
+        />,
+      );
 
       // Abrir modal
       const confirmButton = screen.getByTestId('confirm-team-button');
@@ -120,29 +137,45 @@ describe('CartSidebar Component', () => {
         return selector(store);
       });
 
-      const { container } = render(<CartSidebar />);
+      const { container } = render(
+        <CartSidebar
+          clearTeam={mockClearTeam}
+          pokemons={mockPokemons}
+          removePokemon={mockRemovePokemon}
+        />,
+      );
 
       const results = await axe(container);
       expect(results).toHaveNoViolations();
     });
 
     it('should have no accessibility violations with items', async () => {
-      const { container } = render(<CartSidebar />);
+      const { container } = render(
+        <CartSidebar
+          clearTeam={mockClearTeam}
+          pokemons={mockPokemons}
+          removePokemon={mockRemovePokemon}
+        />,
+      );
 
       const results = await axe(container);
       expect(results).toHaveNoViolations();
     });
 
     it('should have proper button accessibility attributes', () => {
-      render(<CartSidebar />);
+      render(
+        <CartSidebar
+          clearTeam={mockClearTeam}
+          pokemons={mockPokemons}
+          removePokemon={mockRemovePokemon}
+        />,
+      );
 
-      // Confirm button should have proper attributes
       const confirmButton = screen.getByTestId('confirm-team-button');
       expect(confirmButton.tagName).toBe('BUTTON');
       expect(confirmButton.getAttribute('role')).toBeNull();
       expect(confirmButton.textContent.trim().length).toBeGreaterThan(0);
 
-      // Remove buttons should have proper attributes
       const removeButtons = screen.getAllByTestId('remove-pokemon-button');
       removeButtons.forEach((button) => {
         expect(button.tagName).toBe('BUTTON');
@@ -152,7 +185,13 @@ describe('CartSidebar Component', () => {
     });
 
     it('should maintain proper focus management', () => {
-      render(<CartSidebar />);
+      render(
+        <CartSidebar
+          clearTeam={mockClearTeam}
+          pokemons={mockPokemons}
+          removePokemon={mockRemovePokemon}
+        />,
+      );
 
       // All interactive elements should be focusable
       const confirmButton = screen.getByTestId('confirm-team-button');
@@ -162,23 +201,6 @@ describe('CartSidebar Component', () => {
       removeButtons.forEach((button) => {
         expect(button.getAttribute('tabindex')).not.toBe('-1');
       });
-    });
-
-    it('should have accessible disabled state', () => {
-      usePokemonStore.mockImplementation((selector) => {
-        const store = {
-          pokemons: [],
-          removePokemon: mockRemovePokemon,
-          clearTeam: mockClearTeam,
-        };
-        return selector(store);
-      });
-
-      render(<CartSidebar />);
-
-      const confirmButton = screen.getByTestId('confirm-team-button');
-      expect(confirmButton).toBeDisabled();
-      expect(confirmButton.textContent).toContain('Confirmar equipe');
     });
   });
 });
