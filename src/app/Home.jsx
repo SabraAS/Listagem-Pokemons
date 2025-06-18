@@ -8,7 +8,7 @@ import { usePokemonStore } from '@/store/pokemon';
 import './Home.scss';
 
 const Home = () => {
-  const { data } = usePokemons(10);
+  const { data } = usePokemons(40);
   const [showModal, setShowModal] = useState(false);
   const pokemons = usePokemonStore((state) => state.pokemons);
   const addPokemon = usePokemonStore((state) => state.addPokemon);
