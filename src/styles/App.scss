@@ -1,0 +1,21 @@
+#root {
+  background-color: #fffaf4;
+  min-height: 100vh;
+  width: 100%;
+}
+
+:root {
+  --grid-gap: 15px;
+}
+
+.text-align {
+  &--center {
+    text-align: center;
+  }
+}
+
+.align-items {
+  &--center {
+    align-items: center;
+  }
+}

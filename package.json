@@ -1,0 +1,92 @@
+{
+  "name": "listagem-pokemons",
+  "version": "1.0.0",
+  "license": "MIT",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build:development": "vite build --mode development",
+    "build:staging": "vite build --mode staging",
+    "build:production": "vite build --mode production",
+    "build:analyze": "ANALYZE=true vite build",
+    "format": "prettier --write .",
+    "lint": "eslint . --ext .js,.jsx --fix",
+    "stylelint": "stylelint \"src/**/*.(scss|css)\" --fix",
+    "test": "vitest --watch --exclude '**/src/test/performance/**'",
+    "test:ui": "vitest --ui --coverage",
+    "test:coverage": "vitest --run --coverage",
+    "test:coverage:watch": "vitest --coverage",
+    "test:related": "vitest related --run",
+    "test:a11y": "vitest --run --reporter=verbose -t=\"Accessibility\"",
+    "test:a11y:watch": "vitest --watch -t=\"Accessibility\"",
+    "test:performance": "vitest --run --reporter=verbose src/test/performance/",
+    "test:performance:watch": "vitest --watch src/test/performance/",
+    "test:all": "vitest --run --reporter=verbose",
+    "preview": "vite preview",
+    "prepare": "husky install"
+  },
+  "lint-staged": {
+    "src/**/**.{js,jsx}": [
+      "yarn lint",
+      "yarn format",
+      "yarn test:related"
+    ],
+    "src/**/**.{css,scss}": [
+      "yarn format",
+      "yarn stylelint"
+    ],
+    "package.json": [
+      "npx yalc check"
+    ]
+  },
+  "browserslist": [
+    "cover 97%"
+  ],
+  "dependencies": {
+    "@tanstack/react-query": "^5.52.2",
+    "axios": "^1.7.8",
+    "react": "^18.2.0",
+    "react-dom": "^18.2.0",
+    "zustand": "^4.5.2"
+  },
+  "devDependencies": {
+    "@testing-library/jest-dom": "^6.4.2",
+    "@testing-library/react": "^14.2.1",
+    "@types/react": "^18.2.43",
+    "@vitejs/plugin-react": "^4.2.1",
+    "@vitest/coverage-v8": "^1.4.0",
+    "@vitest/ui": "^1.4.0",
+    "eslint": "^9.0.0",
+    "eslint-config-prettier": "^9.1.0",
+    "eslint-plugin-import": "^2.29.1",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-prettier": "^5.1.3",
+    "eslint-plugin-react": "^7.33.2",
+    "eslint-plugin-react-hooks": "^5.0.0",
+    "husky": "^8.0.3",
+    "jsdom": "^24.0.0",
+    "lighthouse": "^11.4.0",
+    "lint-staged": "^15.2.2",
+    "postcss": "^8.4.35",
+    "prettier": "^3.2.5",
+    "puppeteer": "^23.0.0",
+    "sass": "^1.72.0",
+    "stylelint": "^16.2.1",
+    "stylelint-config-standard-scss": "^13.0.0",
+    "stylelint-order": "^6.0.4",
+    "stylelint-prettier": "^5.0.0",
+    "vite": "^5.2.0",
+    "vite-bundle-analyzer": "^0.22.0",
+    "vite-plugin-restart": "^0.4.0",
+    "vitest": "^1.4.0",
+    "vitest-axe": "^0.1.0",
+    "web-vitals": "^5.0.2"
+  },
+  "engines": {
+    "npm": "please-use-yarn",
+    "yarn": ">= 1.19.1"
+  },
+  "keywords": [
+    "react-spa-vite"
+  ]
+}
