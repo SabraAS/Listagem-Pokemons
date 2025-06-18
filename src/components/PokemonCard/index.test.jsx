@@ -6,18 +6,9 @@ import PokemonCard from './index';
 
 import { mockPokemons } from '@/test/mocks/pokemon';
 
-// Transformar dados do mock para o formato esperado pelo componente
-const transformPokemonData = (pokemon) => ({
-  ...pokemon,
-  types: pokemon.types.map((type) => ({ type: { name: type } })),
-  abilities: pokemon.abilities.map((ability) => ({
-    ability: { name: ability },
-  })),
-});
-
 describe('PokemonCard Component', () => {
   const mockOnClick = vi.fn();
-  const mockPokemon = transformPokemonData(mockPokemons[0]);
+  const mockPokemon = mockPokemons[0];
 
   beforeEach(() => {
     vi.clearAllMocks();

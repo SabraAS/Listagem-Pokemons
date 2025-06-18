@@ -121,14 +121,14 @@ const rating = getWebVitalRating(metric); // Mesma função!
 ```
 📊 Resultados via Lighthouse:
 ==================================================
-First Contentful Paint: 1487ms (good)
-  ├─ Good: ≤1800ms | Needs improvement: ≤3000ms
-Largest Contentful Paint: 2388ms (good)
-  ├─ Good: ≤2500ms | Needs improvement: ≤4000ms
-Cumulative Layout Shift: 0.001 (good)
-  ├─ Good: ≤0.1 | Needs improvement: ≤0.25
-Interaction to Next Paint: 0ms (good)
-  ├─ Good: ≤200ms | Needs improvement: ≤600ms
+First Contentful Paint: 1418ms (good)
+  ├─ Thresholds - Good: ≤1800ms | Needs improvement: ≤3000ms
+Largest Contentful Paint: 2241ms (good)
+  ├─ Thresholds - Good: ≤2500ms | Needs improvement: ≤4000ms
+Cumulative Layout Shift: 0.002 (good)
+  ├─ Thresholds - Good: ≤0.1 | Needs improvement: ≤0.25
+Total Blocking Time: 0ms (good)
+  ├─ Thresholds - Good: ≤200ms | Needs improvement: ≤600ms
 ```
 
 #### 3. **Unit Tests**

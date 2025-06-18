@@ -60,8 +60,23 @@ describe('Home Component', () => {
         </QueryClientProvider>,
       );
 
-      expect(screen.getByText('Bulbasaur')).toBeInTheDocument();
-      expect(screen.getByText('Charmander')).toBeInTheDocument();
+      expect(screen.getByText('bulbasaur')).toBeInTheDocument();
+      expect(screen.getByText('charmander')).toBeInTheDocument();
+    });
+
+    it('should render loading message when data is not loaded', () => {
+      usePokemons.mockReturnValue({
+        data: [],
+        isLoading: true,
+      });
+
+      render(
+        <QueryClientProvider client={queryClient}>
+          <Home />
+        </QueryClientProvider>,
+      );
+
+      expect(screen.getByText('Carregando...')).toBeInTheDocument();
     });
   });
 
@@ -83,6 +98,8 @@ describe('Home Component', () => {
       usePokemonStore.mockReturnValue({
         pokemons: [mockPokemons[0]],
         addPokemon: mockAddPokemon,
+        removePokemon: mockRemovePokemon,
+        clearTeam: mockClearTeam,
       });
 
       render(
@@ -112,6 +129,8 @@ describe('Home Component', () => {
       usePokemonStore.mockReturnValue({
         pokemons: [mockPokemons[0]], // First pokemon already selected
         addPokemon: mockAddPokemon,
+        removePokemon: mockRemovePokemon,
+        clearTeam: mockClearTeam,
       });
 
       const { container } = render(

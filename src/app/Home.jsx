@@ -6,15 +6,15 @@ import { usePokemons } from '@/queries/pokemon';
 import { usePokemonStore } from '@/store/pokemon';
 
 const Home = () => {
-  const { data } = usePokemons(30);
+  const { data } = usePokemons(40);
   const { pokemons, addPokemon, removePokemon, clearTeam } = usePokemonStore();
 
   return (
     <div className="home">
       <h1 className="home__title">Pokémons</h1>
       <div className="home__list">
-        {data &&
-          data?.map((pokemon) => (
+        {data?.length ? (
+          data.map((pokemon) => (
             <PokemonCard
               abilities={pokemon.abilities}
               characteristic={pokemon.characteristic}
@@ -27,7 +27,12 @@ const Home = () => {
               }}
               types={pokemon.types}
             />
-          ))}
+          ))
+        ) : (
+          <div className="home__list-empty">
+            <p>Carregando...</p>
+          </div>
+        )}
       </div>
       <CartSidebar
         clearTeam={clearTeam}

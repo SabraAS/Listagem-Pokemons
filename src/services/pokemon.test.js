@@ -3,6 +3,8 @@ import { describe, expect, it, vi } from 'vitest';
 
 import { getPokemonCharacteristic, getPokemonList } from './pokemon';
 
+import { mockPokemons } from '@/test/mocks/pokemon';
+
 // Mock do axios
 vi.mock('axios');
 
@@ -33,10 +35,7 @@ describe('Pokemon Service', () => {
 
     const mockPokemonData = {
       data: {
-        id: 1,
-        name: 'bulbasaur',
-        abilities: [{ ability: { name: 'overgrow' } }],
-        types: [{ type: { name: 'grass' } }],
+        ...mockPokemons[0],
         sprites: {
           back_default:
             'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/back/1.png',
@@ -44,8 +43,7 @@ describe('Pokemon Service', () => {
             'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png',
           other: {
             'official-artwork': {
-              front_default:
-                'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png',
+              front_default: mockPokemons[0].image,
               front_shiny:
                 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/shiny/1.png',
             },
@@ -57,7 +55,7 @@ describe('Pokemon Service', () => {
     const mockCharacteristic = {
       descriptions: [
         {
-          description: 'Takes plenty of siestas',
+          description: mockPokemons[0].characteristic,
           language: { name: 'en' },
         },
       ],
@@ -87,15 +85,7 @@ describe('Pokemon Service', () => {
       expect(result).toHaveLength(2);
 
       // Verifica se os dados do pokémon estão corretos
-      expect(result[0]).toEqual({
-        id: 1,
-        name: 'bulbasaur',
-        image:
-          'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png',
-        abilities: [{ ability: { name: 'overgrow' } }],
-        types: [{ type: { name: 'grass' } }],
-        characteristic: 'Takes plenty of siestas',
-      });
+      expect(result[0]).toEqual(mockPokemons[0]);
 
       // Verifica se as chamadas foram feitas corretamente
       expect(axios.get).toHaveBeenCalledWith(
@@ -119,7 +109,7 @@ describe('Pokemon Service', () => {
       const mockResponse = {
         descriptions: [
           {
-            description: 'Takes plenty of siestas',
+            description: mockPokemons[0].characteristic,
             language: { name: 'en' },
           },
           {
@@ -136,7 +126,7 @@ describe('Pokemon Service', () => {
       );
 
       const result = await getPokemonCharacteristic(1);
-      expect(result).toBe('Takes plenty of siestas');
+      expect(result).toBe(mockPokemons[0].characteristic);
 
       expect(global.fetch).toHaveBeenCalledWith(
         'https://pokeapi.co/api/v2/characteristic/1',

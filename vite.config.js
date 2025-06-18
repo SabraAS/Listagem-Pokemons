@@ -89,6 +89,7 @@ export default defineConfig({
         '.git/**/*',
         // Test configuration files
         'src/test/**/*',
+        'src/test/performance/**',
         // Other common excludes
         'public/**/*',
         'docs/**/*',

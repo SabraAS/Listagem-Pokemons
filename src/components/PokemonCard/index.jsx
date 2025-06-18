@@ -10,11 +10,13 @@ const PokemonCard = ({
   characteristic,
   disabled = false,
 }) => {
-  const getValues = (values) => {
-    return values?.length
-      ? values.map((item) => Object.values(item)[0]?.name).join(', ')
+  const getValues = (values) =>
+    values?.length
+      ? values
+          .map((item) => item.type?.name || item.ability?.name)
+          .filter(Boolean)
+          .join(', ')
       : ' não possui';
-  };
 
   return (
     <div className="pokemon-card">

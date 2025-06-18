@@ -2,15 +2,10 @@ import { describe, expect, it } from 'vitest';
 
 import { usePokemonStore } from './pokemon';
 
+import { mockPokemons } from '@/test/mocks/pokemon';
+
 describe('Pokemon Store', () => {
-  const mockPokemon = {
-    id: 1,
-    name: 'Bulbasaur',
-    image: 'bulbasaur.png',
-    abilities: [{ ability: { name: 'overgrow' } }],
-    types: [{ type: { name: 'grass' } }],
-    characteristic: 'Takes plenty of siestas',
-  };
+  const mockPokemon = mockPokemons[0];
 
   beforeEach(() => {
     usePokemonStore.setState({ pokemons: [] });
@@ -35,14 +30,14 @@ describe('Pokemon Store', () => {
 
     // Adiciona dois pokémons
     addPokemon(mockPokemon);
-    addPokemon({ ...mockPokemon, id: 2, name: 'Charmander' });
+    addPokemon(mockPokemons[1]);
 
     // Remove um pokémon
     removePokemon(1);
 
     const state = usePokemonStore.getState();
     expect(state.pokemons).toHaveLength(1);
-    expect(state.pokemons[0].id).toBe(2);
+    expect(state.pokemons[0].id).toBe(4);
   });
 
   it('should clear the team', () => {
@@ -50,7 +45,7 @@ describe('Pokemon Store', () => {
 
     // Adiciona pokémons
     addPokemon(mockPokemon);
-    addPokemon({ ...mockPokemon, id: 2, name: 'Charmander' });
+    addPokemon(mockPokemons[1]);
 
     // Limpa o time
     clearTeam();
@@ -61,10 +56,7 @@ describe('Pokemon Store', () => {
 
   it('should set pokemons directly', () => {
     const { setPokemons } = usePokemonStore.getState();
-    const newPokemons = [
-      mockPokemon,
-      { ...mockPokemon, id: 2, name: 'Charmander' },
-    ];
+    const newPokemons = [mockPokemon, mockPokemons[1]];
 
     setPokemons(newPokemons);
 
