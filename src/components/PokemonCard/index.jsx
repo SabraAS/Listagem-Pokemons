@@ -13,21 +13,28 @@ const PokemonCard = ({
 }) => {
   const getValues = (values) =>
     values
-      .map((item) => item.type?.name || item.ability?.name)
+      .map((item) => item?.type?.name || item?.ability?.name)
       .filter(Boolean)
       .join(', ');
 
   return (
     <div className="pokemon-card">
-      <img alt={name} className="pokemon-card__image" src={image} />
+      <img
+        alt={`Imagem do ${name}`}
+        className="pokemon-card__image"
+        src={image}
+      />
       <button
+        aria-label={
+          disabled ? `${name} indisponível` : `Adicionar ${name} à equipe`
+        }
         className="pokemon-card__button"
         disabled={disabled}
         onClick={() => addPokemon(id)}
       >
         {disabled ? 'Indisponível' : 'Adicionar à equipe'}
       </button>
-      <p className="pokemon-card__name">{name}</p>
+      <h2 className="pokemon-card__name">{name}</h2>
       <div className="pokemon-card__info">
         <p className="pokemon-card__text">Característica: {characteristic}</p>
         <p className="pokemon-card__text">

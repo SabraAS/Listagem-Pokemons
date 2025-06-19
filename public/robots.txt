@@ -1,0 +1,8 @@
+# Robots.txt para Pokemon App
+# Permite que todos os crawlers acessem todo o site
+
+User-agent: *
+Allow: /
+
+# Delay de 1 segundo entre requisições para não sobrecarregar
+Crawl-delay: 1 

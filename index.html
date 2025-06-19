@@ -8,10 +8,30 @@
       href="/src/assets/cover-pokemon.png"
     />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description" content="Descubra e monte sua equipe perfeita de Pokémons! Explore diversos de Pokémons com informações detalhadas sobre habilidades, tipos e características. Aplicação interativa para fãs de Pokémon." />
+    <meta name="keywords" content="pokemon, pokémon, equipe pokemon, lista pokemon, habilidades pokemon, tipos pokemon" />
+
+    <!-- 🚀 Performance Optimization: Preconnect to External APIs -->
+    <link rel="preconnect" href="https://pokeapi.co" crossorigin />
+    <link rel="dns-prefetch" href="https://pokeapi.co" />
+    <link rel="preconnect" href="https://raw.githubusercontent.com" crossorigin />
+    <link rel="dns-prefetch" href="https://raw.githubusercontent.com" />
+
+    <!-- ⚡ LCP Optimization: Preload first Pokemon image (Bulbasaur) -->
+    <link rel="preload" href="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png" as="image" />
+    
+    <!-- 🎯 LCP Critical: Preload cart sidebar background -->
+    <link rel="preload" href="/src/assets/cover-pokemon.webp" as="image" />
+
+    <!-- 🎨 Font Performance: Preconnect & Preload Google Fonts -->
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link
-      rel="stylesheet"
-      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+      rel="preload"
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap"
+      as="style" onload="this.onload=null;this.rel='stylesheet'"
     />
+
+
 
     <title>Pokemon App - Lista de Pokémons</title>
   </head>

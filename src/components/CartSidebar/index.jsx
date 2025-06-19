@@ -3,8 +3,8 @@ import './index.scss';
 
 const CartSidebar = ({ pokemons, onRemovePokemon, onConfirmTeam }) => {
   return (
-    <div className="cart-sidebar">
-      <div alt="background" className="cart-sidebar__background" />
+    <aside className="cart-sidebar">
+      <div className="cart-sidebar__background" />
       <h2 className="cart-sidebar__title">Sua equipe</h2>
       <div className="cart-sidebar__list">
         {pokemons.length > 0 ? (
@@ -18,6 +18,7 @@ const CartSidebar = ({ pokemons, onRemovePokemon, onConfirmTeam }) => {
                   </div>
                 </div>
                 <button
+                  aria-label={`Remover ${pokemon.name} da equipe`}
                   className="cart-sidebar__remove-button"
                   onClick={() => onRemovePokemon(pokemon.id)}
                 >
@@ -39,10 +40,10 @@ const CartSidebar = ({ pokemons, onRemovePokemon, onConfirmTeam }) => {
           disabled={pokemons.length === 0}
           onClick={onConfirmTeam}
         >
-          <p>Confirmar Equipe</p>
+          Confirmar Equipe
         </button>
       </div>
-    </div>
+    </aside>
   );
 };
 
