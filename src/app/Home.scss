@@ -1,10 +1,19 @@
 .home {
   padding: 64px;
 
+  @media (max-width: 768px) {
+    padding: 24px;
+  }
+
   &__title {
     font-size: 32px;
     font-weight: 700;
     margin-bottom: 24px;
+
+    @media (max-width: 768px) {
+      text-align: center;
+      font-size: 24px;
+    }
   }
 
   &__content {
@@ -14,6 +23,10 @@
     justify-content: space-between;
     width: 100%;
     gap: 24px;
+
+    @media (max-width: 768px) {
+      gap: 0;
+    }
   }
 
   &__list {
@@ -25,5 +38,12 @@
     flex-wrap: wrap;
     max-width: calc(100% - 500px);
     width: 100%;
+
+    @media (max-width: 768px) {
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      max-width: 100%;
+    }
   }
 }

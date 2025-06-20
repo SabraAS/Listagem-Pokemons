@@ -7,7 +7,17 @@ import Home from './app/Home';
 import './styles/App.scss';
 import './styles/index.scss';
 
-const queryClient = new QueryClient();
+// Criar o cliente de consulta com configurações otimizadas
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      refetchOnWindowFocus: false,
+      retry: false,
+      staleTime: 1000 * 60 * 5, // 5 minutos
+      cacheTime: 1000 * 60 * 30, // 30 minutos
+    },
+  },
+});
 
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode>

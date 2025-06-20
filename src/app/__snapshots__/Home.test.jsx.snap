@@ -1,0 +1,136 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`Home > should match snapshot 1`] = `
+<div>
+  <div
+    class="home"
+  >
+    <h1
+      class="home__title"
+    >
+      Pokémons
+    </h1>
+    <div
+      class="home__content"
+    >
+      <div
+        class="home__list"
+      >
+        <div
+          class="pokemon-card"
+        >
+          <img
+            alt="Imagem do bulbasaur"
+            class="pokemon-card__image"
+            src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/1.svg"
+          />
+          <button
+            aria-label="Adicionar bulbasaur à equipe"
+            class="pokemon-card__button"
+          >
+            Adicionar à equipe
+          </button>
+          <h2
+            class="pokemon-card__name"
+          >
+            bulbasaur
+          </h2>
+          <div
+            class="pokemon-card__info"
+          >
+            <p
+              class="pokemon-card__text"
+            >
+              Característica: 
+              Loves to eat
+            </p>
+            <p
+              class="pokemon-card__text"
+            >
+              Habilidades: 
+              overgrow, chlorophyll
+            </p>
+            <p
+              class="pokemon-card__text"
+            >
+              Tipos: 
+              grass, poison
+            </p>
+          </div>
+        </div>
+        <div
+          class="pokemon-card"
+        >
+          <img
+            alt="Imagem do charmander"
+            class="pokemon-card__image"
+            src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/4.svg"
+          />
+          <button
+            aria-label="Adicionar charmander à equipe"
+            class="pokemon-card__button"
+          >
+            Adicionar à equipe
+          </button>
+          <h2
+            class="pokemon-card__name"
+          >
+            charmander
+          </h2>
+          <div
+            class="pokemon-card__info"
+          >
+            <p
+              class="pokemon-card__text"
+            >
+              Característica: 
+              Highly curious
+            </p>
+            <p
+              class="pokemon-card__text"
+            >
+              Habilidades: 
+              blaze, solar-power
+            </p>
+            <p
+              class="pokemon-card__text"
+            >
+              Tipos: 
+              fire
+            </p>
+          </div>
+        </div>
+      </div>
+      <aside
+        class="cart-sidebar"
+      >
+        <div
+          class="cart-sidebar__background"
+        />
+        <h2
+          class="cart-sidebar__title"
+        >
+          Sua equipe
+        </h2>
+        <div
+          class="cart-sidebar__list"
+        >
+          <p>
+            Nenhum Pokémon adicionado
+          </p>
+        </div>
+        <div
+          class="cart-sidebar__footer"
+        >
+          <button
+            class="cart-sidebar__footer-button"
+            disabled=""
+          >
+            Confirmar Equipe
+          </button>
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+`;

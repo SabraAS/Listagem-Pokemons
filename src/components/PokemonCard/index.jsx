@@ -1,4 +1,6 @@
 import PropTypes from 'prop-types';
+
+import coverPokemon from '@/assets/cover-pokemon.webp';
 import './index.scss';
 
 const PokemonCard = ({
@@ -22,7 +24,7 @@ const PokemonCard = ({
       <img
         alt={`Imagem do ${name}`}
         className="pokemon-card__image"
-        src={image}
+        src={image || coverPokemon}
       />
       <button
         aria-label={

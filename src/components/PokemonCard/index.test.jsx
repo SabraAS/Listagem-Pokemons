@@ -4,7 +4,10 @@ import { axe } from 'vitest-axe';
 
 import PokemonCard from './index';
 
+import coverPokemon from '@/assets/cover-pokemon.webp';
 import { mockPokemons } from '@/test/mocks/pokemon';
+
+// Importar a imagem de fallback para testar
 
 describe('PokemonCard', () => {
   // Usar o primeiro Pokémon do mock como base para os testes
@@ -22,6 +25,12 @@ describe('PokemonCard', () => {
     addPokemon: vi.fn(),
   };
 
+  // Teste de snapshot como primeiro teste
+  it('should match snapshot', () => {
+    const { container } = render(<PokemonCard {...defaultProps} />);
+    expect(container).toMatchSnapshot();
+  });
+
   describe('Rendering', () => {
     it('should render pokemon name correctly', () => {
       render(<PokemonCard {...defaultProps} />);
@@ -35,6 +44,15 @@ describe('PokemonCard', () => {
       const image = screen.getByAltText('Imagem do bulbasaur');
       expect(image).toBeInTheDocument();
       expect(image).toHaveAttribute('src', mockPokemon.image);
+    });
+
+    it('should use fallback image when image prop is empty', () => {
+      render(<PokemonCard {...defaultProps} image="" />);
+
+      const image = screen.getByAltText('Imagem do bulbasaur');
+      expect(image).toBeInTheDocument();
+      expect(image).toHaveAttribute('src', coverPokemon);
+      expect(image).toHaveAttribute('alt', 'Imagem do bulbasaur');
     });
 
     it('should render characteristic correctly', () => {

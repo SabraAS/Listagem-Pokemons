@@ -14,7 +14,7 @@ export const getPokemonList = async (limit = 40) => {
         return {
           id: pokemonData.data.id,
           name: pokemonData.data.name,
-          image: pokemonData.data.sprites.front_default,
+          image: pokemonData.data.sprites?.other?.dream_world?.front_default,
           abilities: pokemonData.data.abilities,
           types: pokemonData.data.types,
           characteristic: description,
@@ -22,23 +22,21 @@ export const getPokemonList = async (limit = 40) => {
       }),
     );
   } catch (error) {
-    console.error('Erro ao buscar lista de Pokémon:', error);
+    console.log('Erro ao buscar lista de Pokémon');
     throw error;
   }
 };
 
 export const getPokemonCharacteristic = async (id) => {
   try {
-    const response = await fetch(
-      `https://pokeapi.co/api/v2/characteristic/${id}`,
-    );
-    const data = await response.json();
+    const response = await axios.get(`${BASE_URL}/characteristic/${id}`);
+    const data = response.data;
     const englishDescription = data.descriptions.find(
       (desc) => desc.language.name === 'en',
     );
-    return englishDescription?.description || '';
-  } catch (e) {
-    console.error('Erro ao buscar característica do Pokémon:', e);
-    return '';
+    return englishDescription?.description || 'não possui';
+  } catch (_e) {
+    console.log('Erro ao buscar característica do Pokémon');
+    return 'não possui';
   }
 };

@@ -7,10 +7,16 @@ import { defineConfig } from 'vitest/config';
 
 export default defineConfig({
   build: {
-    outDir: 'build/',
     sourcemap: true,
+    // Configuração para cache eficiente
+    assetsDir: '_assets',
+    // Adiciona hash aos nomes dos arquivos para cache busting quando o conteúdo muda
     rollupOptions: {
       output: {
+        // Adiciona hash ao nome dos arquivos para permitir cache de longa duração
+        entryFileNames: '_assets/[name]-[hash].js',
+        chunkFileNames: '_assets/[name]-[hash].js',
+        assetFileNames: '_assets/[name]-[hash].[ext]',
         manualChunks: {
           // Separar dependências grandes em chunks separados
           react: ['react', 'react-dom'],
@@ -23,9 +29,21 @@ export default defineConfig({
   css: {
     preprocessorOptions: {
       scss: {
-        api: 'modern-compiler', // or "modern"
+        api: 'modern-compiler',
       },
     },
+    devSourcemap: true,
+  },
+  // Otimização de cache para recursos estáticos
+  optimizeDeps: {
+    // Pré-empacota dependências para melhor desempenho de desenvolvimento
+    include: [
+      'react',
+      'react-dom',
+      '@tanstack/react-query',
+      'axios',
+      'zustand',
+    ],
   },
   plugins: [
     react({
@@ -71,16 +89,12 @@ export default defineConfig({
       reporter: ['text', 'json', 'html'],
       reportsDirectory: './coverage',
       clean: true,
-      // Configurações para resolver o erro de source mapping
       skipFull: false,
-      // Incluir apenas arquivos que queremos cobrir
       include: ['src/**/*.{js,jsx}'],
       exclude: [
-        'build/**/*',
+        'dist/**/*',
         'node_modules/**/*',
         'coverage/**/*',
-        'dist/**/*',
-        // Configuration files
         '*.config.js',
         '*.config.cjs',
         '*.config.mjs',
@@ -91,29 +105,21 @@ export default defineConfig({
         'package.json',
         'yarn.lock',
         'package-lock.json',
-        // Configuration directories
         '.config/**/*',
         '.husky/**/*',
         '.git/**/*',
-        // Test configuration files
         'src/test/**/*',
-        'src/test/performance/**',
-        // Test files themselves
         'src/**/*.{test,spec}.{js,jsx,ts,tsx}',
-        // Other common excludes
         'public/**/*',
         'docs/**/*',
         'index.html',
-        // Exclude main.jsx and other entry points that might not be tested
-        'src/main.jsx',
       ],
-      // Configurações específicas para resolver o bug do V8
       all: true,
       lines: 80,
       functions: 80,
       branches: 80,
       statements: 80,
     },
-    testTimeout: 30000, // Timeout maior para testes de performance
+    testTimeout: 30000,
   },
 });

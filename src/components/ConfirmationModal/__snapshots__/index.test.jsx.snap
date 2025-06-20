@@ -1,0 +1,113 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`ConfirmationModal > should match snapshot 1`] = `
+<div>
+  <div
+    aria-labelledby="modal-title"
+    aria-modal="true"
+    class="confirmation-modal"
+    role="dialog"
+  >
+    <div
+      class="confirmation-modal__content"
+    >
+      <button
+        aria-label="Fechar modal"
+        class="confirmation-modal__close-button"
+        data-testid="modal-close-button"
+      >
+        ×
+      </button>
+      <div
+        class="confirmation-modal__header"
+      >
+        <div
+          class="confirmation-modal__check"
+        >
+          ✓
+        </div>
+        <h2
+          class="confirmation-modal__title"
+          id="modal-title"
+        >
+          Equipe formada
+        </h2>
+        <p
+          class="confirmation-modal__subtitle"
+        >
+          Sua equipe está pronta!
+        </p>
+      </div>
+      <div
+        class="confirmation-modal__list"
+      >
+        <div
+          class="confirmation-modal__item"
+        >
+          <div
+            class="confirmation-modal__info"
+          >
+            <img
+              alt="Imagem do bulbasaur"
+              class="confirmation-modal__image"
+              src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/1.svg"
+            />
+            <p
+              class="confirmation-modal__name"
+            >
+              bulbasaur
+            </p>
+          </div>
+          <p
+            class="confirmation-modal__characteristic"
+          >
+            Loves to eat
+          </p>
+        </div>
+        <div
+          class="confirmation-modal__item"
+        >
+          <div
+            class="confirmation-modal__info"
+          >
+            <img
+              alt="Imagem do charmander"
+              class="confirmation-modal__image"
+              src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/4.svg"
+            />
+            <p
+              class="confirmation-modal__name"
+            >
+              charmander
+            </p>
+          </div>
+          <p
+            class="confirmation-modal__characteristic"
+          >
+            Highly curious
+          </p>
+        </div>
+      </div>
+      <div
+        class="confirmation-modal__footer"
+      >
+        <div
+          class="confirmation-modal__total"
+        >
+          <p>
+            Total de pokémons na equipe:
+          </p>
+          <p>
+            2
+          </p>
+        </div>
+        <button
+          class="confirmation-modal__button"
+        >
+          Começar nova equipe
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+`;

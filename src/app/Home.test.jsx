@@ -5,7 +5,7 @@ import { axe } from 'vitest-axe';
 import Home from './Home';
 
 import { usePokemons } from '@/queries/pokemon';
-import { usePokemonStore } from '@/store/pokemon';
+import * as pokemonStoreModule from '@/store/pokemon';
 import { mockPokemons } from '@/test/mocks/pokemon';
 
 // Mock dos hooks
@@ -13,16 +13,14 @@ vi.mock('@/queries/pokemon', () => ({
   usePokemons: vi.fn(),
 }));
 
-vi.mock('@/store/pokemon', () => ({
-  usePokemonStore: vi.fn(),
-}));
-
 describe('Home', () => {
   const mockUsePokemons = vi.fn();
-  const mockUsePokemonStore = vi.fn();
   const mockAddPokemon = vi.fn();
   const mockRemovePokemonById = vi.fn();
   const mockClearTeam = vi.fn();
+
+  // Save original store implementation
+  const originalUsePokemonStore = pokemonStoreModule.usePokemonStore;
 
   beforeEach(() => {
     vi.clearAllMocks();
@@ -32,26 +30,38 @@ describe('Home', () => {
       data: mockPokemons,
     });
 
-    // Mock do store inicial
-    mockUsePokemonStore.mockImplementation((selector) => {
-      const state = {
-        pokemons: [],
-        addPokemon: mockAddPokemon,
-        removePokemonById: mockRemovePokemonById,
-        clearTeam: mockClearTeam,
-      };
-      return selector(state);
-    });
+    // Mock the store for regular tests
+    vi.spyOn(pokemonStoreModule, 'usePokemonStore').mockImplementation(
+      (selector) => {
+        const state = {
+          pokemons: [],
+          addPokemon: mockAddPokemon,
+          removePokemonById: mockRemovePokemonById,
+          clearTeam: mockClearTeam,
+        };
+        return selector(state);
+      },
+    );
 
     usePokemons.mockImplementation(mockUsePokemons);
-    usePokemonStore.mockImplementation(mockUsePokemonStore);
+  });
+
+  afterEach(() => {
+    // Restore the original store implementation
+    vi.restoreAllMocks();
+  });
+
+  // Teste de snapshot como primeiro teste
+  it('should match snapshot', () => {
+    const { container } = render(<Home />);
+    expect(container).toMatchSnapshot();
   });
 
   describe('Basic rendering', () => {
     it('should call usePokemons with correct parameter', () => {
       render(<Home />);
 
-      expect(mockUsePokemons).toHaveBeenCalledWith(40);
+      expect(mockUsePokemons).toHaveBeenCalledWith(100);
     });
 
     it('should render basic structure without errors', () => {
@@ -76,6 +86,66 @@ describe('Home', () => {
       expect(screen.getByText('Pokémons')).toBeInTheDocument();
       expect(screen.getByText('Nenhum Pokémon adicionado')).toBeInTheDocument();
     });
+
+    it('should show loading state while fetching data', () => {
+      mockUsePokemons.mockReturnValue({
+        data: undefined,
+        isLoading: true,
+      });
+
+      render(<Home />);
+
+      expect(screen.getByText('Carregando...')).toBeInTheDocument();
+      expect(
+        screen.queryByText('Nenhum Pokémon encontrado'),
+      ).not.toBeInTheDocument();
+    });
+
+    it('should show "Nenhum Pokémon encontrado" when API returns no results', () => {
+      mockUsePokemons.mockReturnValue({
+        data: null,
+        isLoading: false,
+      });
+
+      render(<Home />);
+
+      expect(screen.getByText('Nenhum Pokémon encontrado')).toBeInTheDocument();
+      expect(screen.queryByText('Carregando...')).not.toBeInTheDocument();
+    });
+
+    it('should handle error state from API', () => {
+      mockUsePokemons.mockReturnValue({
+        data: undefined,
+        isLoading: false,
+        isError: true,
+        error: new Error('API Error'),
+      });
+
+      render(<Home />);
+
+      expect(screen.getByText('Nenhum Pokémon encontrado')).toBeInTheDocument();
+    });
+
+    it('should transition from loading to loaded state correctly', () => {
+      // Inicialmente carregando
+      mockUsePokemons.mockReturnValue({
+        data: undefined,
+        isLoading: true,
+      });
+
+      const { rerender } = render(<Home />);
+      expect(screen.getByText('Carregando...')).toBeInTheDocument();
+
+      // Em seguida, carregado com sucesso
+      mockUsePokemons.mockReturnValue({
+        data: mockPokemons,
+        isLoading: false,
+      });
+
+      rerender(<Home />);
+      expect(screen.queryByText('Carregando...')).not.toBeInTheDocument();
+      expect(screen.getAllByText('bulbasaur')).toHaveLength(1); // Apenas no card
+    });
   });
 
   describe('State management', () => {
@@ -89,15 +159,17 @@ describe('Home', () => {
       ).not.toBeDisabled();
 
       // Simular pokémon adicionado ao estado
-      mockUsePokemonStore.mockImplementation((selector) => {
-        const state = {
-          pokemons: [mockPokemons[0]], // bulbasaur na equipe
-          addPokemon: mockAddPokemon,
-          removePokemonById: mockRemovePokemonById,
-          clearTeam: mockClearTeam,
-        };
-        return selector(state);
-      });
+      vi.spyOn(pokemonStoreModule, 'usePokemonStore').mockImplementation(
+        (selector) => {
+          const state = {
+            pokemons: [mockPokemons[0]], // bulbasaur na equipe
+            addPokemon: mockAddPokemon,
+            removePokemonById: mockRemovePokemonById,
+            clearTeam: mockClearTeam,
+          };
+          return selector(state);
+        },
+      );
 
       rerender(<Home />);
 
@@ -118,15 +190,17 @@ describe('Home', () => {
 
     it('should call removePokemonById when remove button is clicked', () => {
       // Mock com pokémon na equipe
-      mockUsePokemonStore.mockImplementation((selector) => {
-        const state = {
-          pokemons: [mockPokemons[0]],
-          addPokemon: mockAddPokemon,
-          removePokemonById: mockRemovePokemonById,
-          clearTeam: mockClearTeam,
-        };
-        return selector(state);
-      });
+      vi.spyOn(pokemonStoreModule, 'usePokemonStore').mockImplementation(
+        (selector) => {
+          const state = {
+            pokemons: [mockPokemons[0]],
+            addPokemon: mockAddPokemon,
+            removePokemonById: mockRemovePokemonById,
+            clearTeam: mockClearTeam,
+          };
+          return selector(state);
+        },
+      );
 
       render(<Home />);
 
@@ -141,15 +215,17 @@ describe('Home', () => {
   describe('Team confirmation flow', () => {
     beforeEach(() => {
       // Mock com pokémons na equipe para testar fluxo completo
-      mockUsePokemonStore.mockImplementation((selector) => {
-        const state = {
-          pokemons: mockPokemons,
-          addPokemon: mockAddPokemon,
-          removePokemonById: mockRemovePokemonById,
-          clearTeam: mockClearTeam,
-        };
-        return selector(state);
-      });
+      vi.spyOn(pokemonStoreModule, 'usePokemonStore').mockImplementation(
+        (selector) => {
+          const state = {
+            pokemons: mockPokemons,
+            addPokemon: mockAddPokemon,
+            removePokemonById: mockRemovePokemonById,
+            clearTeam: mockClearTeam,
+          };
+          return selector(state);
+        },
+      );
     });
 
     it('should complete flow: confirm team → open modal → close modal', () => {
@@ -187,6 +263,90 @@ describe('Home', () => {
     });
   });
 
+  describe('Test with real store', () => {
+    beforeEach(() => {
+      vi.restoreAllMocks();
+
+      // Just mock the API data
+      usePokemons.mockReturnValue({
+        data: mockPokemons,
+      });
+
+      // Reset the store state between tests
+      originalUsePokemonStore.getState().clearTeam();
+    });
+
+    it('should add and remove pokemon using real store', () => {
+      render(<Home />);
+
+      // Verify initial empty state
+      expect(screen.getByText('Nenhum Pokémon adicionado')).toBeInTheDocument();
+
+      // Add bulbasaur to team
+      const addButton = screen.getByLabelText('Adicionar bulbasaur à equipe');
+      fireEvent.click(addButton);
+
+      // Verify bulbasaur appears in sidebar
+      expect(screen.getAllByText('bulbasaur')).toHaveLength(2); // Card + Sidebar
+      expect(screen.getByLabelText('bulbasaur indisponível')).toBeDisabled();
+
+      // Verify characteristic appears in sidebar
+      expect(screen.getByText('Loves to eat')).toBeInTheDocument();
+
+      // Add charmander to team
+      const addCharmanderButton = screen.getByLabelText(
+        'Adicionar charmander à equipe',
+      );
+      fireEvent.click(addCharmanderButton);
+
+      // Verify both pokemon in sidebar
+      expect(screen.getAllByText('bulbasaur')).toHaveLength(2);
+      expect(screen.getAllByText('charmander')).toHaveLength(2);
+
+      // Remove bulbasaur
+      const removeButton = screen.getByLabelText('Remover bulbasaur da equipe');
+      fireEvent.click(removeButton);
+
+      // Verify bulbasaur removed and button enabled again
+      expect(screen.queryByText('Loves to eat')).not.toBeInTheDocument();
+      expect(
+        screen.getByLabelText('Adicionar bulbasaur à equipe'),
+      ).not.toBeDisabled();
+
+      // Only charmander should remain in sidebar
+      expect(screen.getAllByText('charmander')).toHaveLength(2);
+      expect(screen.getByText('Highly curious')).toBeInTheDocument();
+    });
+
+    it('should complete full team flow with real store', () => {
+      render(<Home />);
+
+      // Add both pokemon to team
+      fireEvent.click(screen.getByLabelText('Adicionar bulbasaur à equipe'));
+      fireEvent.click(screen.getByLabelText('Adicionar charmander à equipe'));
+
+      // Confirm team
+      fireEvent.click(screen.getByText('Confirmar Equipe'));
+
+      // Verify modal shows both pokemon
+      expect(screen.getByText('Equipe formada')).toBeInTheDocument();
+      expect(screen.getAllByText('bulbasaur')).toHaveLength(3); // Card + Sidebar + Modal
+      expect(screen.getAllByText('charmander')).toHaveLength(3);
+
+      // Start new team
+      fireEvent.click(screen.getByText('Começar nova equipe'));
+
+      // Verify team cleared
+      expect(screen.getByText('Nenhum Pokémon adicionado')).toBeInTheDocument();
+      expect(
+        screen.getByLabelText('Adicionar bulbasaur à equipe'),
+      ).not.toBeDisabled();
+      expect(
+        screen.getByLabelText('Adicionar charmander à equipe'),
+      ).not.toBeDisabled();
+    });
+  });
+
   describe('Accessibility', () => {
     it('should have no accessibility violations', async () => {
       const { container } = render(<Home />);
@@ -204,15 +364,17 @@ describe('Home', () => {
     });
 
     it('should have no accessibility violations with modal open', async () => {
-      mockUsePokemonStore.mockImplementation((selector) => {
-        const state = {
-          pokemons: mockPokemons,
-          addPokemon: mockAddPokemon,
-          removePokemonById: mockRemovePokemonById,
-          clearTeam: mockClearTeam,
-        };
-        return selector(state);
-      });
+      vi.spyOn(pokemonStoreModule, 'usePokemonStore').mockImplementation(
+        (selector) => {
+          const state = {
+            pokemons: mockPokemons,
+            addPokemon: mockAddPokemon,
+            removePokemonById: mockRemovePokemonById,
+            clearTeam: mockClearTeam,
+          };
+          return selector(state);
+        },
+      );
 
       const { container } = render(<Home />);
 

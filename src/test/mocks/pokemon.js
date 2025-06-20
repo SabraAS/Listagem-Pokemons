@@ -3,7 +3,7 @@ export const mockPokemons = [
     id: 1,
     name: 'bulbasaur',
     image:
-      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/1.png',
+      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/1.svg',
     abilities: [
       {
         ability: {
@@ -44,7 +44,7 @@ export const mockPokemons = [
     id: 4,
     name: 'charmander',
     image:
-      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/4.png',
+      'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/4.svg',
     abilities: [
       {
         ability: {

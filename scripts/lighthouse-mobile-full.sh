@@ -108,18 +108,18 @@ echo "⚡ Executando Lighthouse com Web Vitals..."
 if [ -n "$CHROME_PATH" ]; then
     CHROME_PATH="$CHROME_PATH" npx lighthouse \
         "$LIGHTHOUSE_URL" \
-        --preset=desktop \
+        --config-path=./lighthouse-mobile-config.json \
         --output=html \
-        --output-path=./reports/lighthouse.html \
+        --output-path=./reports/lighthouse-mobile-full.html \
         --view \
         --chrome-flags="$CHROME_FLAGS"
 else
     echo "⚠️  Chrome não encontrado, tentando execução padrão..."
     npx lighthouse \
         "$LIGHTHOUSE_URL" \
-        --preset=desktop \
+        --config-path=./lighthouse-mobile-config.json \
         --output=html \
-        --output-path=./reports/lighthouse.html \
+        --output-path=./reports/lighthouse-mobile-full.html \
         --view \
         --chrome-flags="$CHROME_FLAGS"
 fi
@@ -127,7 +127,7 @@ fi
 if [ $? -eq 0 ]; then
     echo ""
     echo "✅ Lighthouse concluído!"
-    echo "📊 Relatório: ./reports/lighthouse.html"
+    echo "📊 Relatório: ./reports/lighthouse-mobile-full.html"
     echo "🎯 Ambiente testado: $ENVIRONMENT"
     echo "🌟 Todas as métricas Web Vitals incluídas!"
     

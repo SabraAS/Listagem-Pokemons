@@ -1,0 +1,101 @@
+// Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
+
+exports[`CartSidebar > should match snapshot 1`] = `
+<div>
+  <aside
+    class="cart-sidebar"
+  >
+    <div
+      class="cart-sidebar__background"
+    />
+    <h2
+      class="cart-sidebar__title"
+    >
+      Sua equipe
+    </h2>
+    <div
+      class="cart-sidebar__list"
+    >
+      <div
+        class="cart-sidebar__item"
+      >
+        <div
+          class="cart-sidebar__content"
+        >
+          <div
+            class="cart-sidebar__info"
+          >
+            <div
+              class="cart-sidebar__x"
+            >
+              X
+            </div>
+            <div
+              class="cart-sidebar__name"
+            >
+              <p>
+                bulbasaur
+              </p>
+            </div>
+          </div>
+          <button
+            aria-label="Remover bulbasaur da equipe"
+            class="cart-sidebar__remove-button"
+          >
+            X
+          </button>
+        </div>
+        <p
+          class="cart-sidebar__characteristic"
+        >
+          Loves to eat
+        </p>
+      </div>
+      <div
+        class="cart-sidebar__item"
+      >
+        <div
+          class="cart-sidebar__content"
+        >
+          <div
+            class="cart-sidebar__info"
+          >
+            <div
+              class="cart-sidebar__x"
+            >
+              X
+            </div>
+            <div
+              class="cart-sidebar__name"
+            >
+              <p>
+                charmander
+              </p>
+            </div>
+          </div>
+          <button
+            aria-label="Remover charmander da equipe"
+            class="cart-sidebar__remove-button"
+          >
+            X
+          </button>
+        </div>
+        <p
+          class="cart-sidebar__characteristic"
+        >
+          Highly curious
+        </p>
+      </div>
+    </div>
+    <div
+      class="cart-sidebar__footer"
+    >
+      <button
+        class="cart-sidebar__footer-button"
+      >
+        Confirmar Equipe
+      </button>
+    </div>
+  </aside>
+</div>
+`;

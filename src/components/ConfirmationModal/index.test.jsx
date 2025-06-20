@@ -20,6 +20,12 @@ describe('ConfirmationModal', () => {
     onStartNewTeam: vi.fn(),
   };
 
+  // Teste de snapshot como primeiro teste
+  it('should match snapshot', () => {
+    const { container } = render(<ConfirmationModal {...defaultProps} />);
+    expect(container).toMatchSnapshot();
+  });
+
   describe('Basic rendering', () => {
     it('should render modal title correctly', () => {
       render(<ConfirmationModal {...defaultProps} />);

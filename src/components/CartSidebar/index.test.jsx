@@ -20,6 +20,12 @@ describe('CartSidebar', () => {
     onConfirmTeam: vi.fn(),
   };
 
+  // Teste de snapshot como primeiro teste
+  it('should match snapshot', () => {
+    const { container } = render(<CartSidebar {...defaultProps} />);
+    expect(container).toMatchSnapshot();
+  });
+
   describe('Basic rendering', () => {
     it('should render title correctly', () => {
       render(<CartSidebar {...defaultProps} />);
