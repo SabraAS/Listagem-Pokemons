@@ -6,16 +6,12 @@ const ConfirmationModal = ({ pokemons, onClose, onStartNewTeam }) => {
   return (
     <div className="confirmation-modal">
       <div className="confirmation-modal__content">
-        <button
-          className="confirmation-modal__close-button"
-          data-testid="modal-close-button"
-          onClick={onClose}
-        >
+        <button className="confirmation-modal__close-button" onClick={onClose}>
           ×
         </button>
 
         <div className="confirmation-modal__header">
-          <div className="confirmation-modal__check">✓</div>
+          <p className="confirmation-modal__check">✓</p>
           <h2 className="confirmation-modal__title">Equipe formada</h2>
           <p className="confirmation-modal__subtitle">
             Sua equipe está pronta!
@@ -26,7 +22,6 @@ const ConfirmationModal = ({ pokemons, onClose, onStartNewTeam }) => {
             <div className="confirmation-modal__item" key={pokemon.id}>
               <div className="confirmation-modal__info">
                 <img
-                  alt={pokemon.name}
                   className="confirmation-modal__image"
                   src={pokemon.image}
                 />

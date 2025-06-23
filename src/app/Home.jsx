@@ -8,7 +8,7 @@ import { usePokemonStore } from '@/store/pokemon';
 import './Home.scss';
 
 const Home = () => {
-  const { data } = usePokemons(40);
+  const { data } = usePokemons();
   const [showModal, setShowModal] = useState(false);
   const pokemons = usePokemonStore((state) => state.pokemons);
   const addPokemon = usePokemonStore((state) => state.addPokemon);
@@ -36,7 +36,7 @@ const Home = () => {
     <div className="home">
       <h1 className="home__title">Pokémons</h1>
       <div className="home__content">
-        <div className="home__list">
+        <ul className="home__list">
           {data?.map((pokemon) => (
             <PokemonCard
               abilities={pokemon.abilities}
@@ -52,7 +52,7 @@ const Home = () => {
               types={pokemon.types}
             />
           ))}
-        </div>
+        </ul>
         <CartSidebar
           onConfirmTeam={handleConfirmTeam}
           onRemovePokemon={(id) => handleRemovePokemonFromTeam(id)}

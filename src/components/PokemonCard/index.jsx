@@ -19,7 +19,7 @@ const PokemonCard = ({
 
   return (
     <div className="pokemon-card">
-      <img alt={name} className="pokemon-card__image" src={image} />
+      <img className="pokemon-card__image" src={image} />
       <button
         className="pokemon-card__button"
         disabled={disabled}

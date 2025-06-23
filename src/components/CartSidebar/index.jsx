@@ -1,10 +1,12 @@
 import PropTypes from 'prop-types';
+
+import cover from '@/assets/cover-pokemon.png';
 import './index.scss';
 
 const CartSidebar = ({ pokemons, onRemovePokemon, onConfirmTeam }) => {
   return (
     <div className="cart-sidebar">
-      <div alt="background" className="cart-sidebar__background" />
+      <img className="cart-sidebar__background" src={cover} />
       <h2 className="cart-sidebar__title">Sua equipe</h2>
       <div className="cart-sidebar__list">
         {pokemons.length > 0 ? (
