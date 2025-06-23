@@ -71,7 +71,7 @@ export default [
       // Accessibility rules
       ...jsxA11y.configs.recommended.rules,
 
-      // Suas regras customizadas
+      // Regras customizadas
       'linebreak-style': 0,
       quotes: ['error', 'single'],
       semi: ['error', 'always'],

@@ -5,8 +5,10 @@ exports[`CartSidebar > should match snapshot 1`] = `
   <aside
     class="cart-sidebar"
   >
-    <div
+    <img
+      alt="Imagem de fundo da sidebar"
       class="cart-sidebar__background"
+      src="/src/assets/cover-pokemon.webp"
     />
     <h2
       class="cart-sidebar__title"

@@ -104,6 +104,7 @@ fi
 
 # Executar Lighthouse
 echo "⚡ Executando Lighthouse com Web Vitals..."
+echo "⏳ Aguardando todas as requests terminarem (indefinidamente)..."
 
 if [ -n "$CHROME_PATH" ]; then
     CHROME_PATH="$CHROME_PATH" npx lighthouse \
@@ -112,7 +113,8 @@ if [ -n "$CHROME_PATH" ]; then
         --output=html \
         --output-path=./reports/lighthouse-desktop-full.html \
         --view \
-        --chrome-flags="$CHROME_FLAGS"
+        --chrome-flags="$CHROME_FLAGS" \
+        --wait-for-load
 else
     echo "⚠️  Chrome não encontrado, tentando execução padrão..."
     npx lighthouse \
@@ -121,7 +123,8 @@ else
         --output=html \
         --output-path=./reports/lighthouse-desktop-full.html \
         --view \
-        --chrome-flags="$CHROME_FLAGS"
+        --chrome-flags="$CHROME_FLAGS" \
+        --wait-for-load
 fi
 
 if [ $? -eq 0 ]; then
@@ -130,6 +133,7 @@ if [ $? -eq 0 ]; then
     echo "📊 Relatório: ./reports/lighthouse-desktop-full.html"
     echo "🎯 Ambiente testado: $ENVIRONMENT"
     echo "🌟 Todas as métricas Web Vitals incluídas!"
+    echo "⏱️  Aguardou todas as requests terminarem (sem timeout)"
     
     # 🧹 LIMPEZA AUTOMÁTICA das pastas temporárias do Lighthouse
     echo ""

@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 
 import './index.scss';
 
-const ConfirmationModal = ({ pokemons, onClose, onStartNewTeam }) => {
+const ConfirmationModal = ({ pokemons = [], onClose, onStartNewTeam }) => {
   return (
     <div
       aria-labelledby="modal-title"
@@ -30,18 +30,20 @@ const ConfirmationModal = ({ pokemons, onClose, onStartNewTeam }) => {
           </p>
         </div>
         <div className="confirmation-modal__list">
-          {pokemons.map((pokemon) => (
+          {pokemons?.map((pokemon) => (
             <div className="confirmation-modal__item" key={pokemon.id}>
               <div className="confirmation-modal__info">
                 <img
-                  alt={`Imagem do ${pokemon.name}`}
+                  alt={`Imagem do ${pokemon?.name || 'pokémon'}`}
                   className="confirmation-modal__image"
-                  src={pokemon.image}
+                  src={pokemon?.image || ''}
                 />
-                <p className="confirmation-modal__name">{pokemon.name}</p>
+                <p className="confirmation-modal__name">
+                  {pokemon?.name || 'pokémon sem nome'}
+                </p>
               </div>
               <p className="confirmation-modal__characteristic">
-                {pokemon.characteristic}
+                {pokemon?.characteristic || 'não possui'}
               </p>
             </div>
           ))}
@@ -49,7 +51,7 @@ const ConfirmationModal = ({ pokemons, onClose, onStartNewTeam }) => {
         <div className="confirmation-modal__footer">
           <div className="confirmation-modal__total">
             <p>Total de pokémons na equipe:</p>
-            <p>{pokemons.length}</p>
+            <p>{pokemons?.length || 0}</p>
           </div>
           <button
             className="confirmation-modal__button"
@@ -64,7 +66,7 @@ const ConfirmationModal = ({ pokemons, onClose, onStartNewTeam }) => {
 };
 
 ConfirmationModal.propTypes = {
-  pokemons: PropTypes.array.isRequired,
+  pokemons: PropTypes.array,
   onClose: PropTypes.func.isRequired,
   onStartNewTeam: PropTypes.func.isRequired,
 };

@@ -14,31 +14,37 @@ const PokemonCard = ({
   types,
 }) => {
   const getValues = (values) =>
-    values
-      .map((item) => item?.type?.name || item?.ability?.name)
-      .filter(Boolean)
-      .join(', ');
+    values?.length
+      ? values
+          .map((item) => item?.type?.name || item?.ability?.name)
+          .filter(Boolean)
+          .join(', ')
+      : 'não possui';
 
   return (
     <div className="pokemon-card">
       <img
-        alt={`Imagem do ${name}`}
+        alt={`Imagem do ${name || 'pokémon'}`}
         className="pokemon-card__image"
         src={image || coverPokemon}
       />
       <button
         aria-label={
-          disabled ? `${name} indisponível` : `Adicionar ${name} à equipe`
+          disabled
+            ? `${name || 'pokémon'} indisponível`
+            : `Adicionar ${name || 'pokémon'} à equipe`
         }
         className="pokemon-card__button"
         disabled={disabled}
-        onClick={() => addPokemon(id)}
+        onClick={() => addPokemon(id || name)}
       >
         {disabled ? 'Indisponível' : 'Adicionar à equipe'}
       </button>
-      <h2 className="pokemon-card__name">{name}</h2>
+      <h2 className="pokemon-card__name">{name || 'pokémon sem nome'}</h2>
       <div className="pokemon-card__info">
-        <p className="pokemon-card__text">Característica: {characteristic}</p>
+        <p className="pokemon-card__text">
+          Característica: {characteristic || 'não possui'}
+        </p>
         <p className="pokemon-card__text">
           Habilidades: {getValues(abilities)}
         </p>
@@ -50,13 +56,13 @@ const PokemonCard = ({
 
 PokemonCard.propTypes = {
   addPokemon: PropTypes.func.isRequired,
-  abilities: PropTypes.array.isRequired,
-  characteristic: PropTypes.string.isRequired,
-  disabled: PropTypes.bool.isRequired,
-  id: PropTypes.number.isRequired,
-  image: PropTypes.string.isRequired,
-  name: PropTypes.string.isRequired,
-  types: PropTypes.array.isRequired,
+  abilities: PropTypes.array,
+  characteristic: PropTypes.string,
+  disabled: PropTypes.bool,
+  id: PropTypes.number,
+  image: PropTypes.string,
+  name: PropTypes.string,
+  types: PropTypes.array,
 };
 
 export default PokemonCard;

@@ -3,9 +3,6 @@ import { configureAxe } from 'vitest-axe';
 /**
  * Configuração customizada do axe-core para ambiente de teste JSDOM
  *
- * Esta configuração otimiza os testes de acessibilidade para o ambiente JSDOM,
- * desabilitando regras que não funcionam corretamente em ambiente simulado
- * e habilitando as principais verificações de WCAG.
  */
 export const axe = configureAxe({
   // Configurações globais
@@ -16,18 +13,11 @@ export const axe = configureAxe({
 
   // Regras customizadas para ambiente JSDOM
   rules: {
-    // ❌ Contraste de cor: Não funciona corretamente no JSDOM
-    // O JSDOM não renderiza cores reais, causando falsos positivos
-    'color-contrast': { enabled: false },
+    'color-contrast': { enabled: true },
 
-    // ❌ Landmarks: Desnecessário para testes de componentes isolados
-    // Componentes individuais não precisam ter landmarks completos
-    region: { enabled: false },
+    region: { enabled: true },
 
-    // ❌ Page-level rules: Não aplicáveis para componentes isolados
-    'page-has-heading-one': { enabled: false },
-    'landmark-one-main': { enabled: false },
-    'landmark-complementary-is-top-level': { enabled: false },
+    'landmark-complementary-is-top-level': { enabled: true },
 
     // ✅ Manter regras importantes para componentes
     'button-name': { enabled: true },
@@ -38,6 +28,39 @@ export const axe = configureAxe({
     'aria-valid-attr': { enabled: true },
     'aria-valid-attr-value': { enabled: true },
     'keyboard-navigation': { enabled: true },
+
+    'landmark-one-main': { enabled: true },
+    'heading-order': { enabled: true },
+    list: { enabled: true },
+    listitem: { enabled: true },
+
+    // Regras adicionais importantes
+    'aria-allowed-attr': { enabled: true },
+    'aria-required-attr': { enabled: true },
+    'aria-hidden-focus': { enabled: true },
+    'aria-input-field-name': { enabled: true },
+    'aria-required-children': { enabled: true },
+    'aria-required-parent': { enabled: true },
+    'aria-roles': { enabled: true },
+    'duplicate-id': { enabled: true },
+    'duplicate-id-active': { enabled: true },
+    'duplicate-id-aria': { enabled: true },
+    'frame-title': { enabled: true },
+    'html-has-lang': { enabled: true },
+    'html-lang-valid': { enabled: true },
+    label: { enabled: true },
+    'meta-viewport': { enabled: true },
+    'object-alt': { enabled: true },
+    'page-has-heading-one': { enabled: true },
+    region: { enabled: true },
+    'scope-attr-valid': { enabled: true },
+    'skip-link': { enabled: true },
+    tabindex: { enabled: true },
+    'table-duplicate-name': { enabled: true },
+    'table-fake-caption': { enabled: true },
+    'td-headers-attr': { enabled: true },
+    'th-has-data-cells': { enabled: true },
+    'valid-lang': { enabled: true },
   },
 
   // Tags WCAG para cobertura abrangente

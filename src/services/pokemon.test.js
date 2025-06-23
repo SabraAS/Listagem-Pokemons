@@ -38,6 +38,7 @@ describe('Pokemon Service', () => {
               url: 'https://pokeapi.co/api/v2/pokemon/4',
             },
           ],
+          count: 1000,
         },
       };
 
@@ -98,7 +99,7 @@ describe('Pokemon Service', () => {
       };
 
       axios.get.mockImplementation((url) => {
-        if (url === 'https://pokeapi.co/api/v2/pokemon?limit=2') {
+        if (url === 'https://pokeapi.co/api/v2/pokemon?offset=0&limit=2') {
           return Promise.resolve(mockPokemonListResponse);
         } else if (url === 'https://pokeapi.co/api/v2/pokemon/1') {
           return Promise.resolve(mockPokemon1Response);
@@ -112,18 +113,30 @@ describe('Pokemon Service', () => {
         return Promise.reject(new Error('Invalid URL'));
       });
 
-      const result = await getPokemonList(2);
+      const result = await getPokemonList({ limit: 2 });
+
+      // Verifica se o retorno tem o formato correto
+      expect(result).toHaveProperty('results');
+      expect(result).toHaveProperty('pagination');
 
       // Verifica se a lista tem o tamanho correto
-      expect(result).toHaveLength(2);
+      expect(result.results).toHaveLength(2);
 
       // Verifica se os dados do pokémon estão corretos
-      expect(result[0]).toEqual(mockPokemons[0]);
-      expect(result[1]).toEqual(mockPokemons[1]);
+      expect(result.results[0]).toEqual(mockPokemons[0]);
+      expect(result.results[1]).toEqual(mockPokemons[1]);
+
+      // Verifica dados de paginação
+      expect(result.pagination).toEqual({
+        total: 1000,
+        offset: 0,
+        limit: 2,
+        hasMore: true,
+      });
 
       // Verifica se as chamadas foram feitas corretamente
       expect(axios.get).toHaveBeenCalledWith(
-        'https://pokeapi.co/api/v2/pokemon?limit=2',
+        'https://pokeapi.co/api/v2/pokemon?offset=0&limit=2',
       );
       expect(axios.get).toHaveBeenCalledWith(
         'https://pokeapi.co/api/v2/pokemon/1',
@@ -176,17 +189,17 @@ describe('Pokemon Service', () => {
       );
     });
 
-    it('should return text não possui when characteristic is not found', async () => {
+    it('should return empty text when characteristic is not found', async () => {
       axios.get.mockRejectedValue(new Error('Not found'));
 
       const result = await getPokemonCharacteristic(999);
       expect(console.log).toHaveBeenCalledWith(
         'Erro ao buscar característica do Pokémon',
       );
-      expect(result).toBe('não possui');
+      expect(result).toBe('');
     });
 
-    it('should return text não possui when english description is not found', async () => {
+    it('should return empty text when english description is not found', async () => {
       const mockResponse = {
         data: {
           descriptions: [
@@ -201,7 +214,7 @@ describe('Pokemon Service', () => {
       axios.get.mockImplementation(() => Promise.resolve(mockResponse));
 
       const result = await getPokemonCharacteristic(1);
-      expect(result).toBe('não possui');
+      expect(result).toBe('');
     });
   });
 });

@@ -1,24 +1,34 @@
 import PropTypes from 'prop-types';
+
+import coverPokemon from '@/assets/cover-pokemon.webp';
+
 import './index.scss';
 
-const CartSidebar = ({ pokemons, onRemovePokemon, onConfirmTeam }) => {
+const CartSidebar = ({ pokemons = [], onRemovePokemon, onConfirmTeam }) => {
   return (
     <aside className="cart-sidebar">
-      <div className="cart-sidebar__background" />
+      <img
+        alt="Imagem de fundo da sidebar"
+        className="cart-sidebar__background"
+        src={coverPokemon}
+      />
       <h2 className="cart-sidebar__title">Sua equipe</h2>
       <div className="cart-sidebar__list">
-        {pokemons.length > 0 ? (
+        {pokemons?.length ? (
           pokemons.map((pokemon) => (
-            <div className="cart-sidebar__item" key={pokemon.id}>
+            <div
+              className="cart-sidebar__item"
+              key={pokemon.id || `pokemon-${pokemon.name}`}
+            >
               <div className="cart-sidebar__content">
                 <div className="cart-sidebar__info">
                   <div className="cart-sidebar__x">X</div>
                   <div className="cart-sidebar__name">
-                    <p>{pokemon.name}</p>
+                    <p>{pokemon.name || 'pokémon sem nome'}</p>
                   </div>
                 </div>
                 <button
-                  aria-label={`Remover ${pokemon.name} da equipe`}
+                  aria-label={`Remover ${pokemon.name || 'pokémon sem nome'} da equipe`}
                   className="cart-sidebar__remove-button"
                   onClick={() => onRemovePokemon(pokemon.id)}
                 >
@@ -26,7 +36,7 @@ const CartSidebar = ({ pokemons, onRemovePokemon, onConfirmTeam }) => {
                 </button>
               </div>
               <p className="cart-sidebar__characteristic">
-                {pokemon.characteristic}
+                {pokemon.characteristic || 'Pokémon sem característica'}
               </p>
             </div>
           ))
@@ -37,7 +47,7 @@ const CartSidebar = ({ pokemons, onRemovePokemon, onConfirmTeam }) => {
       <div className="cart-sidebar__footer">
         <button
           className="cart-sidebar__footer-button"
-          disabled={pokemons.length === 0}
+          disabled={!pokemons?.length}
           onClick={onConfirmTeam}
         >
           Confirmar Equipe
@@ -48,7 +58,7 @@ const CartSidebar = ({ pokemons, onRemovePokemon, onConfirmTeam }) => {
 };
 
 CartSidebar.propTypes = {
-  pokemons: PropTypes.array.isRequired,
+  pokemons: PropTypes.array,
   onRemovePokemon: PropTypes.func.isRequired,
   onConfirmTeam: PropTypes.func.isRequired,
 };

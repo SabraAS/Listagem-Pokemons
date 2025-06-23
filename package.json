@@ -12,7 +12,7 @@
     "format": "prettier --write .",
     "lint": "eslint . --ext .js,.jsx --fix",
     "stylelint": "stylelint \"src/**/*.(scss|css)\" --fix",
-    "test": "vitest --watch",
+    "test": "vitest --watch src --exclude \"**/*.puppeteer.test.js\"",
     "test:ui": "vitest --ui --coverage",
     "test:coverage": "vitest --run --coverage",
     "test:coverage:watch": "vitest --coverage",
@@ -20,6 +20,7 @@
     "test:a11y": "vitest --run --reporter=verbose -t=\"Accessibility\"",
     "test:a11y:watch": "vitest --watch -t=\"Accessibility\"",
     "test:all": "vitest --run --reporter=verbose",
+    "test:puppeteer": "vitest --run \"**/*.puppeteer.test.js\"",
     "lighthouse:desktop": "./scripts/lighthouse-desktop.sh",
     "lighthouse:mobile": "./scripts/lighthouse-mobile.sh",
     "lighthouse:desktop:full": "./scripts/lighthouse-desktop-full.sh",
@@ -58,7 +59,6 @@
     "@vitejs/plugin-react": "^4.2.1",
     "@vitest/coverage-v8": "^1.4.0",
     "@vitest/ui": "^1.4.0",
-    "connect-gzip-static": "^4.2.2",
     "eslint": "^9.0.0",
     "eslint-config-prettier": "^9.1.0",
     "eslint-plugin-import": "^2.29.1",
@@ -82,8 +82,7 @@
     "vite-bundle-analyzer": "^0.22.0",
     "vite-plugin-restart": "^0.4.0",
     "vitest": "^1.4.0",
-    "vitest-axe": "^0.1.0",
-    "web-vitals": "^5.0.2"
+    "vitest-axe": "^0.1.0"
   },
   "engines": {
     "npm": "please-use-yarn",

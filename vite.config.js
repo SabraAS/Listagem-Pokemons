@@ -67,6 +67,8 @@ export default defineConfig({
       '@': path.resolve(__dirname, './src'),
     },
   },
+  // Configuração para otimização de assets
+  assetsInclude: ['**/*.webp', '**/*.png', '**/*.jpg', '**/*.jpeg', '**/*.svg'],
   test: {
     globals: true,
     environment: 'jsdom',
