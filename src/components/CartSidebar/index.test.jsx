@@ -46,8 +46,16 @@ describe('CartSidebar', () => {
 
     it('should render pokemon characteristics', () => {
       render(<CartSidebar {...defaultProps} />);
-      expect(screen.getByText('Loves to eat')).toBeInTheDocument();
-      expect(screen.getByText('Highly curious')).toBeInTheDocument();
+      expect(
+        screen.getByText(
+          'A strange seed was planted on its back at birth. The plant sprouts and grows with this Pokémon.',
+        ),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(
+          'Obviously prefers hot places. When it rains, steam is said to spout from the tip of its tail.',
+        ),
+      ).toBeInTheDocument();
     });
 
     it('should render remove buttons for each pokemon', () => {
@@ -326,7 +334,9 @@ describe('CartSidebar', () => {
       expect(name).toBeInTheDocument();
       expect(name).toHaveClass('cart-sidebar__name');
 
-      const characteristic = screen.getByText('Loves to eat');
+      const characteristic = screen.getByText(
+        'A strange seed was planted on its back at birth. The plant sprouts and grows with this Pokémon.',
+      );
       expect(characteristic).toHaveClass('cart-sidebar__characteristic');
     });
 

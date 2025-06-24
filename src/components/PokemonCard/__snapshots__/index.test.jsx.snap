@@ -28,7 +28,7 @@ exports[`PokemonCard > should match snapshot 1`] = `
         class="pokemon-card__text"
       >
         Característica: 
-        Loves to eat
+        A strange seed was planted on its back at birth. The plant sprouts and grows with this Pokémon.
       </p>
       <p
         class="pokemon-card__text"

@@ -13,7 +13,12 @@ export const getPokemonList = async ({ offset = 0, limit = 20 } = {}) => {
     const pokemonData = await Promise.all(
       pokemonList.map(async (pokemon) => {
         const pokemonData = await axios.get(pokemon.url);
-        const description = await getPokemonCharacteristic(pokemonData.data.id);
+
+        // Busca a descrição da espécie
+        const description = await getPokemonSpeciesDescription(
+          pokemonData.data.species.url,
+        );
+
         return {
           id: pokemonData.data.id,
           name: pokemonData.data.name,
@@ -40,16 +45,29 @@ export const getPokemonList = async ({ offset = 0, limit = 20 } = {}) => {
   }
 };
 
-export const getPokemonCharacteristic = async (id) => {
+// Função para buscar a descrição da espécie
+const getPokemonSpeciesDescription = async (speciesUrl) => {
   try {
-    const response = await axios.get(`${BASE_URL}/characteristic/${id}`);
+    const response = await axios.get(speciesUrl);
     const data = response.data;
-    const englishDescription = data.descriptions.find(
-      (desc) => desc.language.name === 'en',
+
+    // Encontra o primeiro flavor_text em inglês
+    const englishFlavorText = data.flavor_text_entries.find(
+      (entry) => entry.language.name === 'en',
     );
-    return englishDescription?.description || '';
-  } catch (_e) {
-    console.log('Erro ao buscar característica do Pokémon');
+
+    if (englishFlavorText) {
+      // Remove quebras de linha e formata o texto
+      return englishFlavorText.flavor_text
+        .replace(/\f/g, ' ') // Remove form feed
+        .replace(/\n/g, ' ') // Remove quebras de linha
+        .replace(/\s+/g, ' ') // Remove espaços múltiplos
+        .trim();
+    }
+
+    return '';
+  } catch (error) {
+    console.log('Erro ao buscar descrição da espécie:', error);
     return '';
   }
 };

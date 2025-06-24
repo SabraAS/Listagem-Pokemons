@@ -74,6 +74,10 @@ export default defineConfig({
     environment: 'jsdom',
     setupFiles: ['./src/test/setup.js'],
     css: true,
+    include: [
+      'src/**/*.{test,spec}.{js,jsx,ts,tsx}',
+      'src/**/*.puppeteer.test.js',
+    ],
     deps: {
       inline: ['react-dom'],
     },

@@ -345,7 +345,11 @@ describe('Home', () => {
       expect(screen.getByLabelText('bulbasaur indisponível')).toBeDisabled();
 
       // Verify characteristic appears in sidebar
-      expect(screen.getByText('Loves to eat')).toBeInTheDocument();
+      expect(
+        screen.getByText(
+          'A strange seed was planted on its back at birth. The plant sprouts and grows with this Pokémon.',
+        ),
+      ).toBeInTheDocument();
 
       // Add charmander to team
       const addCharmanderButton = screen.getByLabelText(
@@ -362,14 +366,22 @@ describe('Home', () => {
       fireEvent.click(removeButton);
 
       // Verify bulbasaur removed and button enabled again
-      expect(screen.queryByText('Loves to eat')).not.toBeInTheDocument();
+      expect(
+        screen.queryByText(
+          'A strange seed was planted on its back at birth. The plant sprouts and grows with this Pokémon.',
+        ),
+      ).not.toBeInTheDocument();
       expect(
         screen.getByLabelText('Adicionar bulbasaur à equipe'),
       ).not.toBeDisabled();
 
       // Only charmander should remain in sidebar
       expect(screen.getAllByText('charmander')).toHaveLength(2);
-      expect(screen.getByText('Highly curious')).toBeInTheDocument();
+      expect(
+        screen.getByText(
+          'Obviously prefers hot places. When it rains, steam is said to spout from the tip of its tail.',
+        ),
+      ).toBeInTheDocument();
     });
 
     it('should hide modal when is called via onClose', () => {

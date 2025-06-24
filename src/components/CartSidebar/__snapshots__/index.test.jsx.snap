@@ -50,7 +50,7 @@ exports[`CartSidebar > should match snapshot 1`] = `
         <p
           class="cart-sidebar__characteristic"
         >
-          Loves to eat
+          A strange seed was planted on its back at birth. The plant sprouts and grows with this Pokémon.
         </p>
       </div>
       <div
@@ -85,7 +85,7 @@ exports[`CartSidebar > should match snapshot 1`] = `
         <p
           class="cart-sidebar__characteristic"
         >
-          Highly curious
+          Obviously prefers hot places. When it rains, steam is said to spout from the tip of its tail.
         </p>
       </div>
     </div>

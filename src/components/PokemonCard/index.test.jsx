@@ -53,7 +53,9 @@ describe('PokemonCard', () => {
     it('should render characteristic correctly', () => {
       render(<PokemonCard {...defaultProps} />);
       expect(
-        screen.getByText('Característica: Loves to eat'),
+        screen.getByText(
+          'Característica: A strange seed was planted on its back at birth. The plant sprouts and grows with this Pokémon.',
+        ),
       ).toBeInTheDocument();
     });
 
@@ -253,7 +255,9 @@ describe('PokemonCard', () => {
     it('should have correct info container class', () => {
       render(<PokemonCard {...defaultProps} />);
       const infoContainer = screen
-        .getByText('Característica: Loves to eat')
+        .getByText(
+          'Característica: A strange seed was planted on its back at birth. The plant sprouts and grows with this Pokémon.',
+        )
         .closest('.pokemon-card__info');
       expect(infoContainer).toBeInTheDocument();
       expect(infoContainer).toHaveClass('pokemon-card__info');
@@ -268,7 +272,7 @@ describe('PokemonCard', () => {
     it('should have correct text classes for all text elements', () => {
       render(<PokemonCard {...defaultProps} />);
       const characteristicText = screen.getByText(
-        'Característica: Loves to eat',
+        'Característica: A strange seed was planted on its back at birth. The plant sprouts and grows with this Pokémon.',
       );
       const abilitiesText = screen.getByText(
         'Habilidades: overgrow, chlorophyll',

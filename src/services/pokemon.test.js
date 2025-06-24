@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { describe, expect, it, vi } from 'vitest';
 
-import { getPokemonCharacteristic, getPokemonList } from './pokemon';
+import { getPokemonList } from './pokemon';
 
 import { mockPokemons } from '@/test/mocks/pokemon';
 
@@ -55,6 +55,10 @@ describe('Pokemon Service', () => {
           },
           abilities: mockPokemons[0].abilities,
           types: mockPokemons[0].types,
+          species: {
+            name: 'bulbasaur',
+            url: 'https://pokeapi.co/api/v2/pokemon-species/1/',
+          },
         },
       };
 
@@ -71,28 +75,57 @@ describe('Pokemon Service', () => {
           },
           abilities: mockPokemons[1].abilities,
           types: mockPokemons[1].types,
+          species: {
+            name: 'charmander',
+            url: 'https://pokeapi.co/api/v2/pokemon-species/4/',
+          },
         },
       };
 
-      // Mock characteristic for bulbasaur
-      const mockCharacteristicResponse1 = {
+      // Mock species description for bulbasaur
+      const mockSpeciesResponse1 = {
         data: {
-          descriptions: [
+          flavor_text_entries: [
             {
-              description: mockPokemons[0].characteristic,
+              flavor_text: mockPokemons[0].characteristic,
               language: { name: 'en' },
+              version: {
+                name: 'red',
+                url: 'https://pokeapi.co/api/v2/version/1/',
+              },
+            },
+            {
+              flavor_text:
+                'Une étrange graine a été plantée sur son dos à la naissance.',
+              language: { name: 'fr' },
+              version: {
+                name: 'red',
+                url: 'https://pokeapi.co/api/v2/version/1/',
+              },
             },
           ],
         },
       };
 
-      // Mock characteristic for charmander
-      const mockCharacteristicResponse2 = {
+      // Mock species description for charmander
+      const mockSpeciesResponse2 = {
         data: {
-          descriptions: [
+          flavor_text_entries: [
             {
-              description: mockPokemons[1].characteristic,
+              flavor_text: mockPokemons[1].characteristic,
               language: { name: 'en' },
+              version: {
+                name: 'red',
+                url: 'https://pokeapi.co/api/v2/version/1/',
+              },
+            },
+            {
+              flavor_text: 'Préfère évidemment les endroits chauds.',
+              language: { name: 'fr' },
+              version: {
+                name: 'red',
+                url: 'https://pokeapi.co/api/v2/version/1/',
+              },
             },
           ],
         },
@@ -105,10 +138,10 @@ describe('Pokemon Service', () => {
           return Promise.resolve(mockPokemon1Response);
         } else if (url === 'https://pokeapi.co/api/v2/pokemon/4') {
           return Promise.resolve(mockPokemon2Response);
-        } else if (url === 'https://pokeapi.co/api/v2/characteristic/1') {
-          return Promise.resolve(mockCharacteristicResponse1);
-        } else if (url === 'https://pokeapi.co/api/v2/characteristic/4') {
-          return Promise.resolve(mockCharacteristicResponse2);
+        } else if (url === 'https://pokeapi.co/api/v2/pokemon-species/1/') {
+          return Promise.resolve(mockSpeciesResponse1);
+        } else if (url === 'https://pokeapi.co/api/v2/pokemon-species/4/') {
+          return Promise.resolve(mockSpeciesResponse2);
         }
         return Promise.reject(new Error('Invalid URL'));
       });
@@ -145,10 +178,10 @@ describe('Pokemon Service', () => {
         'https://pokeapi.co/api/v2/pokemon/4',
       );
       expect(axios.get).toHaveBeenCalledWith(
-        'https://pokeapi.co/api/v2/characteristic/1',
+        'https://pokeapi.co/api/v2/pokemon-species/1/',
       );
       expect(axios.get).toHaveBeenCalledWith(
-        'https://pokeapi.co/api/v2/characteristic/4',
+        'https://pokeapi.co/api/v2/pokemon-species/4/',
       );
     });
 
@@ -160,61 +193,196 @@ describe('Pokemon Service', () => {
         'Erro ao buscar lista de Pokémon',
       );
     });
-  });
 
-  describe('getPokemonCharacteristic', () => {
-    it('should fetch pokemon characteristic correctly', async () => {
-      const mockResponse = {
+    it('should handle error when fetching species description', async () => {
+      const mockPokemonListResponse = {
         data: {
-          descriptions: [
+          results: [
             {
-              description: mockPokemons[0].characteristic,
-              language: { name: 'en' },
-            },
-            {
-              description: 'Dorme bastante',
-              language: { name: 'pt' },
+              name: 'bulbasaur',
+              url: 'https://pokeapi.co/api/v2/pokemon/1',
             },
           ],
+          count: 1000,
         },
       };
 
-      axios.get.mockImplementation(() => Promise.resolve(mockResponse));
+      const mockPokemonResponse = {
+        data: {
+          id: 1,
+          name: 'bulbasaur',
+          sprites: {
+            other: {
+              dream_world: {
+                front_default: 'test-image.svg',
+              },
+            },
+          },
+          abilities: [],
+          types: [],
+          species: {
+            name: 'bulbasaur',
+            url: 'https://pokeapi.co/api/v2/pokemon-species/1/',
+          },
+        },
+      };
 
-      const result = await getPokemonCharacteristic(1);
-      expect(result).toBe(mockPokemons[0].characteristic);
+      axios.get.mockImplementation((url) => {
+        if (url === 'https://pokeapi.co/api/v2/pokemon?offset=0&limit=20') {
+          return Promise.resolve(mockPokemonListResponse);
+        } else if (url === 'https://pokeapi.co/api/v2/pokemon/1') {
+          return Promise.resolve(mockPokemonResponse);
+        } else if (url === 'https://pokeapi.co/api/v2/pokemon-species/1/') {
+          return Promise.reject(new Error('Species API Error'));
+        }
+        return Promise.reject(new Error('Invalid URL'));
+      });
 
-      expect(axios.get).toHaveBeenCalledWith(
-        'https://pokeapi.co/api/v2/characteristic/1',
-      );
-    });
+      const result = await getPokemonList();
 
-    it('should return empty text when characteristic is not found', async () => {
-      axios.get.mockRejectedValue(new Error('Not found'));
-
-      const result = await getPokemonCharacteristic(999);
+      // Verifica se retorna lista vazia quando há erro na descrição da espécie
+      expect(result.results).toHaveLength(1);
+      expect(result.results[0].characteristic).toBe('');
       expect(console.log).toHaveBeenCalledWith(
-        'Erro ao buscar característica do Pokémon',
+        'Erro ao buscar descrição da espécie:',
+        expect.any(Error),
       );
-      expect(result).toBe('');
     });
 
-    it('should return empty text when english description is not found', async () => {
-      const mockResponse = {
+    it('should return empty description when no english flavor text is found', async () => {
+      const mockPokemonListResponse = {
         data: {
-          descriptions: [
+          results: [
             {
-              description: 'Dorme bastante',
-              language: { name: 'pt' },
+              name: 'bulbasaur',
+              url: 'https://pokeapi.co/api/v2/pokemon/1',
+            },
+          ],
+          count: 1000,
+        },
+      };
+
+      const mockPokemonResponse = {
+        data: {
+          id: 1,
+          name: 'bulbasaur',
+          sprites: {
+            other: {
+              dream_world: {
+                front_default: 'test-image.svg',
+              },
+            },
+          },
+          abilities: [],
+          types: [],
+          species: {
+            name: 'bulbasaur',
+            url: 'https://pokeapi.co/api/v2/pokemon-species/1/',
+          },
+        },
+      };
+
+      const mockSpeciesResponse = {
+        data: {
+          flavor_text_entries: [
+            {
+              flavor_text:
+                'Une étrange graine a été plantée sur son dos à la naissance.',
+              language: { name: 'fr' },
+              version: {
+                name: 'red',
+                url: 'https://pokeapi.co/api/v2/version/1/',
+              },
             },
           ],
         },
       };
 
-      axios.get.mockImplementation(() => Promise.resolve(mockResponse));
+      axios.get.mockImplementation((url) => {
+        if (url === 'https://pokeapi.co/api/v2/pokemon?offset=0&limit=20') {
+          return Promise.resolve(mockPokemonListResponse);
+        } else if (url === 'https://pokeapi.co/api/v2/pokemon/1') {
+          return Promise.resolve(mockPokemonResponse);
+        } else if (url === 'https://pokeapi.co/api/v2/pokemon-species/1/') {
+          return Promise.resolve(mockSpeciesResponse);
+        }
+        return Promise.reject(new Error('Invalid URL'));
+      });
 
-      const result = await getPokemonCharacteristic(1);
-      expect(result).toBe('');
+      const result = await getPokemonList();
+
+      // Verifica se retorna descrição vazia quando não há texto em inglês
+      expect(result.results).toHaveLength(1);
+      expect(result.results[0].characteristic).toBe('');
+    });
+
+    it('should format flavor text correctly by removing line breaks and special characters', async () => {
+      const mockPokemonListResponse = {
+        data: {
+          results: [
+            {
+              name: 'ditto',
+              url: 'https://pokeapi.co/api/v2/pokemon/132',
+            },
+          ],
+          count: 1000,
+        },
+      };
+
+      const mockPokemonResponse = {
+        data: {
+          id: 132,
+          name: 'ditto',
+          sprites: {
+            other: {
+              dream_world: {
+                front_default: 'test-image.svg',
+              },
+            },
+          },
+          abilities: [],
+          types: [],
+          species: {
+            name: 'ditto',
+            url: 'https://pokeapi.co/api/v2/pokemon-species/132/',
+          },
+        },
+      };
+
+      const mockSpeciesResponse = {
+        data: {
+          flavor_text_entries: [
+            {
+              flavor_text:
+                "Capable of copying\nan enemy's genetic\ncode to instantly\ftransform itself\ninto a duplicate\nof the enemy.",
+              language: { name: 'en' },
+              version: {
+                name: 'red',
+                url: 'https://pokeapi.co/api/v2/version/1/',
+              },
+            },
+          ],
+        },
+      };
+
+      axios.get.mockImplementation((url) => {
+        if (url === 'https://pokeapi.co/api/v2/pokemon?offset=0&limit=20') {
+          return Promise.resolve(mockPokemonListResponse);
+        } else if (url === 'https://pokeapi.co/api/v2/pokemon/132') {
+          return Promise.resolve(mockPokemonResponse);
+        } else if (url === 'https://pokeapi.co/api/v2/pokemon-species/132/') {
+          return Promise.resolve(mockSpeciesResponse);
+        }
+        return Promise.reject(new Error('Invalid URL'));
+      });
+
+      const result = await getPokemonList();
+
+      // Verifica se o texto foi formatado corretamente
+      expect(result.results).toHaveLength(1);
+      expect(result.results[0].characteristic).toBe(
+        "Capable of copying an enemy's genetic code to instantly transform itself into a duplicate of the enemy.",
+      );
     });
   });
 });

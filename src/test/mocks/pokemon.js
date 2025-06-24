@@ -38,7 +38,8 @@ export const mockPokemons = [
         },
       },
     ],
-    characteristic: 'Loves to eat',
+    characteristic:
+      'A strange seed was planted on its back at birth. The plant sprouts and grows with this Pokémon.',
   },
   {
     id: 4,
@@ -72,6 +73,7 @@ export const mockPokemons = [
         },
       },
     ],
-    characteristic: 'Highly curious',
+    characteristic:
+      'Obviously prefers hot places. When it rains, steam is said to spout from the tip of its tail.',
   },
 ];

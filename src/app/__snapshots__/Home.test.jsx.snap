@@ -43,7 +43,7 @@ exports[`Home > should match snapshot 1`] = `
                 class="pokemon-card__text"
               >
                 Característica: 
-                Loves to eat
+                A strange seed was planted on its back at birth. The plant sprouts and grows with this Pokémon.
               </p>
               <p
                 class="pokemon-card__text"
@@ -87,7 +87,7 @@ exports[`Home > should match snapshot 1`] = `
                 class="pokemon-card__text"
               >
                 Característica: 
-                Highly curious
+                Obviously prefers hot places. When it rains, steam is said to spout from the tip of its tail.
               </p>
               <p
                 class="pokemon-card__text"

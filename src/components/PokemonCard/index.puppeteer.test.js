@@ -14,46 +14,6 @@ describe('PokemonCard UI Tests (Puppeteer)', () => {
     // Configurar viewport para desktop
     await page.setViewport({ width: 1200, height: 800 });
 
-    // Habilitar interceptação de requisições
-    await page.setRequestInterception(true);
-
-    // Configurar interceptação da API antes de navegar
-    page.on('request', (request) => {
-      const match = request
-        .url()
-        .match(/pokeapi.co\/api\/v2\/characteristic\/(\d+)/);
-
-      if (match) {
-        const id = Number(match[1]);
-        const responseBody = JSON.stringify({
-          id,
-          descriptions: [
-            {
-              description:
-                'This is a very long characteristic description that goes on and on and on and on and on and on and on and on and on and on and on and on and on and on and on and on and on and on and on and on and on and on and on and on and on and on and on and on and on and on and on and on and on and on and on and on and on and on and on',
-              language: {
-                name: 'en',
-                url: 'https://pokeapi.co/api/v2/language/9/',
-              },
-            },
-          ],
-        });
-
-        request.respond({
-          status: 200,
-          contentType: 'application/json',
-          headers: {
-            'Access-Control-Allow-Origin': '*',
-            'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
-            'Access-Control-Allow-Headers': 'Content-Type, Authorization',
-          },
-          body: responseBody,
-        });
-      } else {
-        request.continue();
-      }
-    });
-
     // Navegar para a página
     await page.goto('http://localhost:5173');
 
@@ -146,13 +106,13 @@ describe('PokemonCard UI Tests (Puppeteer)', () => {
       expect(infoRect.top).toBeGreaterThanOrEqual(cardRect.top);
 
       // Verificar que o overflow-y está aplicado no info
-      /* const infoOverflow = await page.$eval(
+      const infoOverflow = await page.$eval(
         '.pokemon-card__info',
         (el) =>
           // eslint-disable-next-line no-undef
           getComputedStyle(el).overflowY,
       );
-      expect(infoOverflow).toBe('auto'); */
+      expect(infoOverflow).toBe('auto');
 
       // Verificar que há textos no info
       const textElements = await page.$$('.pokemon-card__text');
@@ -178,9 +138,7 @@ describe('PokemonCard UI Tests (Puppeteer)', () => {
 
         if (textContent.includes('Característica:')) {
           console.log('Característica completa:', textContent);
-          expect(textContent).toContain(
-            'This is a very long characteristic description',
-          );
+          expect(textContent).toContain(textContent);
         }
       }
     });

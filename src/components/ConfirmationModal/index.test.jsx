@@ -63,8 +63,16 @@ describe('ConfirmationModal', () => {
       render(<ConfirmationModal {...defaultProps} />);
       expect(screen.getByText('bulbasaur')).toBeInTheDocument();
       expect(screen.getByText('charmander')).toBeInTheDocument();
-      expect(screen.getByText('Loves to eat')).toBeInTheDocument();
-      expect(screen.getByText('Highly curious')).toBeInTheDocument();
+      expect(
+        screen.getByText(
+          'A strange seed was planted on its back at birth. The plant sprouts and grows with this Pokémon.',
+        ),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(
+          'Obviously prefers hot places. When it rains, steam is said to spout from the tip of its tail.',
+        ),
+      ).toBeInTheDocument();
     });
 
     it('should render pokemon images with correct alt text', () => {
@@ -79,11 +87,21 @@ describe('ConfirmationModal', () => {
 
     it('should render pokemon characteristics', () => {
       render(<ConfirmationModal {...defaultProps} />);
-      expect(screen.getByText('Loves to eat')).toBeInTheDocument();
-      expect(screen.getByText('Highly curious')).toBeInTheDocument();
-      expect(screen.getByText('Loves to eat')).toHaveClass(
-        'confirmation-modal__characteristic',
-      );
+      expect(
+        screen.getByText(
+          'A strange seed was planted on its back at birth. The plant sprouts and grows with this Pokémon.',
+        ),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(
+          'Obviously prefers hot places. When it rains, steam is said to spout from the tip of its tail.',
+        ),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByText(
+          'A strange seed was planted on its back at birth. The plant sprouts and grows with this Pokémon.',
+        ),
+      ).toHaveClass('confirmation-modal__characteristic');
     });
 
     it('should render pokemon names with correct classes', () => {
@@ -332,7 +350,9 @@ describe('ConfirmationModal', () => {
       const name = screen.getByText('bulbasaur');
       expect(name).toHaveClass('confirmation-modal__name');
 
-      const characteristic = screen.getByText('Loves to eat');
+      const characteristic = screen.getByText(
+        'A strange seed was planted on its back at birth. The plant sprouts and grows with this Pokémon.',
+      );
       expect(characteristic).toHaveClass('confirmation-modal__characteristic');
 
       const image = screen.getByAltText('Imagem do bulbasaur');
