@@ -8,7 +8,6 @@ export const usePokemons = () => {
   return useQuery({
     queryKey: ['pokemons', 'list'],
     queryFn: async () => {
-      // Inicia o carregamento com callback para atualizar o cache
       return getPokemonList((pokemons) => {
         queryClient.setQueryData(['pokemons', 'list'], pokemons);
       });
