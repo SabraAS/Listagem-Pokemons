@@ -117,7 +117,7 @@ exports[`Home > should match snapshot 1`] = `
         <img
           alt="Imagem de fundo da sidebar"
           class="cart-sidebar__background"
-          src="/src/assets/cover-pokemon.webp"
+          src="/src/assets/cover-pokemon.png"
         />
         <h2
           class="cart-sidebar__title"

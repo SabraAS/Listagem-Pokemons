@@ -1,6 +1,6 @@
 import PropTypes from 'prop-types';
 
-import coverPokemon from '@/assets/cover-pokemon.webp';
+import coverPokemon from '@/assets/cover-pokemon.png';
 
 import './index.scss';
 

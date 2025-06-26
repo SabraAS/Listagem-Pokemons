@@ -4,7 +4,7 @@ import { axe } from 'vitest-axe';
 
 import PokemonCard from './index';
 
-import coverPokemon from '@/assets/cover-pokemon.webp';
+import coverPokemon from '@/assets/cover-pokemon.png';
 import { mockPokemons } from '@/test/mocks/pokemon';
 
 describe('PokemonCard', () => {
