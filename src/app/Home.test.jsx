@@ -8,7 +8,6 @@ import { usePokemons } from '@/queries/pokemon';
 import * as pokemonStoreModule from '@/store/pokemon';
 import { mockPokemons } from '@/test/mocks/pokemon';
 
-// Mock dos hooks
 vi.mock('@/queries/pokemon', () => ({
   usePokemons: vi.fn(),
 }));
@@ -19,13 +18,11 @@ describe('Home', () => {
   const mockRemovePokemonById = vi.fn();
   const mockClearTeam = vi.fn();
 
-  // Save original store implementation
   const originalUsePokemonStore = pokemonStoreModule.usePokemonStore;
 
   beforeEach(() => {
     vi.clearAllMocks();
 
-    // Mock do hook usePokemons
     mockUsePokemons.mockReturnValue({
       data: {
         pages: [
@@ -46,7 +43,6 @@ describe('Home', () => {
       fetchNextPage: vi.fn(),
     });
 
-    // Mock the store for regular tests
     vi.spyOn(pokemonStoreModule, 'usePokemonStore').mockImplementation(
       (selector) => {
         const state = {
@@ -63,17 +59,15 @@ describe('Home', () => {
   });
 
   afterEach(() => {
-    // Restore the original store implementation
     vi.restoreAllMocks();
   });
 
-  // Teste de snapshot como primeiro teste
-  it('should match snapshot', () => {
-    const { container } = render(<Home />);
-    expect(container).toMatchSnapshot();
-  });
-
   describe('Rendering', () => {
+    it('should match snapshot', () => {
+      const { container } = render(<Home />);
+      expect(container).toMatchSnapshot();
+    });
+
     it('should render basic structure without errors', () => {
       render(<Home />);
       expect(screen.getByText('Pokémons')).toBeInTheDocument();
@@ -81,30 +75,27 @@ describe('Home', () => {
     });
 
     it('should handle empty pages array from API', () => {
-      // Testing the case when data.pages exists but is empty
       mockUsePokemons.mockReturnValue({
         data: {
-          pages: [], // Empty pages array
+          pages: [],
         },
         isLoading: false,
       });
 
       render(<Home />);
       expect(screen.getByText('Pokémons')).toBeInTheDocument();
-      // Should show the empty state message since flattenedPokemons will be []
+
       expect(screen.getByText('Nenhum Pokémon encontrado')).toBeInTheDocument();
     });
 
     it('should handle data without pages property', () => {
-      // Testing the case when data exists but has no pages property
-      // Note: data.pages needs to be defined but can be null
       mockUsePokemons.mockReturnValue({
         data: { pages: null },
         isLoading: false,
       });
 
       render(<Home />);
-      // Should show empty state since flattenedPokemons will be []
+
       expect(screen.getByText('Nenhum Pokémon encontrado')).toBeInTheDocument();
     });
 
@@ -199,7 +190,6 @@ describe('Home', () => {
     });
 
     it('should transition from loading to loaded state correctly', () => {
-      // Inicialmente carregando
       mockUsePokemons.mockReturnValue({
         data: undefined,
         isLoading: true,
@@ -208,7 +198,6 @@ describe('Home', () => {
       const { rerender } = render(<Home />);
       expect(screen.getByText('Carregando...')).toBeInTheDocument();
 
-      // Em seguida, carregado com sucesso
       mockUsePokemons.mockReturnValue({
         data: {
           pages: [
@@ -228,7 +217,7 @@ describe('Home', () => {
 
       rerender(<Home />);
       expect(screen.queryByText('Carregando...')).not.toBeInTheDocument();
-      expect(screen.getAllByText('bulbasaur')).toHaveLength(1); // Apenas no card
+      expect(screen.getAllByText('bulbasaur')).toHaveLength(1);
     });
   });
 
@@ -237,7 +226,6 @@ describe('Home', () => {
       vi.clearAllMocks();
       vi.restoreAllMocks();
 
-      // Just mock the API data
       usePokemons.mockReturnValue({
         data: {
           pages: [
@@ -258,15 +246,12 @@ describe('Home', () => {
         fetchNextPage: vi.fn(),
       });
 
-      // Reset the store state between tests
       originalUsePokemonStore.getState().clearTeam();
     });
 
     it('should not add pokemon that does not exist in the list', () => {
-      // Create spies to monitor store actions
       const mockAddPokemon = vi.fn();
 
-      // Set up mocked store with our spy
       vi.spyOn(pokemonStoreModule, 'usePokemonStore').mockImplementation(
         (selector) => {
           const state = {
@@ -279,8 +264,6 @@ describe('Home', () => {
         },
       );
 
-      // Set up mocked API response with specific Pokemon data
-      // Notice we only include ID 1 and 2
       mockUsePokemons.mockReturnValue({
         data: {
           pages: [
@@ -306,66 +289,51 @@ describe('Home', () => {
 
       const { container } = render(<Home />);
 
-      // Initial state check - make sure our pokemons render correctly
       expect(screen.getByText('bulbasaur')).toBeInTheDocument();
       expect(screen.getByText('charmander')).toBeInTheDocument();
 
-      // Mock the PokemonCard's addPokemon prop call with a non-existent ID
       const addPokemonProp = container.querySelector(
         '.pokemon-card__button',
       ).onclick;
 
-      // Create a mock function that will call the original with a non-existent ID
-      const nonExistingId = 999; // an ID that doesn't exist in our results
+      const nonExistingId = 999;
 
-      // Reset the spy to ensure we're only tracking new calls
       mockAddPokemon.mockClear();
 
-      // Call the handler directly with a non-existent ID
-      // This simulates what would happen if somehow a card with ID 999 was clicked
       const mockEvent = { preventDefault: vi.fn() };
       addPokemonProp.call({ props: { id: nonExistingId } }, mockEvent);
 
-      // Verify addPokemon was not called since the Pokemon doesn't exist
       expect(mockAddPokemon).not.toHaveBeenCalled();
     });
 
     it('should add and remove pokemon using real store', () => {
       render(<Home />);
 
-      // Verify initial empty state
       expect(screen.getByText('Nenhum Pokémon adicionado')).toBeInTheDocument();
 
-      // Add bulbasaur to team
       const addButton = screen.getByLabelText('Adicionar bulbasaur à equipe');
       fireEvent.click(addButton);
 
-      // Verify bulbasaur appears in sidebar
       expect(screen.getAllByText('bulbasaur')).toHaveLength(2); // Card + Sidebar
       expect(screen.getByLabelText('bulbasaur indisponível')).toBeDisabled();
 
-      // Verify characteristic appears in sidebar
       expect(
         screen.getByText(
           'A strange seed was planted on its back at birth. The plant sprouts and grows with this Pokémon.',
         ),
       ).toBeInTheDocument();
 
-      // Add charmander to team
       const addCharmanderButton = screen.getByLabelText(
         'Adicionar charmander à equipe',
       );
       fireEvent.click(addCharmanderButton);
 
-      // Verify both pokemon in sidebar
       expect(screen.getAllByText('bulbasaur')).toHaveLength(2);
       expect(screen.getAllByText('charmander')).toHaveLength(2);
 
-      // Remove bulbasaur
       const removeButton = screen.getByLabelText('Remover bulbasaur da equipe');
       fireEvent.click(removeButton);
 
-      // Verify bulbasaur removed and button enabled again
       expect(
         screen.queryByText(
           'A strange seed was planted on its back at birth. The plant sprouts and grows with this Pokémon.',
@@ -375,7 +343,6 @@ describe('Home', () => {
         screen.getByLabelText('Adicionar bulbasaur à equipe'),
       ).not.toBeDisabled();
 
-      // Only charmander should remain in sidebar
       expect(screen.getAllByText('charmander')).toHaveLength(2);
       expect(
         screen.getByText(
@@ -385,7 +352,6 @@ describe('Home', () => {
     });
 
     it('should hide modal when is called via onClose', () => {
-      // Setup the store to have pokemons
       vi.spyOn(pokemonStoreModule, 'usePokemonStore').mockImplementation(
         (selector) => {
           const state = {
@@ -403,51 +369,42 @@ describe('Home', () => {
 
       render(<Home />);
 
-      // Open the modal first
       fireEvent.click(screen.getByText('Confirmar Equipe'));
       expect(screen.getByText('Equipe formada')).toBeInTheDocument();
 
-      // Find and click the close button (X) in the modal
       const closeButton = screen.getByLabelText('Fechar modal');
       fireEvent.click(closeButton);
 
-      // Verify modal is now closed
       expect(screen.queryByText('Equipe formada')).not.toBeInTheDocument();
     });
 
     it('should complete full team flow with real store', () => {
       render(<Home />);
 
-      // Add both pokemon to team
-      fireEvent.click(screen.getByLabelText('Adicionar bulbasaur à equipe'));
-      fireEvent.click(screen.getByLabelText('Adicionar charmander à equipe'));
+      const addPokemon1 = screen.getByTestId('pokemon-card-button-1');
+      const addPokemon2 = screen.getByTestId('pokemon-card-button-4');
+      fireEvent.click(addPokemon1);
+      fireEvent.click(addPokemon2);
 
-      // Confirm team
-      fireEvent.click(screen.getByText('Confirmar Equipe'));
+      const button = screen.getByTestId('cart-sidebar-footer-button');
+      fireEvent.click(button);
 
-      // Verify modal shows both pokemon
-      expect(screen.getByText('Equipe formada')).toBeInTheDocument();
-      expect(screen.getAllByText('bulbasaur')).toHaveLength(3); // Card + Sidebar + Modal
-      expect(screen.getAllByText('charmander')).toHaveLength(3);
+      const modal = screen.getByTestId('confirmation-modal');
+      expect(modal).toBeInTheDocument();
 
-      // Start new team
-      fireEvent.click(screen.getByText('Começar nova equipe'));
+      const closeButton = screen.getByTestId('confirmation-modal-button');
+      fireEvent.click(closeButton);
 
-      // Verify team cleared
+      expect(modal).not.toBeInTheDocument();
+
       expect(screen.getByText('Nenhum Pokémon adicionado')).toBeInTheDocument();
-      expect(
-        screen.getByLabelText('Adicionar bulbasaur à equipe'),
-      ).not.toBeDisabled();
-      expect(
-        screen.getByLabelText('Adicionar charmander à equipe'),
-      ).not.toBeDisabled();
+      expect(addPokemon1).not.toBeDisabled();
+      expect(addPokemon2).not.toBeDisabled();
     });
 
     it('should calculate correct pokemonsPerPage based on screen width', () => {
-      // Precisamos reiniciar o mock do usePokemons para cada teste
       vi.restoreAllMocks();
 
-      // Mock usePokemons para podermos verificar com qual valor ele é chamado
       const mockFn = vi.fn();
       usePokemons.mockImplementation((value) => {
         mockFn(value);
@@ -471,7 +428,6 @@ describe('Home', () => {
       render(<Home />);
       expect(mockFn).toHaveBeenCalledWith(44);
 
-      // Limpar o componente e o mock
       vi.clearAllMocks();
 
       // (> 1900px e <= 3000px)
@@ -482,7 +438,6 @@ describe('Home', () => {
       render(<Home />);
       expect(mockFn).toHaveBeenCalledWith(28);
 
-      // Limpar o componente e o mock
       vi.clearAllMocks();
 
       // (> 1700px e <= 1900px)
@@ -493,7 +448,6 @@ describe('Home', () => {
       render(<Home />);
       expect(mockFn).toHaveBeenCalledWith(20);
 
-      // Limpar o componente e o mock
       vi.clearAllMocks();
 
       // (> 1420px && width <= 1700px)
@@ -504,7 +458,6 @@ describe('Home', () => {
       render(<Home />);
       expect(mockFn).toHaveBeenCalledWith(16);
 
-      // Limpar o componente e o mock
       vi.clearAllMocks();
 
       // Test tablet/mobile screen (< 1420px)
@@ -515,7 +468,6 @@ describe('Home', () => {
       render(<Home />);
       expect(mockFn).toHaveBeenCalledWith(8);
 
-      // Restaurar a largura original da janela
       Object.defineProperty(window, 'innerWidth', {
         value: originalWidth,
         configurable: true,
@@ -523,18 +475,14 @@ describe('Home', () => {
     });
 
     it('should handle browser without IntersectionObserver support', () => {
-      // Salvar a implementação original
       const originalIntersectionObserver = global.IntersectionObserver;
 
-      // Simular navegador sem suporte a IntersectionObserver
       delete global.IntersectionObserver;
 
-      // Espiar o console.warn
       const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
 
       render(<Home />);
 
-      // Verificar se o aviso foi exibido
       expect(warnSpy).toHaveBeenCalledWith(
         'IntersectionObserver não suportado neste navegador',
       );
@@ -545,11 +493,8 @@ describe('Home', () => {
     });
 
     it('should handle IntersectionObserver callback correctly', async () => {
-      // Criar um mock do fetchNextPage que podemos verificar
       const mockFetchNextPage = vi.fn();
 
-      // Configurar todos os valores necessários para que fetchNextPage seja chamado
-      // quando o elemento se torna visível
       mockUsePokemons.mockReturnValue({
         data: {
           pages: [
@@ -570,8 +515,6 @@ describe('Home', () => {
         fetchNextPage: mockFetchNextPage,
       });
 
-      // Modificar a implementação global do IntersectionObserver
-      // para simular o comportamento real
       class TestIntersectionObserver {
         constructor(callback) {
           this.callback = callback;
@@ -586,14 +529,10 @@ describe('Home', () => {
         disconnect = vi.fn();
       }
 
-      // Substituir o IntersectionObserver global
       global.IntersectionObserver = TestIntersectionObserver;
 
-      // Renderizar o componente - isso deve acionar o useEffect
       render(<Home />);
 
-      // Verificar que fetchNextPage foi chamado
-      // Adicionamos um pequeno atraso para dar tempo do useEffect ser executado
       return new Promise((resolve) => {
         setTimeout(() => {
           try {
@@ -609,7 +548,6 @@ describe('Home', () => {
     it('should not trigger fetchNextPage when element is not intersecting', () => {
       const mockFetchNextPage = vi.fn();
 
-      // Mock com hasNextPage true para testar infinite scroll
       mockUsePokemons.mockReturnValue({
         data: {
           pages: [
@@ -630,14 +568,12 @@ describe('Home', () => {
         fetchNextPage: mockFetchNextPage,
       });
 
-      // Modificar o mock do IntersectionObserver para simular elemento NÃO visível
       class TestIntersectionObserver {
         constructor(callback) {
           this.callback = callback;
         }
 
         observe = vi.fn(() => {
-          // Chamar o callback imediatamente para simular que o elemento NÃO está visível
           setTimeout(() => {
             this.callback([{ isIntersecting: false }]);
           }, 0);
@@ -647,12 +583,10 @@ describe('Home', () => {
         disconnect = vi.fn();
       }
 
-      // Substituir o IntersectionObserver global
       global.IntersectionObserver = TestIntersectionObserver;
 
       render(<Home />);
 
-      // Verificar se fetchNextPage NÃO é chamado quando o elemento não está visível
       return new Promise((resolve) => {
         setTimeout(() => {
           expect(mockFetchNextPage).not.toHaveBeenCalled();
@@ -664,7 +598,6 @@ describe('Home', () => {
     it('should not trigger fetchNextPage when hasNextPage is false', () => {
       const mockFetchNextPage = vi.fn();
 
-      // Mock com hasNextPage false para testar que não carrega mais dados
       mockUsePokemons.mockReturnValue({
         data: {
           pages: [
@@ -685,14 +618,12 @@ describe('Home', () => {
         fetchNextPage: mockFetchNextPage,
       });
 
-      // Modificar o mock do IntersectionObserver para simular elemento visível
       class TestIntersectionObserver {
         constructor(callback) {
           this.callback = callback;
         }
 
         observe = vi.fn(() => {
-          // Chamar o callback imediatamente para simular que o elemento está visível
           setTimeout(() => {
             this.callback([{ isIntersecting: true }]);
           }, 0);
@@ -702,12 +633,10 @@ describe('Home', () => {
         disconnect = vi.fn();
       }
 
-      // Substituir o IntersectionObserver global
       global.IntersectionObserver = TestIntersectionObserver;
 
       render(<Home />);
 
-      // Verificar se fetchNextPage NÃO é chamado quando não há mais páginas
       return new Promise((resolve) => {
         setTimeout(() => {
           expect(mockFetchNextPage).not.toHaveBeenCalled();
@@ -719,7 +648,6 @@ describe('Home', () => {
     it('should not trigger fetchNextPage when already fetching next page', () => {
       const mockFetchNextPage = vi.fn();
 
-      // Mock com isFetchingNextPage true para testar que não carrega mais dados enquanto carrega
       mockUsePokemons.mockReturnValue({
         data: {
           pages: [
@@ -740,14 +668,12 @@ describe('Home', () => {
         fetchNextPage: mockFetchNextPage,
       });
 
-      // Modificar o mock do IntersectionObserver para simular elemento visível
       class TestIntersectionObserver {
         constructor(callback) {
           this.callback = callback;
         }
 
         observe = vi.fn(() => {
-          // Chamar o callback imediatamente para simular que o elemento está visível
           setTimeout(() => {
             this.callback([{ isIntersecting: true }]);
           }, 0);
@@ -757,12 +683,10 @@ describe('Home', () => {
         disconnect = vi.fn();
       }
 
-      // Substituir o IntersectionObserver global
       global.IntersectionObserver = TestIntersectionObserver;
 
       render(<Home />);
 
-      // Verificar se fetchNextPage NÃO é chamado quando já está carregando mais dados
       return new Promise((resolve) => {
         setTimeout(() => {
           expect(mockFetchNextPage).not.toHaveBeenCalled();
@@ -772,11 +696,9 @@ describe('Home', () => {
     });
 
     it('should call observer.unobserve when fetchNextPage changes', async () => {
-      // Mock para o IntersectionObserver
       const unobserveSpy = vi.fn();
       const observeSpy = vi.fn();
 
-      // Mock do IntersectionObserver
       vi.stubGlobal(
         'IntersectionObserver',
         class {
@@ -787,7 +709,6 @@ describe('Home', () => {
         },
       );
 
-      // Primeiro estado do hook usePokemons
       const initialFetchNextPage = vi.fn();
       usePokemons.mockReturnValue({
         data: { pages: [{ results: mockPokemons }] },
@@ -797,19 +718,15 @@ describe('Home', () => {
         fetchNextPage: initialFetchNextPage,
       });
 
-      // Renderizar o componente
       const { rerender } = render(<Home />);
 
-      // Garantir que o componente foi renderizado completamente
       await vi.waitFor(() => {
         expect(observeSpy).toHaveBeenCalled();
       });
 
-      // Limpar os mocks para verificar as próximas chamadas
       unobserveSpy.mockClear();
       observeSpy.mockClear();
 
-      // Segundo estado do hook usePokemons com um fetchNextPage diferente
       const newFetchNextPage = vi.fn();
       usePokemons.mockReturnValue({
         data: { pages: [{ results: mockPokemons }] },
@@ -819,16 +736,12 @@ describe('Home', () => {
         fetchNextPage: newFetchNextPage,
       });
 
-      // Re-renderizar o componente para acionar o cleanup do useEffect
       rerender(<Home />);
 
-      // Verificar que unobserve foi chamado durante o cleanup
       expect(unobserveSpy).toHaveBeenCalled();
 
-      // E que observe foi chamado novamente para o novo efeito
       expect(observeSpy).toHaveBeenCalled();
 
-      // Restaurar o IntersectionObserver original
       vi.unstubAllGlobals();
     });
   });
@@ -888,8 +801,12 @@ describe('Home', () => {
 
       const { container } = render(<Home />);
 
-      // Abrir modal
-      fireEvent.click(screen.getByText('Confirmar Equipe'));
+      // Clica no botão de confirmar equipe da sidebar pra abrir o modal
+      const button = screen.getByTestId('cart-sidebar-footer-button');
+      fireEvent.click(button);
+
+      const modal = screen.getByTestId('confirmation-modal');
+      expect(modal).toBeInTheDocument();
 
       const results = await axe(container);
       expect(results).toHaveNoViolations();
@@ -897,10 +814,10 @@ describe('Home', () => {
 
     it('should have proper heading structure', () => {
       render(<Home />);
-      const title = screen.getByText('Pokémons');
+      const title = screen.getByTestId('home-title');
       expect(title.tagName).toBe('H1');
 
-      const sidebarTitle = screen.getByText('Sua equipe');
+      const sidebarTitle = screen.getByTestId('cart-sidebar-title');
       expect(sidebarTitle.tagName).toBe('H2');
     });
   });

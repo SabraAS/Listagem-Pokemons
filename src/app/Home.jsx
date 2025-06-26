@@ -34,14 +34,11 @@ const Home = () => {
   const removePokemonById = usePokemonStore((state) => state.removePokemonById);
   const clearTeam = usePokemonStore((state) => state.clearTeam);
 
-  // Ref para o elemento observador do infinite scroll
-  const observerRef = useRef(null);
-
-  // Flatten dos resultados paginados
   const flattenedPokemons = data?.pages?.flatMap((page) => page.results) || [];
 
+  const observerRef = useRef(null);
+
   useEffect(() => {
-    // Verificar se o navegador suporta IntersectionObserver
     if (!('IntersectionObserver' in window)) {
       console.warn('IntersectionObserver não suportado neste navegador');
       return;
@@ -100,7 +97,9 @@ const Home = () => {
 
   return (
     <div className="home">
-      <h1 className="home__title">Pokémons</h1>
+      <h1 className="home__title" data-testid="home-title">
+        Pokémons
+      </h1>
       <div className="home__content">
         <ul className="home__list">
           {flattenedPokemons?.length > 0 ? (

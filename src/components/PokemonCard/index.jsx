@@ -36,7 +36,7 @@ const PokemonCard = ({
             : `Adicionar ${name || 'pokémon'} à equipe`
         }
         className="pokemon-card__button"
-        data-testid="pokemon-card-button"
+        data-testid={`pokemon-card-button-${id}`}
         disabled={disabled}
         onClick={() => addPokemon(id || name)}
       >

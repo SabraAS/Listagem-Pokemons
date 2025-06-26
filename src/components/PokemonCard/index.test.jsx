@@ -59,14 +59,14 @@ describe('PokemonCard', () => {
 
     it('should render add button when not disabled', () => {
       render(<PokemonCard {...defaultProps} />);
-      const button = screen.getByTestId('pokemon-card-button');
+      const button = screen.getByTestId('pokemon-card-button-1');
       expect(button).toHaveTextContent('Adicionar à equipe');
       expect(button).not.toBeDisabled();
     });
 
     it('should render disabled button when disabled', () => {
       render(<PokemonCard {...defaultProps} disabled={true} />);
-      const button = screen.getByTestId('pokemon-card-button');
+      const button = screen.getByTestId('pokemon-card-button-1');
       expect(button).toHaveTextContent('Indisponível');
       expect(button).toBeDisabled();
     });
@@ -76,7 +76,7 @@ describe('PokemonCard', () => {
     it('should call addPokemon when button is clicked', () => {
       const mockAddPokemon = vi.fn();
       render(<PokemonCard {...defaultProps} addPokemon={mockAddPokemon} />);
-      const button = screen.getByTestId('pokemon-card-button');
+      const button = screen.getByTestId('pokemon-card-button-1');
       fireEvent.click(button);
       expect(mockAddPokemon).toHaveBeenCalledTimes(1);
       expect(mockAddPokemon).toHaveBeenCalledWith(defaultProps.id);
@@ -91,7 +91,7 @@ describe('PokemonCard', () => {
           disabled={true}
         />,
       );
-      const button = screen.getByTestId('pokemon-card-button');
+      const button = screen.getByTestId('pokemon-card-button-1');
       fireEvent.click(button);
       expect(mockAddPokemon).not.toHaveBeenCalled();
     });
@@ -99,7 +99,7 @@ describe('PokemonCard', () => {
     it('should pass correct id on each call', () => {
       const mockAddPokemon = vi.fn();
       render(<PokemonCard {...defaultProps} addPokemon={mockAddPokemon} />);
-      const button = screen.getByTestId('pokemon-card-button');
+      const button = screen.getByTestId('pokemon-card-button-1');
       fireEvent.click(button);
       expect(mockAddPokemon).toHaveBeenCalledWith(1); // id do bulbasauro
     });
@@ -121,7 +121,7 @@ describe('PokemonCard', () => {
       expect(image).toHaveAttribute('src', mockSinglePokemon.image);
       expect(image).toHaveAttribute('alt', 'Imagem do pokémon');
 
-      const button = screen.getByTestId('pokemon-card-button');
+      const button = screen.getByTestId('pokemon-card-button-1');
       expect(button).toHaveTextContent('Adicionar à equipe');
     });
 
@@ -146,7 +146,7 @@ describe('PokemonCard', () => {
       render(
         <PokemonCard {...defaultProps} addPokemon={mockAddPokemon} id={null} />,
       );
-      const button = screen.getByTestId('pokemon-card-button');
+      const button = screen.getByTestId('pokemon-card-button-null');
       fireEvent.click(button);
       expect(mockAddPokemon).toHaveBeenCalledWith('bulbasaur');
     });

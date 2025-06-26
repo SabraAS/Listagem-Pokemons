@@ -1,12 +1,13 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`Home > should match snapshot 1`] = `
+exports[`Home > Rendering > should match snapshot 1`] = `
 <div>
   <div
     class="home"
   >
     <h1
       class="home__title"
+      data-testid="home-title"
     >
       Pokémons
     </h1>
@@ -30,7 +31,7 @@ exports[`Home > should match snapshot 1`] = `
             <button
               aria-label="Adicionar bulbasaur à equipe"
               class="pokemon-card__button"
-              data-testid="pokemon-card-button"
+              data-testid="pokemon-card-button-1"
             >
               Adicionar à equipe
             </button>
@@ -81,7 +82,7 @@ exports[`Home > should match snapshot 1`] = `
             <button
               aria-label="Adicionar charmander à equipe"
               class="pokemon-card__button"
-              data-testid="pokemon-card-button"
+              data-testid="pokemon-card-button-4"
             >
               Adicionar à equipe
             </button>
