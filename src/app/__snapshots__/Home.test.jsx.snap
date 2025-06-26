@@ -19,20 +19,24 @@ exports[`Home > should match snapshot 1`] = `
         <li>
           <div
             class="pokemon-card"
+            data-testid="pokemon-card"
           >
             <img
               alt="Imagem do bulbasaur"
               class="pokemon-card__image"
+              data-testid="pokemon-card-image"
               src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/1.svg"
             />
             <button
               aria-label="Adicionar bulbasaur à equipe"
               class="pokemon-card__button"
+              data-testid="pokemon-card-button"
             >
               Adicionar à equipe
             </button>
             <h2
               class="pokemon-card__name"
+              data-testid="pokemon-card-name"
             >
               bulbasaur
             </h2>
@@ -41,18 +45,21 @@ exports[`Home > should match snapshot 1`] = `
             >
               <p
                 class="pokemon-card__text"
+                data-testid="pokemon-card-characteristic"
               >
                 Característica: 
                 A strange seed was planted on its back at birth. The plant sprouts and grows with this Pokémon.
               </p>
               <p
                 class="pokemon-card__text"
+                data-testid="pokemon-card-abilities"
               >
                 Habilidades: 
                 overgrow, chlorophyll
               </p>
               <p
                 class="pokemon-card__text"
+                data-testid="pokemon-card-types"
               >
                 Tipos: 
                 grass, poison
@@ -63,20 +70,24 @@ exports[`Home > should match snapshot 1`] = `
         <li>
           <div
             class="pokemon-card"
+            data-testid="pokemon-card"
           >
             <img
               alt="Imagem do charmander"
               class="pokemon-card__image"
+              data-testid="pokemon-card-image"
               src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/4.svg"
             />
             <button
               aria-label="Adicionar charmander à equipe"
               class="pokemon-card__button"
+              data-testid="pokemon-card-button"
             >
               Adicionar à equipe
             </button>
             <h2
               class="pokemon-card__name"
+              data-testid="pokemon-card-name"
             >
               charmander
             </h2>
@@ -85,18 +96,21 @@ exports[`Home > should match snapshot 1`] = `
             >
               <p
                 class="pokemon-card__text"
+                data-testid="pokemon-card-characteristic"
               >
                 Característica: 
                 Obviously prefers hot places. When it rains, steam is said to spout from the tip of its tail.
               </p>
               <p
                 class="pokemon-card__text"
+                data-testid="pokemon-card-abilities"
               >
                 Habilidades: 
                 blaze, solar-power
               </p>
               <p
                 class="pokemon-card__text"
+                data-testid="pokemon-card-types"
               >
                 Tipos: 
                 fire
@@ -113,29 +127,37 @@ exports[`Home > should match snapshot 1`] = `
       </ul>
       <aside
         class="cart-sidebar"
+        data-testid="cart-sidebar"
       >
         <img
           alt="Imagem de fundo da sidebar"
           class="cart-sidebar__background"
+          data-testid="cart-sidebar-background"
           src="/src/assets/cover-pokemon.png"
         />
         <h2
           class="cart-sidebar__title"
+          data-testid="cart-sidebar-title"
         >
           Sua equipe
         </h2>
         <div
           class="cart-sidebar__list"
+          data-testid="cart-sidebar-list"
         >
-          <p>
+          <p
+            data-testid="cart-sidebar-empty-message"
+          >
             Nenhum Pokémon adicionado
           </p>
         </div>
         <div
           class="cart-sidebar__footer"
+          data-testid="cart-sidebar-footer"
         >
           <button
             class="cart-sidebar__footer-button"
+            data-testid="cart-sidebar-footer-button"
             disabled=""
           >
             Confirmar Equipe

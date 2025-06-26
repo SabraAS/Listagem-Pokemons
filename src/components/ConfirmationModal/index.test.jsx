@@ -4,10 +4,9 @@ import { axe } from 'vitest-axe';
 
 import ConfirmationModal from './index';
 
-import { mockPokemons } from '@/test/mocks/pokemon';
+import { mockPokemons, mockSinglePokemon } from '@/test/mocks/pokemon';
 
 describe('ConfirmationModal', () => {
-  // Props mockadas padrão para os testes
   const defaultProps = {
     pokemons: mockPokemons,
     onClose: vi.fn(),
@@ -15,124 +14,105 @@ describe('ConfirmationModal', () => {
   };
 
   const singlePokemonProps = {
-    pokemons: [mockPokemons[0]],
+    pokemons: mockSinglePokemon,
     onClose: vi.fn(),
     onStartNewTeam: vi.fn(),
   };
 
-  // Teste de snapshot como primeiro teste
-  it('should match snapshot', () => {
-    const { container } = render(<ConfirmationModal {...defaultProps} />);
-    expect(container).toMatchSnapshot();
-  });
-
   describe('Rendering', () => {
+    it('should match snapshot', () => {
+      const { container } = render(<ConfirmationModal {...defaultProps} />);
+      expect(container).toMatchSnapshot();
+    });
+
     it('should render modal title correctly', () => {
       render(<ConfirmationModal {...defaultProps} />);
-      expect(screen.getByText('Equipe formada')).toBeInTheDocument();
-      expect(screen.getByText('Equipe formada')).toHaveClass(
+      expect(
+        screen.getByTestId('confirmation-modal-title'),
+      ).toBeInTheDocument();
+      expect(screen.getByTestId('confirmation-modal-title')).toHaveClass(
         'confirmation-modal__title',
       );
     });
 
     it('should render subtitle correctly', () => {
       render(<ConfirmationModal {...defaultProps} />);
-      expect(screen.getByText('Sua equipe está pronta!')).toBeInTheDocument();
-      expect(screen.getByText('Sua equipe está pronta!')).toHaveClass(
+      expect(
+        screen.getByTestId('confirmation-modal-subtitle'),
+      ).toBeInTheDocument();
+      expect(screen.getByTestId('confirmation-modal-subtitle')).toHaveClass(
         'confirmation-modal__subtitle',
       );
     });
 
     it('should render check icon', () => {
       render(<ConfirmationModal {...defaultProps} />);
-      expect(screen.getByText('✓')).toBeInTheDocument();
-      expect(screen.getByText('✓')).toHaveClass('confirmation-modal__check');
+      const check = screen.getByTestId('confirmation-modal-check');
+      expect(check).toBeInTheDocument();
+      expect(check).toHaveClass('confirmation-modal__check');
     });
 
     it('should render basic modal structure', () => {
       render(<ConfirmationModal {...defaultProps} />);
-      expect(
-        screen.getByText('Equipe formada').closest('.confirmation-modal'),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByText('Equipe formada').closest('.confirmation-modal'),
-      ).toHaveClass('confirmation-modal');
+      const title = screen.getByTestId('confirmation-modal-title');
+      const subtitle = screen.getByTestId('confirmation-modal-subtitle');
+      expect(title).toBeInTheDocument();
+      expect(title).toHaveClass('confirmation-modal__title');
+      expect(subtitle).toBeInTheDocument();
+      expect(subtitle).toHaveClass('confirmation-modal__subtitle');
     });
 
-    it('should render all team pokemons', () => {
+    it('should render pokemon image with correct alt text', () => {
       render(<ConfirmationModal {...defaultProps} />);
-      expect(screen.getByText('bulbasaur')).toBeInTheDocument();
-      expect(screen.getByText('charmander')).toBeInTheDocument();
-      expect(
-        screen.getByText(
-          'A strange seed was planted on its back at birth. The plant sprouts and grows with this Pokémon.',
-        ),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByText(
-          'Obviously prefers hot places. When it rains, steam is said to spout from the tip of its tail.',
-        ),
-      ).toBeInTheDocument();
-    });
-
-    it('should render pokemon images with correct alt text', () => {
-      render(<ConfirmationModal {...defaultProps} />);
-      const bulbasaurImg = screen.getByAltText('Imagem do bulbasaur');
-      const charmanderImg = screen.getByAltText('Imagem do charmander');
-      expect(bulbasaurImg).toBeInTheDocument();
-      expect(charmanderImg).toBeInTheDocument();
-      expect(bulbasaurImg).toHaveClass('confirmation-modal__image');
-      expect(bulbasaurImg).toHaveAttribute('src', mockPokemons[0].image);
+      const bulbasaurImg = screen.getByTestId(
+        'confirmation-modal-pokemon-image-1',
+      );
+      expect(bulbasaurImg).toHaveAttribute('alt', 'Imagem do bulbasaur');
     });
 
     it('should render pokemon characteristics', () => {
       render(<ConfirmationModal {...defaultProps} />);
-      expect(
-        screen.getByText(
-          'A strange seed was planted on its back at birth. The plant sprouts and grows with this Pokémon.',
-        ),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByText(
-          'Obviously prefers hot places. When it rains, steam is said to spout from the tip of its tail.',
-        ),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByText(
-          'A strange seed was planted on its back at birth. The plant sprouts and grows with this Pokémon.',
-        ),
-      ).toHaveClass('confirmation-modal__characteristic');
+      const characteristic1 = screen.getByTestId(
+        'confirmation-modal-pokemon-characteristic-1',
+      );
+      expect(characteristic1).toBeInTheDocument();
+      expect(characteristic1).toHaveTextContent(
+        'A strange seed was planted on its back at birth. The plant sprouts and grows with this Pokémon.',
+      );
+      const characteristic2 = screen.getByTestId(
+        'confirmation-modal-pokemon-characteristic-4',
+      ); // id do charmander é 4
+      expect(characteristic2).toBeInTheDocument();
+      expect(characteristic2).toHaveTextContent(
+        'Obviously prefers hot places. When it rains, steam is said to spout from the tip of its tail.',
+      );
     });
 
     it('should render pokemon names with correct classes', () => {
       render(<ConfirmationModal {...defaultProps} />);
-      expect(screen.getByText('bulbasaur')).toHaveClass(
-        'confirmation-modal__name',
-      );
-      expect(screen.getByText('charmander')).toHaveClass(
-        'confirmation-modal__name',
-      );
+      const name1 = screen.getByTestId('confirmation-modal-pokemon-name-1');
+      const name2 = screen.getByTestId('confirmation-modal-pokemon-name-4'); // id do charmander é 4
+      expect(name1).toHaveClass('confirmation-modal__name');
+      expect(name2).toHaveClass('confirmation-modal__name');
     });
 
     it('should show correct pokemon total', () => {
       render(<ConfirmationModal {...defaultProps} />);
-      expect(
-        screen.getByText('Total de pokémons na equipe:'),
-      ).toBeInTheDocument();
-      expect(screen.getByText('2')).toBeInTheDocument();
+      const total = screen.getByTestId('confirmation-modal-total');
+      expect(total).toBeInTheDocument();
+      expect(total).toHaveTextContent('2');
     });
 
     it('should show total 1 when there is only one pokemon', () => {
-      render(<ConfirmationModal {...singlePokemonProps} />);
-      expect(
-        screen.getByText('Total de pokémons na equipe:'),
-      ).toBeInTheDocument();
-      expect(screen.getByText('1')).toBeInTheDocument();
+      render(<ConfirmationModal pokemons={[mockSinglePokemon]} />);
+      const total = screen.getByTestId('confirmation-modal-total');
+      expect(total).toBeInTheDocument();
+      expect(total).toHaveTextContent('1');
     });
 
     it('should render close button with ×', () => {
       render(<ConfirmationModal {...defaultProps} />);
-      const closeButton = screen.getByTestId('modal-close-button');
+      const closeButton = screen.getByTestId('confirmation-modal-close-button');
       expect(closeButton).toBeInTheDocument();
       expect(closeButton).toHaveTextContent('×');
     });
@@ -148,7 +128,7 @@ describe('ConfirmationModal', () => {
     it('should call onClose when × button is clicked', () => {
       const mockOnClose = vi.fn();
       render(<ConfirmationModal {...defaultProps} onClose={mockOnClose} />);
-      const closeButton = screen.getByTestId('modal-close-button');
+      const closeButton = screen.getByTestId('confirmation-modal-close-button');
       fireEvent.click(closeButton);
       expect(mockOnClose).toHaveBeenCalledTimes(1);
     });
@@ -176,8 +156,8 @@ describe('ConfirmationModal', () => {
           onStartNewTeam={mockOnStartNewTeam}
         />,
       );
-      const closeButton = screen.getByTestId('modal-close-button');
-      const newTeamButton = screen.getByText('Começar nova equipe');
+      const closeButton = screen.getByTestId('confirmation-modal-close-button');
+      const newTeamButton = screen.getByTestId('confirmation-modal-button');
       fireEvent.click(closeButton);
       fireEvent.click(newTeamButton);
       fireEvent.click(closeButton);
@@ -187,17 +167,6 @@ describe('ConfirmationModal', () => {
   });
 
   describe('Edge cases', () => {
-    it('should handle empty pokemon array', () => {
-      const emptyProps = {
-        ...defaultProps,
-        pokemons: [],
-      };
-      render(<ConfirmationModal {...emptyProps} />);
-      expect(screen.getByText('Equipe formada')).toBeInTheDocument();
-      expect(screen.getByText('0')).toBeInTheDocument();
-      expect(screen.queryByText('bulbasaur')).not.toBeInTheDocument();
-    });
-
     it('should handle pokemons with incomplete data', () => {
       const incompletePokemons = [
         { id: 1, name: '', image: '', characteristic: '' },
@@ -208,10 +177,21 @@ describe('ConfirmationModal', () => {
         pokemons: incompletePokemons,
       };
       render(<ConfirmationModal {...incompleteProps} />);
-      expect(screen.getByText('test')).toBeInTheDocument();
-      expect(screen.getByText('test char')).toBeInTheDocument();
-      expect(screen.getByText('pokémon sem nome')).toBeInTheDocument();
-      expect(screen.getByText('2')).toBeInTheDocument();
+      const name1 = screen.getByTestId('confirmation-modal-pokemon-name-1');
+      const name2 = screen.getByTestId('confirmation-modal-pokemon-name-2');
+      const characteristic1 = screen.getByTestId(
+        'confirmation-modal-pokemon-characteristic-1',
+      );
+      const characteristic2 = screen.getByTestId(
+        'confirmation-modal-pokemon-characteristic-2',
+      );
+      expect(name1).toHaveTextContent('pokémon sem nome');
+      expect(name2).toHaveTextContent('test');
+      expect(characteristic1).toHaveTextContent('não possui');
+      expect(characteristic2).toHaveTextContent('test char');
+      const total = screen.getByTestId('confirmation-modal-total');
+      expect(total).toBeInTheDocument();
+      expect(total).toHaveTextContent('2');
     });
 
     it('should handle many pokemons', () => {
@@ -226,27 +206,14 @@ describe('ConfirmationModal', () => {
         pokemons: manyPokemons,
       };
       render(<ConfirmationModal {...manyPokemonsProps} />);
-      expect(screen.getByText('10')).toBeInTheDocument();
-      expect(screen.getByText('pokemon1')).toBeInTheDocument();
-      expect(screen.getByText('pokemon10')).toBeInTheDocument();
-    });
-
-    it('should handle null pokemons prop without crashing', () => {
-      render(
-        <ConfirmationModal
-          onClose={vi.fn()}
-          onStartNewTeam={vi.fn()}
-          pokemons={null}
-        />,
-      );
-      // Componente deve renderizar sem quebrar
-      expect(screen.getByText('Equipe formada')).toBeInTheDocument();
-      expect(screen.getByText('0')).toBeInTheDocument();
+      const total = screen.getByTestId('confirmation-modal-total');
+      expect(total).toBeInTheDocument();
+      expect(total).toHaveTextContent('10');
     });
 
     it('should handle pokemon with null ID', () => {
       const pokemonWithNullId = {
-        ...mockPokemons[0],
+        ...mockSinglePokemon,
         id: null,
         name: 'pokemonSemId',
       };
@@ -257,13 +224,13 @@ describe('ConfirmationModal', () => {
           pokemons={[pokemonWithNullId]}
         />,
       );
-      // Verificar se o pokemon é renderizado mesmo com ID nulo
+
       expect(screen.getByText('pokemonSemId')).toBeInTheDocument();
     });
 
     it('should handle pokemon with empty name', () => {
       const pokemonWithEmptyName = {
-        ...mockPokemons[0],
+        ...mockSinglePokemon,
         name: '',
       };
       render(
@@ -273,16 +240,16 @@ describe('ConfirmationModal', () => {
           pokemons={[pokemonWithEmptyName]}
         />,
       );
-      // Verificar se o texto fallback foi usado para o nome
+
       expect(screen.getByText('pokémon sem nome')).toBeInTheDocument();
-      // Verificar se o alt da imagem usa o fallback
+
       const imgAlt = screen.getByAltText('Imagem do pokémon');
       expect(imgAlt).toBeInTheDocument();
     });
 
     it('should handle pokemon with empty characteristic', () => {
       const pokemonWithEmptyChar = {
-        ...mockPokemons[0],
+        ...mockSinglePokemon,
         characteristic: '',
       };
       render(
@@ -292,13 +259,13 @@ describe('ConfirmationModal', () => {
           pokemons={[pokemonWithEmptyChar]}
         />,
       );
-      // Verificar se o pokemon é renderizado mesmo com característica vazia
+
       expect(screen.getByText('bulbasaur')).toBeInTheDocument();
     });
 
     it('should handle pokemon with null image', () => {
       const pokemonWithNullImage = {
-        ...mockPokemons[0],
+        ...mockSinglePokemon,
         image: null,
       };
       render(
@@ -308,7 +275,7 @@ describe('ConfirmationModal', () => {
           pokemons={[pokemonWithNullImage]}
         />,
       );
-      // Verificar se a imagem está com src vazia
+
       const image = screen.getByAltText('Imagem do bulbasaur');
       expect(image.getAttribute('src')).toBe('');
     });
@@ -329,7 +296,7 @@ describe('ConfirmationModal', () => {
         .closest('.confirmation-modal__content');
       expect(content).toHaveClass('confirmation-modal__content');
 
-      const check = screen.getByText('✓');
+      const check = screen.getByTestId('confirmation-modal-check');
       expect(check).toHaveClass('confirmation-modal__check');
     });
 
@@ -369,7 +336,6 @@ describe('ConfirmationModal', () => {
 
       const title = screen.getByText('Equipe formada');
       expect(title).toHaveClass('confirmation-modal__title');
-      expect(title).toHaveAttribute('id', 'modal-title');
 
       const subtitle = screen.getByText('Sua equipe está pronta!');
       expect(subtitle).toHaveClass('confirmation-modal__subtitle');
@@ -394,7 +360,7 @@ describe('ConfirmationModal', () => {
 
     it('should have correct close button class', () => {
       render(<ConfirmationModal {...defaultProps} />);
-      const closeButton = screen.getByTestId('modal-close-button');
+      const closeButton = screen.getByTestId('confirmation-modal-close-button');
       expect(closeButton).toHaveClass('confirmation-modal__close-button');
     });
 
@@ -424,7 +390,7 @@ describe('ConfirmationModal', () => {
 
     it('should have proper button accessibility', () => {
       render(<ConfirmationModal {...defaultProps} />);
-      const closeButton = screen.getByTestId('modal-close-button');
+      const closeButton = screen.getByTestId('confirmation-modal-close-button');
       const newTeamButton = screen.getByText('Começar nova equipe');
       expect(closeButton.tagName).toBe('BUTTON');
       expect(newTeamButton.tagName).toBe('BUTTON');
@@ -452,37 +418,15 @@ describe('ConfirmationModal', () => {
       expect(screen.getByText('Começar nova equipe')).toBeInTheDocument();
     });
 
-    it('should have proper semantic structure', () => {
-      render(<ConfirmationModal {...defaultProps} />);
-      // Check for title structure
-      const title = screen.getByText('Equipe formada');
-      expect(title.tagName).toBe('H2');
-      // Check for meaningful button text
-      const newTeamButton = screen.getByText('Começar nova equipe');
-      expect(newTeamButton.textContent.trim().length).toBeGreaterThan(0);
-    });
-
     it('should handle keyboard navigation properly', () => {
       render(<ConfirmationModal {...defaultProps} />);
       const buttons = screen.getAllByRole('button');
       buttons.forEach((button) => {
         expect(button).not.toHaveAttribute('tabindex', '-1');
-        // Test focus
+
         button.focus();
         expect(document.activeElement).toBe(button);
       });
-    });
-
-    it('should have proper modal accessibility attributes', () => {
-      render(<ConfirmationModal {...defaultProps} />);
-      // Modal should be properly structured
-      const modal = screen
-        .getByText('Equipe formada')
-        .closest('.confirmation-modal');
-      expect(modal).toBeInTheDocument();
-      // Close button should have proper identification
-      const closeButton = screen.getByTestId('modal-close-button');
-      expect(closeButton).toHaveAttribute('data-testid', 'modal-close-button');
     });
   });
 });

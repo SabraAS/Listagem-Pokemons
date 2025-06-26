@@ -1,28 +1,34 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`CartSidebar > should match snapshot 1`] = `
+exports[`CartSidebar > Rendering > should match snapshot 1`] = `
 <div>
   <aside
     class="cart-sidebar"
+    data-testid="cart-sidebar"
   >
     <img
       alt="Imagem de fundo da sidebar"
       class="cart-sidebar__background"
+      data-testid="cart-sidebar-background"
       src="/src/assets/cover-pokemon.png"
     />
     <h2
       class="cart-sidebar__title"
+      data-testid="cart-sidebar-title"
     >
       Sua equipe
     </h2>
     <div
       class="cart-sidebar__list"
+      data-testid="cart-sidebar-list"
     >
       <div
         class="cart-sidebar__item"
+        data-testid="cart-sidebar-item-1"
       >
         <div
           class="cart-sidebar__content"
+          data-testid="cart-sidebar-content-1"
         >
           <div
             class="cart-sidebar__info"
@@ -34,6 +40,7 @@ exports[`CartSidebar > should match snapshot 1`] = `
             </div>
             <div
               class="cart-sidebar__name"
+              data-testid="cart-sidebar-pokemon-name-1"
             >
               <p>
                 bulbasaur
@@ -43,21 +50,25 @@ exports[`CartSidebar > should match snapshot 1`] = `
           <button
             aria-label="Remover bulbasaur da equipe"
             class="cart-sidebar__remove-button"
+            data-testid="cart-sidebar-remove-button-1"
           >
             X
           </button>
         </div>
         <p
           class="cart-sidebar__characteristic"
+          data-testid="cart-sidebar-pokemon-characteristic-1"
         >
           A strange seed was planted on its back at birth. The plant sprouts and grows with this Pokémon.
         </p>
       </div>
       <div
         class="cart-sidebar__item"
+        data-testid="cart-sidebar-item-4"
       >
         <div
           class="cart-sidebar__content"
+          data-testid="cart-sidebar-content-4"
         >
           <div
             class="cart-sidebar__info"
@@ -69,6 +80,7 @@ exports[`CartSidebar > should match snapshot 1`] = `
             </div>
             <div
               class="cart-sidebar__name"
+              data-testid="cart-sidebar-pokemon-name-4"
             >
               <p>
                 charmander
@@ -78,12 +90,14 @@ exports[`CartSidebar > should match snapshot 1`] = `
           <button
             aria-label="Remover charmander da equipe"
             class="cart-sidebar__remove-button"
+            data-testid="cart-sidebar-remove-button-4"
           >
             X
           </button>
         </div>
         <p
           class="cart-sidebar__characteristic"
+          data-testid="cart-sidebar-pokemon-characteristic-4"
         >
           Obviously prefers hot places. When it rains, steam is said to spout from the tip of its tail.
         </p>
@@ -91,9 +105,11 @@ exports[`CartSidebar > should match snapshot 1`] = `
     </div>
     <div
       class="cart-sidebar__footer"
+      data-testid="cart-sidebar-footer"
     >
       <button
         class="cart-sidebar__footer-button"
+        data-testid="cart-sidebar-footer-button"
       >
         Confirmar Equipe
       </button>

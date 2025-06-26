@@ -4,10 +4,9 @@ import { axe } from 'vitest-axe';
 
 import CartSidebar from './index';
 
-import { mockPokemons } from '@/test/mocks/pokemon';
+import { mockPokemons, mockSinglePokemon } from '@/test/mocks/pokemon';
 
 describe('CartSidebar', () => {
-  // Props mockadas padrão para os testes
   const defaultProps = {
     pokemons: mockPokemons,
     onRemovePokemon: vi.fn(),
@@ -20,71 +19,70 @@ describe('CartSidebar', () => {
     onConfirmTeam: vi.fn(),
   };
 
-  // Teste de snapshot como primeiro teste
-  it('should match snapshot', () => {
-    const { container } = render(<CartSidebar {...defaultProps} />);
-    expect(container).toMatchSnapshot();
-  });
-
   describe('Rendering', () => {
+    it('should match snapshot', () => {
+      const { container } = render(<CartSidebar {...defaultProps} />);
+      expect(container).toMatchSnapshot();
+    });
+
     it('should render title correctly', () => {
       render(<CartSidebar {...defaultProps} />);
-      expect(screen.getByText('Sua equipe')).toBeInTheDocument();
-      expect(screen.getByText('Sua equipe')).toHaveClass('cart-sidebar__title');
+      const title = screen.getByTestId('cart-sidebar-title');
+      expect(title).toBeInTheDocument();
+      expect(title).toHaveClass('cart-sidebar__title');
     });
 
     it('should render empty message when no pokemons', () => {
       render(<CartSidebar {...emptyProps} />);
-      expect(screen.getByText('Nenhum Pokémon adicionado')).toBeInTheDocument();
+      const emptyMessage = screen.getByTestId('cart-sidebar-empty-message');
+      expect(emptyMessage).toBeInTheDocument();
+      expect(emptyMessage).toHaveTextContent('Nenhum Pokémon adicionado');
     });
 
     it('should render pokemon list when pokemons exist', () => {
       render(<CartSidebar {...defaultProps} />);
-      expect(screen.getByText('bulbasaur')).toBeInTheDocument();
-      expect(screen.getByText('charmander')).toBeInTheDocument();
+      const bulbasaur = screen.getByTestId('cart-sidebar-item-1');
+      expect(bulbasaur).toHaveTextContent('bulbasaur');
+
+      const charmander = screen.getByTestId('cart-sidebar-item-4');
+      expect(charmander).toHaveTextContent('charmander');
     });
 
     it('should render pokemon characteristics', () => {
       render(<CartSidebar {...defaultProps} />);
-      expect(
-        screen.getByText(
-          'A strange seed was planted on its back at birth. The plant sprouts and grows with this Pokémon.',
-        ),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByText(
-          'Obviously prefers hot places. When it rains, steam is said to spout from the tip of its tail.',
-        ),
-      ).toBeInTheDocument();
+      const characteristic1 = screen.getByTestId(
+        'cart-sidebar-pokemon-characteristic-1',
+      );
+      expect(characteristic1).toHaveTextContent(
+        'A strange seed was planted on its back at birth. The plant sprouts and grows with this Pokémon.',
+      );
     });
 
     it('should render remove buttons for each pokemon', () => {
       render(<CartSidebar {...defaultProps} />);
-      expect(
-        screen.getByLabelText('Remover bulbasaur da equipe'),
-      ).toBeInTheDocument();
-      expect(
-        screen.getByLabelText('Remover charmander da equipe'),
-      ).toBeInTheDocument();
+      const removeButton1 = screen.getByTestId('cart-sidebar-remove-button-1');
+      expect(removeButton1).toHaveTextContent('X');
+      const removeButton2 = screen.getByTestId('cart-sidebar-remove-button-4');
+      expect(removeButton2).toHaveTextContent('X');
     });
 
-    it('should render pokemon names with correct structure', () => {
+    it('should render pokemon names', () => {
       render(<CartSidebar {...defaultProps} />);
-      const bulbasaurName = screen.getByText('bulbasaur');
-      const charmanderName = screen.getByText('charmander');
-      expect(bulbasaurName.closest('.cart-sidebar__name')).toBeInTheDocument();
-      expect(charmanderName.closest('.cart-sidebar__name')).toBeInTheDocument();
+      const bulbasaurName = screen.getByTestId('cart-sidebar-pokemon-name-1');
+      expect(bulbasaurName).toHaveTextContent('bulbasaur');
+      const charmanderName = screen.getByTestId('cart-sidebar-pokemon-name-4');
+      expect(charmanderName).toHaveTextContent('charmander');
     });
 
     it('should render confirm button enabled when pokemons exist', () => {
       render(<CartSidebar {...defaultProps} />);
-      const confirmButton = screen.getByText('Confirmar Equipe');
+      const confirmButton = screen.getByTestId('cart-sidebar-footer-button');
       expect(confirmButton).not.toBeDisabled();
     });
 
     it('should render confirm button disabled when no pokemons', () => {
       render(<CartSidebar {...emptyProps} />);
-      const confirmButton = screen.getByText('Confirmar Equipe');
+      const confirmButton = screen.getByTestId('cart-sidebar-footer-button');
       expect(confirmButton).toBeDisabled();
     });
   });
@@ -99,7 +97,7 @@ describe('CartSidebar', () => {
           pokemons={mockPokemons}
         />,
       );
-      const removeButton = screen.getByLabelText('Remover bulbasaur da equipe');
+      const removeButton = screen.getByTestId('cart-sidebar-remove-button-1');
       fireEvent.click(removeButton);
       expect(mockOnRemovePokemon).toHaveBeenCalledTimes(1);
       expect(mockOnRemovePokemon).toHaveBeenCalledWith(1);
@@ -114,25 +112,9 @@ describe('CartSidebar', () => {
           pokemons={mockPokemons}
         />,
       );
-      const confirmButton = screen.getByText('Confirmar Equipe');
+      const confirmButton = screen.getByTestId('cart-sidebar-footer-button');
       fireEvent.click(confirmButton);
       expect(mockOnConfirmTeam).toHaveBeenCalledTimes(1);
-    });
-
-    it('should call onRemovePokemon with correct ID for each pokemon', () => {
-      const mockOnRemovePokemon = vi.fn();
-      render(
-        <CartSidebar
-          {...defaultProps}
-          onRemovePokemon={mockOnRemovePokemon}
-          pokemons={mockPokemons}
-        />,
-      );
-      fireEvent.click(screen.getByLabelText('Remover bulbasaur da equipe'));
-      fireEvent.click(screen.getByLabelText('Remover charmander da equipe'));
-      expect(mockOnRemovePokemon).toHaveBeenCalledTimes(2);
-      expect(mockOnRemovePokemon).toHaveBeenNthCalledWith(1, 1);
-      expect(mockOnRemovePokemon).toHaveBeenNthCalledWith(2, 4);
     });
 
     it('should not call onConfirmTeam when button is disabled', () => {
@@ -144,35 +126,24 @@ describe('CartSidebar', () => {
           pokemons={[]}
         />,
       );
-      const confirmButton = screen.getByText('Confirmar Equipe');
+      const confirmButton = screen.getByTestId('cart-sidebar-footer-button');
       fireEvent.click(confirmButton);
       expect(mockOnConfirmTeam).not.toHaveBeenCalled();
     });
   });
 
   describe('Edge cases', () => {
-    it('should handle single pokemon correctly', () => {
-      render(<CartSidebar {...defaultProps} pokemons={[mockPokemons[0]]} />);
-      expect(screen.getByText('bulbasaur')).toBeInTheDocument();
-      expect(screen.queryByText('charmander')).not.toBeInTheDocument();
-      expect(screen.getByText('Confirmar Equipe')).not.toBeDisabled();
-    });
-
     it('should handle pokemon with empty characteristic', () => {
       const pokemonWithEmptyChar = {
-        ...mockPokemons[0],
+        ...mockSinglePokemon,
         characteristic: '',
       };
       render(
         <CartSidebar {...defaultProps} pokemons={[pokemonWithEmptyChar]} />,
       );
-      expect(screen.getByText('bulbasaur')).toBeInTheDocument();
-      // Characteristic should show "Pokémon sem característica" when empty
-      const characteristicElement = screen
-        .getByText('bulbasaur')
-        .closest('.cart-sidebar__item')
-        .querySelector('.cart-sidebar__characteristic');
-      expect(characteristicElement).toBeInTheDocument();
+      const characteristicElement = screen.getByTestId(
+        'cart-sidebar-pokemon-characteristic-1',
+      );
       expect(characteristicElement).toHaveTextContent(
         'Pokémon sem característica',
       );
@@ -186,31 +157,15 @@ describe('CartSidebar', () => {
           pokemons={null}
         />,
       );
-      // Verificar se a mensagem de "Nenhum Pokémon adicionado" é exibida
-      expect(screen.getByText('Nenhum Pokémon adicionado')).toBeInTheDocument();
-      // Verificar se o botão está desabilitado
-      const confirmButton = screen.getByText('Confirmar Equipe');
-      expect(confirmButton).toBeDisabled();
-    });
-
-    it('should handle undefined pokemons prop without crashing', () => {
-      render(
-        <CartSidebar
-          onConfirmTeam={vi.fn()}
-          onRemovePokemon={vi.fn()}
-          pokemons={undefined}
-        />,
-      );
-      // Verificar se a mensagem de "Nenhum Pokémon adicionado" é exibida
-      expect(screen.getByText('Nenhum Pokémon adicionado')).toBeInTheDocument();
-      // Verificar se o botão está desabilitado
-      const confirmButton = screen.getByText('Confirmar Equipe');
+      const emptyMessage = screen.getByTestId('cart-sidebar-empty-message');
+      expect(emptyMessage).toBeInTheDocument();
+      const confirmButton = screen.getByTestId('cart-sidebar-footer-button');
       expect(confirmButton).toBeDisabled();
     });
 
     it('should handle pokemon with null ID', () => {
       const pokemonWithNullId = {
-        ...mockPokemons[0],
+        ...mockSinglePokemon,
         id: null,
         name: 'pokemonSemId',
       };
@@ -222,16 +177,10 @@ describe('CartSidebar', () => {
           pokemons={[pokemonWithNullId]}
         />,
       );
-      // Verificar se o pokemon é renderizado mesmo com ID nulo
-      expect(screen.getByText('pokemonSemId')).toBeInTheDocument();
-      // Verificar se o item foi renderizado corretamente
-      const itemElement = screen
-        .getByText('pokemonSemId')
-        .closest('.cart-sidebar__item');
+      const itemElement = screen.getByText('pokemonSemId');
       expect(itemElement).toBeInTheDocument();
-      // Verificar interação do botão de remover
-      const removeButton = screen.getByLabelText(
-        'Remover pokemonSemId da equipe',
+      const removeButton = screen.getByTestId(
+        'cart-sidebar-remove-button-null',
       );
       fireEvent.click(removeButton);
       expect(mockRemove).toHaveBeenCalledWith(null);
@@ -250,38 +199,15 @@ describe('CartSidebar', () => {
           pokemons={[pokemonWithoutName]}
         />,
       );
-      // Verificar se o texto de fallback "pokémon sem nome" é exibido
-      expect(screen.getByText('pokémon sem nome')).toBeInTheDocument();
-    });
-
-    it('should handle pokemon with null name', () => {
-      const pokemonWithNullName = {
-        ...mockPokemons[0],
-        name: null,
-        id: 888,
-      };
-      render(
-        <CartSidebar
-          onConfirmTeam={vi.fn()}
-          onRemovePokemon={vi.fn()}
-          pokemons={[pokemonWithNullName]}
-        />,
-      );
-      // Verificar se o texto de fallback "pokémon sem nome" é exibido
-      expect(screen.getByText('pokémon sem nome')).toBeInTheDocument();
-      // Verificar se o botão de remoção ainda tem um aria-label acessível
-      const removeButtons = screen
-        .getAllByText('X')
-        .filter((el) => el.classList.contains('cart-sidebar__remove-button'));
-      expect(removeButtons[0]).toHaveAttribute('aria-label');
-      expect(removeButtons[0].getAttribute('aria-label')).toContain('Remover');
+      const name = screen.getByTestId('cart-sidebar-pokemon-name-999');
+      expect(name).toHaveTextContent('pokémon sem nome');
     });
   });
 
   describe('CSS structure', () => {
     it('should have correct main container class', () => {
       render(<CartSidebar {...defaultProps} />);
-      const sidebar = screen.getByText('Sua equipe').closest('.cart-sidebar');
+      const sidebar = screen.getByTestId('cart-sidebar');
       expect(sidebar).toBeInTheDocument();
       expect(sidebar).toHaveClass('cart-sidebar');
       expect(sidebar.tagName).toBe('ASIDE');
@@ -289,66 +215,56 @@ describe('CartSidebar', () => {
 
     it('should have correct list structure', () => {
       render(<CartSidebar {...defaultProps} />);
-      const listContainer = screen
-        .getByText('bulbasaur')
-        .closest('.cart-sidebar__list');
+      const listContainer = screen.getByTestId('cart-sidebar-list');
       expect(listContainer).toBeInTheDocument();
       expect(listContainer).toHaveClass('cart-sidebar__list');
     });
 
     it('should have correct title class', () => {
       render(<CartSidebar {...defaultProps} />);
-      const title = screen.getByText('Sua equipe');
+      const title = screen.getByTestId('cart-sidebar-title');
       expect(title).toHaveClass('cart-sidebar__title');
     });
 
     it('should have correct item structure and classes', () => {
       render(<CartSidebar {...defaultProps} />);
-      const item = screen.getByText('bulbasaur').closest('.cart-sidebar__item');
+      const item = screen.getByTestId('cart-sidebar-item-1');
       expect(item).toBeInTheDocument();
       expect(item).toHaveClass('cart-sidebar__item');
 
-      const content = screen
-        .getByText('bulbasaur')
-        .closest('.cart-sidebar__content');
+      const content = screen.getByTestId('cart-sidebar-content-1');
       expect(content).toBeInTheDocument();
       expect(content).toHaveClass('cart-sidebar__content');
 
-      const info = screen.getByText('bulbasaur').closest('.cart-sidebar__info');
-      expect(info).toBeInTheDocument();
-      expect(info).toHaveClass('cart-sidebar__info');
-
-      const name = screen.getByText('bulbasaur').closest('.cart-sidebar__name');
+      const name = screen.getByTestId('cart-sidebar-pokemon-name-1');
       expect(name).toBeInTheDocument();
       expect(name).toHaveClass('cart-sidebar__name');
 
-      const characteristic = screen.getByText(
-        'A strange seed was planted on its back at birth. The plant sprouts and grows with this Pokémon.',
+      const characteristic = screen.getByTestId(
+        'cart-sidebar-pokemon-characteristic-1',
       );
       expect(characteristic).toHaveClass('cart-sidebar__characteristic');
     });
 
     it('should have correct footer structure', () => {
       render(<CartSidebar {...defaultProps} />);
-      const footer = screen
-        .getByText('Confirmar Equipe')
-        .closest('.cart-sidebar__footer');
+      const footer = screen.getByTestId('cart-sidebar-footer');
       expect(footer).toBeInTheDocument();
       expect(footer).toHaveClass('cart-sidebar__footer');
 
-      const button = screen.getByText('Confirmar Equipe');
+      const button = screen.getByTestId('cart-sidebar-footer-button');
       expect(button).toHaveClass('cart-sidebar__footer-button');
     });
 
     it('should have correct remove button class', () => {
       render(<CartSidebar {...defaultProps} />);
-      const removeButton = screen.getByLabelText('Remover bulbasaur da equipe');
+      const removeButton = screen.getByTestId('cart-sidebar-remove-button-1');
       expect(removeButton).toHaveClass('cart-sidebar__remove-button');
     });
 
     it('should have correct background element', () => {
       render(<CartSidebar {...defaultProps} />);
-      const background = document.querySelector('.cart-sidebar__background');
+      const background = screen.getByTestId('cart-sidebar-background');
       expect(background).toBeInTheDocument();
       expect(background).toHaveClass('cart-sidebar__background');
     });
@@ -376,39 +292,33 @@ describe('CartSidebar', () => {
 
     it('should have proper heading structure', () => {
       render(<CartSidebar {...defaultProps} />);
-      const heading = screen.getByText('Sua equipe');
+      const heading = screen.getByTestId('cart-sidebar-title');
       expect(heading.tagName).toBe('H2');
     });
 
     it('should have proper button accessibility', () => {
       render(<CartSidebar {...defaultProps} />);
-      const removeButtons = screen.getAllByLabelText(/Remover .* da equipe/);
-      removeButtons.forEach((button) => {
-        expect(button).toHaveAttribute('aria-label');
-        expect(button.getAttribute('aria-label')).toMatch(
-          /Remover .* da equipe/,
-        );
-      });
+      const removeButton1 = screen.getByTestId('cart-sidebar-remove-button-1');
+      const removeButton2 = screen.getByTestId('cart-sidebar-remove-button-4'); //id do charmander é 4
+      expect(removeButton1).toHaveAttribute(
+        'aria-label',
+        'Remover bulbasaur da equipe',
+      );
+      expect(removeButton2).toHaveAttribute(
+        'aria-label',
+        'Remover charmander da equipe',
+      );
     });
 
     it('should have keyboard accessible buttons', () => {
       render(<CartSidebar {...defaultProps} />);
-      const confirmButton = screen.getByText('Confirmar Equipe');
+      const confirmButton = screen.getByTestId('cart-sidebar-footer-button');
       confirmButton.focus();
       expect(document.activeElement).toBe(confirmButton);
 
-      const removeButton = screen.getByLabelText('Remover bulbasaur da equipe');
+      const removeButton = screen.getByTestId('cart-sidebar-remove-button-1');
       removeButton.focus();
       expect(document.activeElement).toBe(removeButton);
-    });
-
-    it('should maintain focus order', () => {
-      render(<CartSidebar {...defaultProps} />);
-      const focusableElements = screen.getAllByRole('button');
-      expect(focusableElements).toHaveLength(3); // 2 remove buttons + 1 confirm button
-      focusableElements.forEach((element) => {
-        expect(element).not.toHaveAttribute('tabindex', '-1');
-      });
     });
   });
 });

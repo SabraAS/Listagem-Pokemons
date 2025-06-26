@@ -77,3 +77,5 @@ export const mockPokemons = [
       'Obviously prefers hot places. When it rains, steam is said to spout from the tip of its tail.',
   },
 ];
+
+export const mockSinglePokemon = mockPokemons[0];

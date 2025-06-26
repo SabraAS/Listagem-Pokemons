@@ -1,11 +1,12 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`ConfirmationModal > should match snapshot 1`] = `
+exports[`ConfirmationModal > Rendering > should match snapshot 1`] = `
 <div>
   <div
-    aria-labelledby="modal-title"
+    aria-label="Modal de confirmação de equipe"
     aria-modal="true"
     class="confirmation-modal"
+    data-testid="confirmation-modal"
     role="dialog"
   >
     <div
@@ -14,7 +15,7 @@ exports[`ConfirmationModal > should match snapshot 1`] = `
       <button
         aria-label="Fechar modal"
         class="confirmation-modal__close-button"
-        data-testid="modal-close-button"
+        data-testid="confirmation-modal-close-button"
       >
         ×
       </button>
@@ -23,23 +24,26 @@ exports[`ConfirmationModal > should match snapshot 1`] = `
       >
         <div
           class="confirmation-modal__check"
+          data-testid="confirmation-modal-check"
         >
           ✓
         </div>
         <h2
           class="confirmation-modal__title"
-          id="modal-title"
+          data-testid="confirmation-modal-title"
         >
           Equipe formada
         </h2>
         <p
           class="confirmation-modal__subtitle"
+          data-testid="confirmation-modal-subtitle"
         >
           Sua equipe está pronta!
         </p>
       </div>
       <div
         class="confirmation-modal__list"
+        data-testid="confirmation-modal-list"
       >
         <div
           class="confirmation-modal__item"
@@ -50,16 +54,19 @@ exports[`ConfirmationModal > should match snapshot 1`] = `
             <img
               alt="Imagem do bulbasaur"
               class="confirmation-modal__image"
+              data-testid="confirmation-modal-pokemon-image-1"
               src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/1.svg"
             />
             <p
               class="confirmation-modal__name"
+              data-testid="confirmation-modal-pokemon-name-1"
             >
               bulbasaur
             </p>
           </div>
           <p
             class="confirmation-modal__characteristic"
+            data-testid="confirmation-modal-pokemon-characteristic-1"
           >
             A strange seed was planted on its back at birth. The plant sprouts and grows with this Pokémon.
           </p>
@@ -73,16 +80,19 @@ exports[`ConfirmationModal > should match snapshot 1`] = `
             <img
               alt="Imagem do charmander"
               class="confirmation-modal__image"
+              data-testid="confirmation-modal-pokemon-image-4"
               src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/4.svg"
             />
             <p
               class="confirmation-modal__name"
+              data-testid="confirmation-modal-pokemon-name-4"
             >
               charmander
             </p>
           </div>
           <p
             class="confirmation-modal__characteristic"
+            data-testid="confirmation-modal-pokemon-characteristic-4"
           >
             Obviously prefers hot places. When it rains, steam is said to spout from the tip of its tail.
           </p>
@@ -97,12 +107,15 @@ exports[`ConfirmationModal > should match snapshot 1`] = `
           <p>
             Total de pokémons na equipe:
           </p>
-          <p>
+          <p
+            data-testid="confirmation-modal-total"
+          >
             2
           </p>
         </div>
         <button
           class="confirmation-modal__button"
+          data-testid="confirmation-modal-button"
         >
           Começar nova equipe
         </button>

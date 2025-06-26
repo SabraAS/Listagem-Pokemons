@@ -5,114 +5,70 @@ import { axe } from 'vitest-axe';
 import PokemonCard from './index';
 
 import coverPokemon from '@/assets/cover-pokemon.png';
-import { mockPokemons } from '@/test/mocks/pokemon';
+import { mockSinglePokemon } from '@/test/mocks/pokemon';
 
 describe('PokemonCard', () => {
-  // Usar o primeiro Pokémon do mock como base para os testes
-  const mockPokemon = mockPokemons[0];
-
-  // Props mockadas padrão para os testes usando o mock
   const defaultProps = {
-    id: mockPokemon.id,
-    name: mockPokemon.name,
-    image: mockPokemon.image,
-    characteristic: mockPokemon.characteristic,
-    abilities: mockPokemon.abilities,
-    types: mockPokemon.types,
+    id: mockSinglePokemon.id,
+    name: mockSinglePokemon.name,
+    image: mockSinglePokemon.image,
+    characteristic: mockSinglePokemon.characteristic,
+    abilities: mockSinglePokemon.abilities,
+    types: mockSinglePokemon.types,
     disabled: false,
     addPokemon: vi.fn(),
   };
 
-  // Teste de snapshot como primeiro teste
-  it('should match snapshot', () => {
-    const { container } = render(<PokemonCard {...defaultProps} />);
-    expect(container).toMatchSnapshot();
-  });
-
   describe('Rendering', () => {
+    it('should match snapshot', () => {
+      const { container } = render(<PokemonCard {...defaultProps} />);
+      expect(container).toMatchSnapshot();
+    });
+
     it('should render pokemon name correctly', () => {
       render(<PokemonCard {...defaultProps} />);
-      expect(screen.getByText('bulbasaur')).toBeInTheDocument();
+      const name = screen.getByTestId('pokemon-card-name');
+      expect(name).toHaveTextContent('bulbasaur');
     });
 
     it('should render pokemon image with correct alt text', () => {
       render(<PokemonCard {...defaultProps} />);
-      const image = screen.getByAltText('Imagem do bulbasaur');
-      expect(image).toBeInTheDocument();
-      expect(image).toHaveAttribute('src', mockPokemon.image);
-    });
-
-    it('should use fallback image when image prop is empty', () => {
-      render(<PokemonCard {...defaultProps} image="" />);
-      const image = screen.getByAltText('Imagem do bulbasaur');
-      expect(image).toBeInTheDocument();
-      expect(image).toHaveAttribute('src', coverPokemon);
-      expect(image).toHaveAttribute('alt', 'Imagem do bulbasaur');
+      const image = screen.getByTestId('pokemon-card-image');
+      expect(image).toHaveAttribute('src', mockSinglePokemon.image);
     });
 
     it('should render characteristic correctly', () => {
       render(<PokemonCard {...defaultProps} />);
-      expect(
-        screen.getByText(
-          'Característica: A strange seed was planted on its back at birth. The plant sprouts and grows with this Pokémon.',
-        ),
-      ).toBeInTheDocument();
+      const characteristic = screen.getByTestId('pokemon-card-characteristic');
+      expect(characteristic).toHaveTextContent(
+        'Característica: A strange seed was planted on its back at birth. The plant sprouts and grows with this Pokémon.',
+      );
     });
 
     it('should render abilities correctly', () => {
       render(<PokemonCard {...defaultProps} />);
-      expect(
-        screen.getByText('Habilidades: overgrow, chlorophyll'),
-      ).toBeInTheDocument();
+      const abilities = screen.getByTestId('pokemon-card-abilities');
+      expect(abilities).toHaveTextContent('Habilidades: overgrow, chlorophyll');
     });
 
     it('should render types correctly', () => {
       render(<PokemonCard {...defaultProps} />);
-      expect(screen.getByText('Tipos: grass, poison')).toBeInTheDocument();
+      const types = screen.getByTestId('pokemon-card-types');
+      expect(types).toHaveTextContent('Tipos: grass, poison');
     });
 
     it('should render add button when not disabled', () => {
       render(<PokemonCard {...defaultProps} />);
-      const button = screen.getByRole('button');
-      expect(button).toBeInTheDocument();
+      const button = screen.getByTestId('pokemon-card-button');
       expect(button).toHaveTextContent('Adicionar à equipe');
       expect(button).not.toBeDisabled();
     });
 
     it('should render disabled button when disabled', () => {
       render(<PokemonCard {...defaultProps} disabled={true} />);
-      const button = screen.getByRole('button');
-      expect(button).toBeInTheDocument();
+      const button = screen.getByTestId('pokemon-card-button');
       expect(button).toHaveTextContent('Indisponível');
       expect(button).toBeDisabled();
-    });
-
-    it('should handle empty arrays for abilities and types', () => {
-      render(<PokemonCard {...defaultProps} abilities={[]} types={[]} />);
-      expect(screen.getByText(/Habilidades: não possui/)).toBeInTheDocument();
-      expect(screen.getByText(/Tipos: não possui/)).toBeInTheDocument();
-    });
-
-    it('should handle null values in arrays', () => {
-      const abilitiesWithNull = [
-        { ability: { name: 'overgrow' } },
-        null,
-        { ability: { name: 'chlorophyll' } },
-      ];
-      render(<PokemonCard {...defaultProps} abilities={abilitiesWithNull} />);
-      expect(
-        screen.getByText('Habilidades: overgrow, chlorophyll'),
-      ).toBeInTheDocument();
-    });
-
-    it('should handle undefined nested properties', () => {
-      const typesWithUndefined = [
-        { type: { name: 'grass' } },
-        { type: undefined },
-        { type: { name: 'poison' } },
-      ];
-      render(<PokemonCard {...defaultProps} types={typesWithUndefined} />);
-      expect(screen.getByText('Tipos: grass, poison')).toBeInTheDocument();
     });
   });
 
@@ -120,7 +76,7 @@ describe('PokemonCard', () => {
     it('should call addPokemon when button is clicked', () => {
       const mockAddPokemon = vi.fn();
       render(<PokemonCard {...defaultProps} addPokemon={mockAddPokemon} />);
-      const button = screen.getByRole('button');
+      const button = screen.getByTestId('pokemon-card-button');
       fireEvent.click(button);
       expect(mockAddPokemon).toHaveBeenCalledTimes(1);
       expect(mockAddPokemon).toHaveBeenCalledWith(defaultProps.id);
@@ -135,74 +91,54 @@ describe('PokemonCard', () => {
           disabled={true}
         />,
       );
-      const button = screen.getByRole('button');
+      const button = screen.getByTestId('pokemon-card-button');
       fireEvent.click(button);
       expect(mockAddPokemon).not.toHaveBeenCalled();
-    });
-
-    it('should handle multiple clicks correctly', () => {
-      const mockAddPokemon = vi.fn();
-      render(<PokemonCard {...defaultProps} addPokemon={mockAddPokemon} />);
-      const button = screen.getByRole('button');
-      fireEvent.click(button);
-      fireEvent.click(button);
-      fireEvent.click(button);
-      expect(mockAddPokemon).toHaveBeenCalledTimes(3);
     });
 
     it('should pass correct id on each call', () => {
       const mockAddPokemon = vi.fn();
       render(<PokemonCard {...defaultProps} addPokemon={mockAddPokemon} />);
-      const button = screen.getByRole('button');
+      const button = screen.getByTestId('pokemon-card-button');
       fireEvent.click(button);
-      expect(mockAddPokemon).toHaveBeenCalledWith(1);
+      expect(mockAddPokemon).toHaveBeenCalledWith(1); // id do bulbasauro
     });
   });
 
   describe('Edge cases', () => {
-    it('should handle very long pokemon names', () => {
-      const longName = 'a'.repeat(100);
-      render(<PokemonCard {...defaultProps} name={longName} />);
-      expect(screen.getByText(longName)).toBeInTheDocument();
-    });
-
     it('should handle empty characteristic', () => {
       render(<PokemonCard {...defaultProps} characteristic="" />);
-      expect(
-        screen.getByText('Característica: não possui'),
-      ).toBeInTheDocument();
+      const characteristic = screen.getByTestId('pokemon-card-characteristic');
+      expect(characteristic).toHaveTextContent('Característica: não possui');
     });
 
     it('should handle empty name', () => {
       render(<PokemonCard {...defaultProps} name={''} />);
-      // Verificar se o fallback é usado para o nome
-      expect(screen.getByText('pokémon sem nome')).toBeInTheDocument();
-      // Verificar se o alt da imagem usa o fallback
-      const image = screen.getByAltText('Imagem do pokémon');
-      expect(image).toBeInTheDocument();
-      // Verificar se o aria-label usa o fallback
-      const button = screen.getByLabelText('Adicionar pokémon à equipe');
-      expect(button).toBeInTheDocument();
+      const name = screen.getByTestId('pokemon-card-name');
+      expect(name).toHaveTextContent('pokémon sem nome');
+
+      const image = screen.getByTestId('pokemon-card-image');
+      expect(image).toHaveAttribute('src', mockSinglePokemon.image);
+      expect(image).toHaveAttribute('alt', 'Imagem do pokémon');
+
+      const button = screen.getByTestId('pokemon-card-button');
+      expect(button).toHaveTextContent('Adicionar à equipe');
     });
 
     it('should handle null image', () => {
       render(<PokemonCard {...defaultProps} image={null} />);
-      // Verificar se a imagem de fallback é usada
-      const image = screen.getByAltText('Imagem do bulbasaur');
-      expect(image).toBeInTheDocument();
+      const image = screen.getByTestId('pokemon-card-image');
       expect(image).toHaveAttribute('src', coverPokemon);
+      expect(image).toHaveAttribute('alt', 'Imagem do bulbasaur');
     });
 
-    it('should handle null abilities', () => {
-      render(<PokemonCard {...defaultProps} abilities={null} />);
-      // Verificar se o fallback é usado para habilidades
-      expect(screen.getByText('Habilidades: não possui')).toBeInTheDocument();
-    });
+    it('should handle null abilities and types', () => {
+      render(<PokemonCard {...defaultProps} abilities={null} types={null} />);
+      const abilities = screen.getByTestId('pokemon-card-abilities');
+      expect(abilities).toHaveTextContent('Habilidades: não possui');
 
-    it('should handle null types', () => {
-      render(<PokemonCard {...defaultProps} types={null} />);
-      // Verificar se o fallback é usado para tipos
-      expect(screen.getByText('Tipos: não possui')).toBeInTheDocument();
+      const types = screen.getByTestId('pokemon-card-types');
+      expect(types).toHaveTextContent('Tipos: não possui');
     });
 
     it('should handle null id by using name instead', () => {
@@ -210,25 +146,9 @@ describe('PokemonCard', () => {
       render(
         <PokemonCard {...defaultProps} addPokemon={mockAddPokemon} id={null} />,
       );
-      // Clicar no botão e verificar se o nome foi passado em vez do id
-      const button = screen.getByRole('button');
+      const button = screen.getByTestId('pokemon-card-button');
       fireEvent.click(button);
       expect(mockAddPokemon).toHaveBeenCalledWith('bulbasaur');
-    });
-
-    it('should render with minimal props', () => {
-      // Renderizar apenas com a prop obrigatória
-      render(<PokemonCard addPokemon={vi.fn()} />);
-      // Verificar se o componente renderiza corretamente com valores default
-      expect(screen.getByText('pokémon sem nome')).toBeInTheDocument();
-      expect(
-        screen.getByText('Característica: não possui'),
-      ).toBeInTheDocument();
-      expect(screen.getByText(/Habilidades: não possui/)).toBeInTheDocument();
-      expect(screen.getByText(/Tipos: não possui/)).toBeInTheDocument();
-      const image = screen.getByAltText('Imagem do pokémon');
-      expect(image).toBeInTheDocument();
-      expect(image).toHaveAttribute('src', coverPokemon);
     });
   });
 

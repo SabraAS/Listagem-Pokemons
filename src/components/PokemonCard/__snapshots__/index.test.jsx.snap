@@ -1,23 +1,27 @@
 // Vitest Snapshot v1, https://vitest.dev/guide/snapshot.html
 
-exports[`PokemonCard > should match snapshot 1`] = `
+exports[`PokemonCard > Rendering > should match snapshot 1`] = `
 <div>
   <div
     class="pokemon-card"
+    data-testid="pokemon-card"
   >
     <img
       alt="Imagem do bulbasaur"
       class="pokemon-card__image"
+      data-testid="pokemon-card-image"
       src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/dream-world/1.svg"
     />
     <button
       aria-label="Adicionar bulbasaur à equipe"
       class="pokemon-card__button"
+      data-testid="pokemon-card-button"
     >
       Adicionar à equipe
     </button>
     <h2
       class="pokemon-card__name"
+      data-testid="pokemon-card-name"
     >
       bulbasaur
     </h2>
@@ -26,18 +30,21 @@ exports[`PokemonCard > should match snapshot 1`] = `
     >
       <p
         class="pokemon-card__text"
+        data-testid="pokemon-card-characteristic"
       >
         Característica: 
         A strange seed was planted on its back at birth. The plant sprouts and grows with this Pokémon.
       </p>
       <p
         class="pokemon-card__text"
+        data-testid="pokemon-card-abilities"
       >
         Habilidades: 
         overgrow, chlorophyll
       </p>
       <p
         class="pokemon-card__text"
+        data-testid="pokemon-card-types"
       >
         Tipos: 
         grass, poison
