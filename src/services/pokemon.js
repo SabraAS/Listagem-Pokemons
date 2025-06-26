@@ -53,15 +53,13 @@ const getPokemonSpeciesDescription = async (speciesUrl) => {
       (entry) => entry.language.name === 'en',
     );
 
-    if (description) {
-      return description.flavor_text
-        .replace(/\f/g, ' ') // Remove form feed
-        .replace(/\n/g, ' ') // Remove quebras de linha
-        .replace(/\s+/g, ' ') // Remove espaços múltiplos
-        .trim();
-    }
-
-    return '';
+    return description
+      ? description.flavor_text
+          .replace(/\f/g, ' ')
+          .replace(/\n/g, ' ')
+          .replace(/\s+/g, ' ')
+          .trim()
+      : '';
   } catch (error) {
     console.log('Erro ao buscar descrição da espécie:', error);
     return '';
