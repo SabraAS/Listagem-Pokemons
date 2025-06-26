@@ -33,8 +33,6 @@ describe('ConfirmationModal UI Tests (Puppeteer)', () => {
       // Adicionar vários pokémons clicando nos botões
       const addButtons = await page.$$('.pokemon-card__button:not(:disabled)');
 
-      console.log('addButtons length for modal test:', addButtons.length);
-
       // Adicionar muitos pokémons para forçar o crescimento da lista
       for (let i = 0; i < Math.min(15, addButtons.length); i++) {
         await addButtons[i].click();
@@ -78,13 +76,6 @@ describe('ConfirmationModal UI Tests (Puppeteer)', () => {
       // Modal tem padding de 24px (top + bottom = 48px)
       const padding = 48;
       const maxListHeight = modalHeight - headerHeight - footerHeight - padding;
-
-      console.log('Modal Height:', modalHeight);
-      console.log('Header Height:', headerHeight);
-      console.log('Footer Height:', footerHeight);
-      console.log('List Height:', listHeight);
-      console.log('Max List Height Available:', maxListHeight);
-      console.log('Padding:', padding);
 
       // A lista nunca pode ser maior que o espaço disponível
       expect(listHeight).toBeLessThanOrEqual(maxListHeight);

@@ -179,9 +179,6 @@ describe('CartSidebar', () => {
     });
 
     it('should handle null pokemons prop without crashing', () => {
-      const consoleErrorSpy = vi
-        .spyOn(console, 'error')
-        .mockImplementation(() => {});
       render(
         <CartSidebar
           onConfirmTeam={vi.fn()}
@@ -194,13 +191,9 @@ describe('CartSidebar', () => {
       // Verificar se o botão está desabilitado
       const confirmButton = screen.getByText('Confirmar Equipe');
       expect(confirmButton).toBeDisabled();
-      consoleErrorSpy.mockRestore();
     });
 
     it('should handle undefined pokemons prop without crashing', () => {
-      const consoleErrorSpy = vi
-        .spyOn(console, 'error')
-        .mockImplementation(() => {});
       render(
         <CartSidebar
           onConfirmTeam={vi.fn()}
@@ -213,7 +206,6 @@ describe('CartSidebar', () => {
       // Verificar se o botão está desabilitado
       const confirmButton = screen.getByText('Confirmar Equipe');
       expect(confirmButton).toBeDisabled();
-      consoleErrorSpy.mockRestore();
     });
 
     it('should handle pokemon with null ID', () => {
@@ -246,9 +238,6 @@ describe('CartSidebar', () => {
     });
 
     it('should handle pokemon without name property', () => {
-      const consoleErrorSpy = vi
-        .spyOn(console, 'error')
-        .mockImplementation(() => {});
       const pokemonWithoutName = {
         ...mockPokemons[0],
         name: undefined,
@@ -263,7 +252,6 @@ describe('CartSidebar', () => {
       );
       // Verificar se o texto de fallback "pokémon sem nome" é exibido
       expect(screen.getByText('pokémon sem nome')).toBeInTheDocument();
-      consoleErrorSpy.mockRestore();
     });
 
     it('should handle pokemon with null name', () => {

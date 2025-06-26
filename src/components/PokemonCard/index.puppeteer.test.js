@@ -27,7 +27,6 @@ describe('PokemonCard UI Tests (Puppeteer)', () => {
 
   describe('Layout Tests with Long Content', () => {
     it('should not let the list exceed the available space in card', async () => {
-      console.log('95 Starting test');
       // Aguardar o carregamento dos pokémons
       await page.waitForSelector('.pokemon-card', { timeout: 10000 });
 
@@ -41,11 +40,6 @@ describe('PokemonCard UI Tests (Puppeteer)', () => {
       // Pegar o primeiro card para testar
       const firstCard = await page.$('.pokemon-card');
       const cardBox = await firstCard.boundingBox();
-
-      console.log('Card dimensions:', {
-        width: cardBox.width,
-        height: cardBox.height,
-      });
 
       // Verificar dimensões corretas
       expect(cardBox.width).toBeCloseTo(250, 0);
@@ -78,14 +72,6 @@ describe('PokemonCard UI Tests (Puppeteer)', () => {
       const margins = 8 + 16 + 8; // margins do button e name
       const maxInfoHeight =
         cardHeight - imageHeight - buttonHeight - nameHeight - margins;
-
-      console.log('Card Height:', cardHeight);
-      console.log('Image Height:', imageHeight);
-      console.log('Button Height:', buttonHeight);
-      console.log('Name Height:', nameHeight);
-      console.log('Info Height:', infoHeight);
-      console.log('Max Info Height Available:', maxInfoHeight);
-      console.log('Margins:', margins);
 
       // O info nunca pode ser maior que o espaço disponível
       expect(infoHeight).toBeLessThanOrEqual(maxInfoHeight);
@@ -120,24 +106,19 @@ describe('PokemonCard UI Tests (Puppeteer)', () => {
 
       // Verificar o nome do Pokémon que está sendo testado
       const nameElements = await page.$$('.pokemon-card__name');
-      console.log('Número de cards de nome:', nameElements.length);
 
       for (let i = 0; i < nameElements.length; i++) {
         const nameText = await nameElements[i].evaluate((el) => el.textContent);
         const textContent = await textElements[i].evaluate(
           (el) => el.textContent,
         );
-        console.log(`Nome do Pokémon ${i + 1}:`, nameText);
-        console.log(`Texto do Pokémon ${i + 1}:`, textContent);
       }
 
       // Verificar se a característica longa está sendo exibida
       for (const textElement of textElements) {
         const textContent = await textElement.evaluate((el) => el.textContent);
-        console.log('Texto encontrado:', textContent.substring(0, 100) + '...');
 
         if (textContent.includes('Característica:')) {
-          console.log('Característica completa:', textContent);
           expect(textContent).toContain(textContent);
         }
       }
@@ -154,11 +135,6 @@ describe('PokemonCard UI Tests (Puppeteer)', () => {
       // Verificar se todos os cards têm as mesmas dimensões
       for (let i = 0; i < Math.min(3, pokemonCards.length); i++) {
         const cardBox = await pokemonCards[i].boundingBox();
-
-        console.log(`Card ${i + 1} dimensions:`, {
-          width: cardBox.width,
-          height: cardBox.height,
-        });
 
         // Todos os cards devem ter as mesmas dimensões
         expect(cardBox.width).toBeCloseTo(250, 0);
