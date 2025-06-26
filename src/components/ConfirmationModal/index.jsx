@@ -65,7 +65,7 @@ const ConfirmationModal = ({ pokemons = [], onClose, onStartNewTeam }) => {
                 className="confirmation-modal__characteristic"
                 data-testid={`confirmation-modal-pokemon-characteristic-${pokemon?.id}`}
               >
-                {pokemon?.characteristic || 'não possui'}
+                {pokemon?.characteristic || 'não possui característica'}
               </p>
             </div>
           ))}

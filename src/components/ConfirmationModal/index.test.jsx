@@ -187,7 +187,7 @@ describe('ConfirmationModal', () => {
       );
       expect(name1).toHaveTextContent('pokémon sem nome');
       expect(name2).toHaveTextContent('test');
-      expect(characteristic1).toHaveTextContent('não possui');
+      expect(characteristic1).toHaveTextContent('não possui característica');
       expect(characteristic2).toHaveTextContent('test char');
       const total = screen.getByTestId('confirmation-modal-total');
       expect(total).toBeInTheDocument();
@@ -260,7 +260,10 @@ describe('ConfirmationModal', () => {
         />,
       );
 
-      expect(screen.getByText('bulbasaur')).toBeInTheDocument();
+      const characteristic = screen.getByTestId(
+        'confirmation-modal-pokemon-characteristic-1',
+      );
+      expect(characteristic).toHaveTextContent('não possui característica');
     });
 
     it('should handle pokemon with null image', () => {
