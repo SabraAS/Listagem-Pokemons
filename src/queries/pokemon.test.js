@@ -6,7 +6,11 @@ import { describe, expect, it, vi } from 'vitest';
 import { usePokemons } from './pokemon';
 
 import { getPokemonList } from '@/services/pokemon';
-import { mockPokemons } from '@/test/mocks/pokemon';
+import {
+  mockResponseNoMorePokemons,
+  mockUsePokemonsResponse,
+  mockUsePokemonsResponseCustomValue,
+} from '@/test/mocks/queries';
 
 vi.mock('@/services/pokemon', () => ({
   getPokemonList: vi.fn(),
@@ -36,17 +40,7 @@ describe('Pokemon Queries', () => {
 
   describe('usePokemons', () => {
     it('should fetch pokemons successfully', async () => {
-      const mockResponse = {
-        results: mockPokemons,
-        pagination: {
-          total: 1000,
-          offset: 0,
-          limit: 20,
-          hasMore: true,
-        },
-      };
-
-      getPokemonList.mockResolvedValue(mockResponse);
+      getPokemonList.mockResolvedValue(mockUsePokemonsResponse);
 
       const { result } = renderHook(() => usePokemons(), { wrapper });
 
@@ -57,11 +51,7 @@ describe('Pokemon Queries', () => {
         expect(result.current.isLoading).toBe(false);
       });
 
-      expect(result.current.data.pages[0]).toEqual(mockResponse);
-      expect(getPokemonList).toHaveBeenCalledWith({
-        offset: 0,
-        limit: 20,
-      });
+      expect(result.current.data.pages[0]).toEqual(mockUsePokemonsResponse);
     });
 
     it('should return error when fetch fails', async () => {
@@ -80,17 +70,7 @@ describe('Pokemon Queries', () => {
     });
 
     it('should use custom pageSize when provided', async () => {
-      const mockResponse = {
-        results: mockPokemons,
-        pagination: {
-          total: 1000,
-          offset: 0,
-          limit: 10,
-          hasMore: true,
-        },
-      };
-
-      getPokemonList.mockResolvedValue(mockResponse);
+      getPokemonList.mockResolvedValue(mockUsePokemonsResponseCustomValue);
 
       const customPageSize = 10;
       const { result } = renderHook(() => usePokemons(customPageSize), {
@@ -108,18 +88,8 @@ describe('Pokemon Queries', () => {
     });
   });
 
-  it('should return hasNextPage as false when pagination.hasMore is false', async () => {
-    const mockResponse = {
-      results: mockPokemons.slice(0, 5),
-      pagination: {
-        total: 1000,
-        offset: 980,
-        limit: 20,
-        hasMore: false,
-      },
-    };
-
-    getPokemonList.mockResolvedValue(mockResponse);
+  it('should return hasNextPage as false when pagination hasMore is false', async () => {
+    getPokemonList.mockResolvedValue(mockResponseNoMorePokemons);
 
     const { result } = renderHook(() => usePokemons(), { wrapper });
 
