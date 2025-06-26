@@ -8,7 +8,6 @@ import { usePokemons } from './pokemon';
 import { getPokemonList } from '@/services/pokemon';
 import { mockPokemons } from '@/test/mocks/pokemon';
 
-// Mock do serviço
 vi.mock('@/services/pokemon', () => ({
   getPokemonList: vi.fn(),
 }));
@@ -37,13 +36,12 @@ describe('Pokemon Queries', () => {
 
   describe('usePokemons', () => {
     it('should fetch pokemons successfully', async () => {
-      // Mock do retorno com o formato correto (results e pagination)
       const mockResponse = {
         results: mockPokemons,
         pagination: {
           total: 1000,
           offset: 0,
-          limit: 21,
+          limit: 20,
           hasMore: true,
         },
       };
@@ -59,11 +57,10 @@ describe('Pokemon Queries', () => {
         expect(result.current.isLoading).toBe(false);
       });
 
-      // Verifica se os dados foram carregados corretamente
       expect(result.current.data.pages[0]).toEqual(mockResponse);
       expect(getPokemonList).toHaveBeenCalledWith({
         offset: 0,
-        limit: 21,
+        limit: 20,
       });
     });
 
@@ -78,13 +75,11 @@ describe('Pokemon Queries', () => {
         expect(result.current.isError).toBe(true);
       });
 
-      // Verify error properties
       expect(result.current.error.message).toBe(errorMessage);
       expect(result.current.error).toBeInstanceOf(Error);
     });
 
     it('should use custom pageSize when provided', async () => {
-      // Mock do retorno com o formato correto (results e pagination)
       const mockResponse = {
         results: mockPokemons,
         pagination: {
@@ -106,7 +101,6 @@ describe('Pokemon Queries', () => {
         expect(result.current.isLoading).toBe(false);
       });
 
-      // Verifica se os parâmetros corretos foram passados
       expect(getPokemonList).toHaveBeenCalledWith({
         offset: 0,
         limit: customPageSize,
@@ -115,14 +109,13 @@ describe('Pokemon Queries', () => {
   });
 
   it('should return hasNextPage as false when pagination.hasMore is false', async () => {
-    // Mock response with hasMore set to false
     const mockResponse = {
-      results: mockPokemons.slice(0, 5), // Simulating last few items
+      results: mockPokemons.slice(0, 5),
       pagination: {
         total: 1000,
         offset: 980,
-        limit: 21,
-        hasMore: false, // This is the key property we're testing
+        limit: 20,
+        hasMore: false,
       },
     };
 
@@ -130,19 +123,15 @@ describe('Pokemon Queries', () => {
 
     const { result } = renderHook(() => usePokemons(), { wrapper });
 
-    // Wait for query to complete
     await waitFor(() => {
       expect(result.current.isLoading).toBe(false);
     });
 
-    // Verify that hasNextPage is false when hasMore is false
     expect(result.current.hasNextPage).toBe(false);
 
-    // Test the fetchNextPage function - it should not call getPokemonList again
     const initialCallCount = getPokemonList.mock.calls.length;
     result.current.fetchNextPage();
 
-    // Wait a moment and verify getPokemonList wasn't called again
     await new Promise((resolve) => setTimeout(resolve, 100));
     expect(getPokemonList.mock.calls.length).toBe(initialCallCount);
   });

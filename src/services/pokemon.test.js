@@ -5,11 +5,9 @@ import { getPokemonList } from './pokemon';
 
 import { mockPokemons } from '@/test/mocks/pokemon';
 
-// Mock do axios
 vi.mock('axios');
 
 describe('Pokemon Service', () => {
-  // Mock do console.log
   const originalConsoleError = console.log;
   beforeAll(() => {
     console.log = vi.fn();
@@ -25,7 +23,6 @@ describe('Pokemon Service', () => {
 
   describe('getPokemonList', () => {
     test('should fetch pokemon list with correct data', async () => {
-      // Mock das chamadas de API
       const mockPokemonListResponse = {
         data: {
           results: [
@@ -82,7 +79,6 @@ describe('Pokemon Service', () => {
         },
       };
 
-      // Mock species description for bulbasaur
       const mockSpeciesResponse1 = {
         data: {
           flavor_text_entries: [
@@ -107,7 +103,6 @@ describe('Pokemon Service', () => {
         },
       };
 
-      // Mock species description for charmander
       const mockSpeciesResponse2 = {
         data: {
           flavor_text_entries: [
@@ -148,18 +143,14 @@ describe('Pokemon Service', () => {
 
       const result = await getPokemonList({ limit: 2 });
 
-      // Verifica se o retorno tem o formato correto
       expect(result).toHaveProperty('results');
       expect(result).toHaveProperty('pagination');
 
-      // Verifica se a lista tem o tamanho correto
       expect(result.results).toHaveLength(2);
 
-      // Verifica se os dados do pokémon estão corretos
       expect(result.results[0]).toEqual(mockPokemons[0]);
       expect(result.results[1]).toEqual(mockPokemons[1]);
 
-      // Verifica dados de paginação
       expect(result.pagination).toEqual({
         total: 1000,
         offset: 0,
@@ -167,7 +158,6 @@ describe('Pokemon Service', () => {
         hasMore: true,
       });
 
-      // Verifica se as chamadas foram feitas corretamente
       expect(axios.get).toHaveBeenCalledWith(
         'https://pokeapi.co/api/v2/pokemon?offset=0&limit=2',
       );
@@ -240,7 +230,6 @@ describe('Pokemon Service', () => {
 
       const result = await getPokemonList();
 
-      // Verifica se retorna lista vazia quando há erro na descrição da espécie
       expect(result.results).toHaveLength(1);
       expect(result.results[0].characteristic).toBe('');
       expect(console.log).toHaveBeenCalledWith(
@@ -311,7 +300,6 @@ describe('Pokemon Service', () => {
 
       const result = await getPokemonList();
 
-      // Verifica se retorna descrição vazia quando não há texto em inglês
       expect(result.results).toHaveLength(1);
       expect(result.results[0].characteristic).toBe('');
     });
@@ -378,7 +366,6 @@ describe('Pokemon Service', () => {
 
       const result = await getPokemonList();
 
-      // Verifica se o texto foi formatado corretamente
       expect(result.results).toHaveLength(1);
       expect(result.results[0].characteristic).toBe(
         "Capable of copying an enemy's genetic code to instantly transform itself into a duplicate of the enemy.",
