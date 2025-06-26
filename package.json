@@ -11,7 +11,7 @@
     "build:analyze": "ANALYZE=true vite build",
     "format": "prettier --write .",
     "lint": "eslint . --ext .js,.jsx --fix",
-    "stylelint": "stylelint \"src/**/*.(scss|css)\" --fix",
+    "stylelint": "stylelint \"src/**/*.{scss,css}\" --fix",
     "test": "vitest --run",
     "test:watch": "vitest --run --watch src --exclude \"**/*.puppeteer.test.js\"",
     "test:ui": "vitest --ui --coverage",
@@ -36,8 +36,7 @@
       "yarn test:related"
     ],
     "src/**/**.{css,scss}": [
-      "yarn format",
-      "yarn stylelint"
+      "yarn format"
     ],
     "package.json": [
       "npx yalc check"

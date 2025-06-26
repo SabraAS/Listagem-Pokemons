@@ -1,7 +1,7 @@
 .home {
   padding: 64px;
 
-  @media (width <= 768px) {
+  @media (max-width: 768px) {
     padding: 24px;
   }
 
@@ -10,7 +10,7 @@
     font-weight: 700;
     margin-bottom: 24px;
 
-    @media (width <= 768px) {
+    @media (max-width: 768px) {
       font-size: 24px;
       text-align: center;
     }
@@ -24,7 +24,7 @@
     justify-content: space-between;
     width: 100%;
 
-    @media (width <= 768px) {
+    @media (max-width: 768px) {
       gap: 0;
     }
   }
@@ -38,7 +38,7 @@
     max-width: calc(100% - 500px);
     width: 100%;
 
-    @media (width <= 768px) {
+    @media (max-width: 768px) {
       align-items: center;
       flex-direction: column;
       justify-content: center;
