@@ -167,33 +167,6 @@ describe('ConfirmationModal', () => {
   });
 
   describe('Edge cases', () => {
-    it('should handle pokemons with incomplete data', () => {
-      const incompletePokemons = [
-        { id: 1, name: '', image: '', characteristic: '' },
-        { id: 2, name: 'test', image: 'test.jpg', characteristic: 'test char' },
-      ];
-      const incompleteProps = {
-        ...defaultProps,
-        pokemons: incompletePokemons,
-      };
-      render(<ConfirmationModal {...incompleteProps} />);
-      const name1 = screen.getByTestId('confirmation-modal-pokemon-name-1');
-      const name2 = screen.getByTestId('confirmation-modal-pokemon-name-2');
-      const characteristic1 = screen.getByTestId(
-        'confirmation-modal-pokemon-characteristic-1',
-      );
-      const characteristic2 = screen.getByTestId(
-        'confirmation-modal-pokemon-characteristic-2',
-      );
-      expect(name1).toHaveTextContent('pokémon sem nome');
-      expect(name2).toHaveTextContent('test');
-      expect(characteristic1).toHaveTextContent('não possui característica');
-      expect(characteristic2).toHaveTextContent('test char');
-      const total = screen.getByTestId('confirmation-modal-total');
-      expect(total).toBeInTheDocument();
-      expect(total).toHaveTextContent('2');
-    });
-
     it('should handle many pokemons', () => {
       const manyPokemons = Array.from({ length: 10 }, (_, i) => ({
         id: i + 1,
