@@ -14,7 +14,6 @@ export const getPokemonList = async ({ offset = 0, limit = 20 } = {}) => {
       pokemonList.map(async (pokemon) => {
         const pokemonData = await axios.get(pokemon.url);
 
-        // Busca a descrição da espécie
         const description = await getPokemonSpeciesDescription(
           pokemonData.data.species.url,
         );
@@ -45,20 +44,17 @@ export const getPokemonList = async ({ offset = 0, limit = 20 } = {}) => {
   }
 };
 
-// Função para buscar a descrição da espécie
 const getPokemonSpeciesDescription = async (speciesUrl) => {
   try {
     const response = await axios.get(speciesUrl);
     const data = response.data;
 
-    // Encontra o primeiro flavor_text em inglês
-    const englishFlavorText = data.flavor_text_entries.find(
+    const description = data.flavor_text_entries.find(
       (entry) => entry.language.name === 'en',
     );
 
-    if (englishFlavorText) {
-      // Remove quebras de linha e formata o texto
-      return englishFlavorText.flavor_text
+    if (description) {
+      return description.flavor_text
         .replace(/\f/g, ' ') // Remove form feed
         .replace(/\n/g, ' ') // Remove quebras de linha
         .replace(/\s+/g, ' ') // Remove espaços múltiplos
