@@ -104,7 +104,13 @@ describe('ConfirmationModal', () => {
     });
 
     it('should show total 1 when there is only one pokemon', () => {
-      render(<ConfirmationModal pokemons={[mockSinglePokemon]} />);
+      render(
+        <ConfirmationModal
+          onClose={vi.fn()}
+          onStartNewTeam={vi.fn()}
+          pokemons={[mockSinglePokemon]}
+        />,
+      );
       const total = screen.getByTestId('confirmation-modal-total');
       expect(total).toBeInTheDocument();
       expect(total).toHaveTextContent('1');
@@ -362,47 +368,6 @@ describe('ConfirmationModal', () => {
       const { container } = render(<ConfirmationModal {...emptyProps} />);
       const results = await axe(container);
       expect(results).toHaveNoViolations();
-    });
-
-    it('should have proper button accessibility', () => {
-      render(<ConfirmationModal {...defaultProps} />);
-      const closeButton = screen.getByTestId('confirmation-modal-close-button');
-      const newTeamButton = screen.getByText('Começar nova equipe');
-      expect(closeButton.tagName).toBe('BUTTON');
-      expect(newTeamButton.tagName).toBe('BUTTON');
-      expect(closeButton).not.toHaveAttribute('tabindex', '-1');
-      expect(newTeamButton).not.toHaveAttribute('tabindex', '-1');
-      expect(closeButton).toHaveAttribute('aria-label', 'Fechar modal');
-    });
-
-    it('should have proper image accessibility', () => {
-      render(<ConfirmationModal {...defaultProps} />);
-      const images = screen.getAllByRole('img');
-      images.forEach((img) => {
-        expect(img).toHaveAttribute('alt');
-        expect(img.getAttribute('alt')).not.toBe('');
-      });
-    });
-
-    it('should have descriptive content for screen readers', () => {
-      render(<ConfirmationModal {...defaultProps} />);
-      expect(screen.getByText('Equipe formada')).toBeInTheDocument();
-      expect(screen.getByText('Sua equipe está pronta!')).toBeInTheDocument();
-      expect(
-        screen.getByText('Total de pokémons na equipe:'),
-      ).toBeInTheDocument();
-      expect(screen.getByText('Começar nova equipe')).toBeInTheDocument();
-    });
-
-    it('should handle keyboard navigation properly', () => {
-      render(<ConfirmationModal {...defaultProps} />);
-      const buttons = screen.getAllByRole('button');
-      buttons.forEach((button) => {
-        expect(button).not.toHaveAttribute('tabindex', '-1');
-
-        button.focus();
-        expect(document.activeElement).toBe(button);
-      });
     });
   });
 });

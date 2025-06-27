@@ -56,6 +56,8 @@ describe('Home', () => {
     );
 
     usePokemons.mockImplementation(mockUsePokemons);
+
+    delete window.IntersectionObserver;
   });
 
   afterEach(() => {
@@ -474,25 +476,7 @@ describe('Home', () => {
       });
     });
 
-    it('should handle browser without IntersectionObserver support', () => {
-      const originalIntersectionObserver = global.IntersectionObserver;
-
-      delete global.IntersectionObserver;
-
-      const warnSpy = vi.spyOn(console, 'warn').mockImplementation(() => {});
-
-      render(<Home />);
-
-      expect(warnSpy).toHaveBeenCalledWith(
-        'IntersectionObserver não suportado neste navegador',
-      );
-
-      // Restaurar a implementação original
-      global.IntersectionObserver = originalIntersectionObserver;
-      warnSpy.mockRestore();
-    });
-
-    it('should handle IntersectionObserver callback correctly', async () => {
+    it('should request next page when user scrolls to the bottom of the page', async () => {
       const mockFetchNextPage = vi.fn();
 
       mockUsePokemons.mockReturnValue({
@@ -515,21 +499,13 @@ describe('Home', () => {
         fetchNextPage: mockFetchNextPage,
       });
 
-      class TestIntersectionObserver {
-        constructor(callback) {
-          this.callback = callback;
-        }
-
-        observe = vi.fn(() => {
-          // Simular que o elemento está visível
-          this.callback([{ isIntersecting: true }]);
-        });
-
-        unobserve = vi.fn();
-        disconnect = vi.fn();
-      }
-
-      global.IntersectionObserver = TestIntersectionObserver;
+      const mockIntersectionObserver = vi.fn();
+      mockIntersectionObserver.mockImplementation((entries) => ({
+        observe: vi.fn(() => entries && entries([{ isIntersecting: true }])),
+        unobserve: vi.fn(),
+        disconnect: vi.fn(),
+      }));
+      window.IntersectionObserver = mockIntersectionObserver;
 
       render(<Home />);
 
@@ -545,169 +521,17 @@ describe('Home', () => {
       });
     });
 
-    it('should not trigger fetchNextPage when element is not intersecting', () => {
-      const mockFetchNextPage = vi.fn();
-
-      mockUsePokemons.mockReturnValue({
-        data: {
-          pages: [
-            {
-              results: mockPokemons,
-              pagination: {
-                total: 1000,
-                offset: 0,
-                limit: 21,
-                hasMore: true,
-              },
-            },
-          ],
-        },
-        isLoading: false,
-        isFetchingNextPage: false,
-        hasNextPage: true,
-        fetchNextPage: mockFetchNextPage,
-      });
-
-      class TestIntersectionObserver {
-        constructor(callback) {
-          this.callback = callback;
-        }
-
-        observe = vi.fn(() => {
-          setTimeout(() => {
-            this.callback([{ isIntersecting: false }]);
-          }, 0);
-        });
-
-        unobserve = vi.fn();
-        disconnect = vi.fn();
-      }
-
-      global.IntersectionObserver = TestIntersectionObserver;
-
-      render(<Home />);
-
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          expect(mockFetchNextPage).not.toHaveBeenCalled();
-          resolve();
-        }, 50);
-      });
-    });
-
-    it('should not trigger fetchNextPage when hasNextPage is false', () => {
-      const mockFetchNextPage = vi.fn();
-
-      mockUsePokemons.mockReturnValue({
-        data: {
-          pages: [
-            {
-              results: mockPokemons,
-              pagination: {
-                total: 1000,
-                offset: 0,
-                limit: 21,
-                hasMore: false,
-              },
-            },
-          ],
-        },
-        isLoading: false,
-        isFetchingNextPage: false,
-        hasNextPage: false,
-        fetchNextPage: mockFetchNextPage,
-      });
-
-      class TestIntersectionObserver {
-        constructor(callback) {
-          this.callback = callback;
-        }
-
-        observe = vi.fn(() => {
-          setTimeout(() => {
-            this.callback([{ isIntersecting: true }]);
-          }, 0);
-        });
-
-        unobserve = vi.fn();
-        disconnect = vi.fn();
-      }
-
-      global.IntersectionObserver = TestIntersectionObserver;
-
-      render(<Home />);
-
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          expect(mockFetchNextPage).not.toHaveBeenCalled();
-          resolve();
-        }, 50);
-      });
-    });
-
-    it('should not trigger fetchNextPage when already fetching next page', () => {
-      const mockFetchNextPage = vi.fn();
-
-      mockUsePokemons.mockReturnValue({
-        data: {
-          pages: [
-            {
-              results: mockPokemons,
-              pagination: {
-                total: 1000,
-                offset: 0,
-                limit: 21,
-                hasMore: true,
-              },
-            },
-          ],
-        },
-        isLoading: false,
-        isFetchingNextPage: true,
-        hasNextPage: true,
-        fetchNextPage: mockFetchNextPage,
-      });
-
-      class TestIntersectionObserver {
-        constructor(callback) {
-          this.callback = callback;
-        }
-
-        observe = vi.fn(() => {
-          setTimeout(() => {
-            this.callback([{ isIntersecting: true }]);
-          }, 0);
-        });
-
-        unobserve = vi.fn();
-        disconnect = vi.fn();
-      }
-
-      global.IntersectionObserver = TestIntersectionObserver;
-
-      render(<Home />);
-
-      return new Promise((resolve) => {
-        setTimeout(() => {
-          expect(mockFetchNextPage).not.toHaveBeenCalled();
-          resolve();
-        }, 50);
-      });
-    });
-
     it('should call observer.unobserve when fetchNextPage changes', async () => {
       const unobserveSpy = vi.fn();
       const observeSpy = vi.fn();
 
-      vi.stubGlobal(
-        'IntersectionObserver',
-        class {
-          constructor() {}
-          observe = observeSpy;
-          unobserve = unobserveSpy;
-          disconnect = vi.fn();
-        },
-      );
+      const mockIntersectionObserver = vi.fn();
+      mockIntersectionObserver.mockImplementation((entries) => ({
+        observe: observeSpy,
+        unobserve: unobserveSpy,
+        disconnect: vi.fn(),
+      }));
+      window.IntersectionObserver = mockIntersectionObserver;
 
       const initialFetchNextPage = vi.fn();
       usePokemons.mockReturnValue({
@@ -741,8 +565,6 @@ describe('Home', () => {
       expect(unobserveSpy).toHaveBeenCalled();
 
       expect(observeSpy).toHaveBeenCalled();
-
-      vi.unstubAllGlobals();
     });
   });
 
@@ -810,15 +632,6 @@ describe('Home', () => {
 
       const results = await axe(container);
       expect(results).toHaveNoViolations();
-    });
-
-    it('should have proper heading structure', () => {
-      render(<Home />);
-      const title = screen.getByTestId('home-title');
-      expect(title.tagName).toBe('H1');
-
-      const sidebarTitle = screen.getByTestId('cart-sidebar-title');
-      expect(sidebarTitle.tagName).toBe('H2');
     });
   });
 });

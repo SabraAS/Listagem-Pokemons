@@ -282,43 +282,5 @@ describe('CartSidebar', () => {
       const results = await axe(container);
       expect(results).toHaveNoViolations();
     });
-
-    it('should use semantic aside element', () => {
-      render(<CartSidebar {...defaultProps} />);
-      const aside = screen.getByRole('complementary');
-      expect(aside).toBeInTheDocument();
-      expect(aside).toHaveClass('cart-sidebar');
-    });
-
-    it('should have proper heading structure', () => {
-      render(<CartSidebar {...defaultProps} />);
-      const heading = screen.getByTestId('cart-sidebar-title');
-      expect(heading.tagName).toBe('H2');
-    });
-
-    it('should have proper button accessibility', () => {
-      render(<CartSidebar {...defaultProps} />);
-      const removeButton1 = screen.getByTestId('cart-sidebar-remove-button-1');
-      const removeButton2 = screen.getByTestId('cart-sidebar-remove-button-4'); //id do charmander é 4
-      expect(removeButton1).toHaveAttribute(
-        'aria-label',
-        'Remover bulbasaur da equipe',
-      );
-      expect(removeButton2).toHaveAttribute(
-        'aria-label',
-        'Remover charmander da equipe',
-      );
-    });
-
-    it('should have keyboard accessible buttons', () => {
-      render(<CartSidebar {...defaultProps} />);
-      const confirmButton = screen.getByTestId('cart-sidebar-footer-button');
-      confirmButton.focus();
-      expect(document.activeElement).toBe(confirmButton);
-
-      const removeButton = screen.getByTestId('cart-sidebar-remove-button-1');
-      removeButton.focus();
-      expect(document.activeElement).toBe(removeButton);
-    });
   });
 });

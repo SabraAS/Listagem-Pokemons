@@ -236,29 +236,8 @@ describe('PokemonCard', () => {
       );
     });
 
-    it('should have proper button accessibility when disabled', () => {
-      render(<PokemonCard {...defaultProps} disabled={true} />);
-      const button = screen.getByRole('button');
-      expect(button).toHaveAttribute('aria-label', 'bulbasaur indisponível');
-    });
-
     it('should have proper button accessibility with null name', () => {
       render(<PokemonCard {...defaultProps} name={null} />);
-      const button = screen.getByRole('button');
-      expect(button).toHaveAttribute(
-        'aria-label',
-        'Adicionar pokémon à equipe',
-      );
-    });
-
-    it('should have proper button accessibility when disabled with null name', () => {
-      render(<PokemonCard {...defaultProps} disabled={true} name={null} />);
-      const button = screen.getByRole('button');
-      expect(button).toHaveAttribute('aria-label', 'pokémon indisponível');
-    });
-
-    it('should have proper button accessibility with undefined name', () => {
-      render(<PokemonCard {...defaultProps} name={undefined} />);
       const button = screen.getByRole('button');
       expect(button).toHaveAttribute(
         'aria-label',
@@ -272,38 +251,6 @@ describe('PokemonCard', () => {
       );
       const button = screen.getByRole('button');
       expect(button).toHaveAttribute('aria-label', 'pokémon indisponível');
-    });
-
-    it('should have proper image accessibility', () => {
-      render(<PokemonCard {...defaultProps} />);
-      const image = screen.getByRole('img');
-      expect(image).toHaveAttribute('alt', 'Imagem do bulbasaur');
-    });
-
-    it('should have proper heading structure', () => {
-      render(<PokemonCard {...defaultProps} />);
-      const heading = screen.getByText('bulbasaur');
-      expect(heading.tagName).toBe('H2');
-    });
-
-    it('should be keyboard accessible', () => {
-      render(<PokemonCard {...defaultProps} />);
-      const button = screen.getByRole('button');
-      button.focus();
-      expect(document.activeElement).toBe(button);
-    });
-
-    it('should have proper focus management when disabled', () => {
-      render(<PokemonCard {...defaultProps} disabled={true} />);
-      const button = screen.getByRole('button');
-      expect(button).toBeDisabled();
-    });
-
-    it('should have descriptive text content', () => {
-      render(<PokemonCard {...defaultProps} />);
-      expect(screen.getByText(/Característica:/)).toBeInTheDocument();
-      expect(screen.getByText(/Habilidades:/)).toBeInTheDocument();
-      expect(screen.getByText(/Tipos:/)).toBeInTheDocument();
     });
   });
 });

@@ -39,7 +39,7 @@ export const getPokemonList = async ({ offset = 0, limit = 20 } = {}) => {
       },
     };
   } catch (error) {
-    console.log('Erro ao buscar lista de Pokémon');
+    console.log('Erro ao buscar lista de pokémons');
     throw error;
   }
 };

@@ -39,12 +39,13 @@ const Home = () => {
   const observerRef = useRef(null);
 
   useEffect(() => {
+    // no caso dos testes não vai existir o IntersectionObserver
+    // então a gente checa se existe e se não existe, a gente não faz nada
+    // só para não ter que mockar em todos os testes
     if (!('IntersectionObserver' in window)) {
-      console.warn('IntersectionObserver não suportado neste navegador');
       return;
     }
 
-    // Configurar o Intersection Observer para detectar quando o usuário chega ao final da lista
     const observer = new IntersectionObserver(
       (entries) => {
         const [entry] = entries;
@@ -52,15 +53,16 @@ const Home = () => {
           fetchNextPage();
         }
       },
-      { threshold: 0.5 },
+      // assim que um unico pixel do elemento observado estiver visível,
+      // o observer é acionado
+      // torna a experiencia mais fluida pro usuario
+      { threshold: 0 },
     );
 
-    // Observar o elemento de carregamento
     if (observerRef.current) {
       observer.observe(observerRef.current);
     }
 
-    // Cleanup
     return () => {
       if (observerRef.current) {
         observer.unobserve(observerRef.current);
@@ -121,7 +123,6 @@ const Home = () => {
                 </li>
               ))}
 
-              {/* Elemento observado para carregar mais itens */}
               <li key="loader">
                 <div
                   className="home__loader"

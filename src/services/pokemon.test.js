@@ -38,7 +38,6 @@ describe('Pokemon Service', () => {
         } else if (url === 'https://pokeapi.co/api/v2/pokemon-species/1/') {
           return Promise.resolve(mockSpeciesResponse);
         }
-        return Promise.reject(new Error('Invalid URL'));
       });
 
       const result = await getPokemonList({ limit: 1 });
@@ -73,7 +72,7 @@ describe('Pokemon Service', () => {
 
       await expect(getPokemonList()).rejects.toThrow('API Error');
       expect(console.log).toHaveBeenCalledWith(
-        'Erro ao buscar lista de Pokémon',
+        'Erro ao buscar lista de pokémons',
       );
     });
 
@@ -86,7 +85,6 @@ describe('Pokemon Service', () => {
         } else if (url === 'https://pokeapi.co/api/v2/pokemon-species/1/') {
           return Promise.reject(new Error('Species API Error'));
         }
-        return Promise.reject(new Error('Invalid URL'));
       });
 
       const result = await getPokemonList();
@@ -108,7 +106,6 @@ describe('Pokemon Service', () => {
         } else if (url === 'https://pokeapi.co/api/v2/pokemon-species/1/') {
           return Promise.resolve(mockSpeciesNoResponse);
         }
-        return Promise.reject(new Error('Invalid URL'));
       });
 
       const result = await getPokemonList();

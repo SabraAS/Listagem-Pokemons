@@ -14,7 +14,6 @@ export const usePokemons = (pageSize = 20) => {
       if (!lastPage.pagination.hasMore) return undefined;
       return lastPage.pagination.offset + lastPage.pagination.limit;
     },
-    initialPageParam: 0,
     retry: false,
     refetchOnWindowFocus: false,
   });

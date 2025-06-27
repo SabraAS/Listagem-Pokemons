@@ -13,7 +13,7 @@
     "lint": "eslint . --ext .js,.jsx --fix",
     "stylelint": "stylelint \"src/**/*.{scss,css}\" --fix",
     "test": "vitest --run",
-    "test:watch": "vitest --run --watch src --exclude \"**/*.puppeteer.test.js\"",
+    "test:watch": "vitest --watch",
     "test:ui": "vitest --ui --coverage",
     "test:coverage": "vitest --run --coverage",
     "test:coverage:watch": "vitest --coverage",
