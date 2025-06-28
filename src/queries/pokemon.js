@@ -4,7 +4,7 @@ import { getPokemonList } from '@/services/pokemon';
 
 export const usePokemons = (pageSize = 20) => {
   return useInfiniteQuery({
-    queryKey: ['pokemons', 'infinite', pageSize],
+    queryKey: ['pokemons'],
     queryFn: ({ pageParam = 0 }) =>
       getPokemonList({
         offset: pageParam,

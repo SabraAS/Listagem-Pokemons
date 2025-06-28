@@ -8,6 +8,7 @@ export const getPokemonList = async ({ offset = 0, limit = 20 } = {}) => {
       `${BASE_URL}/pokemon?offset=${offset}&limit=${limit}`,
     );
     const pokemonList = response.data.results;
+    const hasMorePokemon = response.data.next !== null;
     const total = response.data.count;
 
     const pokemonData = await Promise.all(
@@ -35,7 +36,7 @@ export const getPokemonList = async ({ offset = 0, limit = 20 } = {}) => {
         total,
         offset,
         limit,
-        hasMore: offset + limit < total,
+        hasMore: hasMorePokemon,
       },
     };
   } catch (error) {
