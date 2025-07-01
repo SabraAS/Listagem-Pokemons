@@ -7,7 +7,6 @@ import Home from './app/Home';
 import './styles/App.scss';
 import './styles/index.scss';
 
-// Criar o cliente de consulta com configurações otimizadas
 const queryClient = new QueryClient({
   defaultOptions: {
     queries: {
