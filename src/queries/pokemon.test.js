@@ -86,23 +86,23 @@ describe('Pokemon Queries', () => {
         limit: customPageSize,
       });
     });
-  });
 
-  it('should return hasNextPage as false when pagination hasMore is false', async () => {
-    getPokemonList.mockResolvedValue(mockResponseNoMorePokemons);
+    it('should return hasNextPage as false when pagination hasMore is false', async () => {
+      getPokemonList.mockResolvedValue(mockResponseNoMorePokemons);
 
-    const { result } = renderHook(() => usePokemons(), { wrapper });
+      const { result } = renderHook(() => usePokemons(), { wrapper });
 
-    await waitFor(() => {
-      expect(result.current.isLoading).toBe(false);
+      await waitFor(() => {
+        expect(result.current.isLoading).toBe(false);
+      });
+
+      expect(result.current.hasNextPage).toBe(false);
+
+      const initialCallCount = getPokemonList.mock.calls.length;
+      result.current.fetchNextPage();
+
+      await new Promise((resolve) => setTimeout(resolve, 100));
+      expect(getPokemonList.mock.calls.length).toBe(initialCallCount);
     });
-
-    expect(result.current.hasNextPage).toBe(false);
-
-    const initialCallCount = getPokemonList.mock.calls.length;
-    result.current.fetchNextPage();
-
-    await new Promise((resolve) => setTimeout(resolve, 100));
-    expect(getPokemonList.mock.calls.length).toBe(initialCallCount);
   });
 });

@@ -28,8 +28,8 @@ describe('Pokemon Service', () => {
     vi.clearAllMocks();
   });
 
-  describe('getPokemonList', () => {
-    test('should fetch pokemon list with correct data', async () => {
+  describe('Services', () => {
+    it('should fetch pokemons with correct data', async () => {
       axios.get.mockImplementation((url) => {
         if (url === 'https://pokeapi.co/api/v2/pokemon?offset=0&limit=1') {
           return Promise.resolve(mockPokemonListResponse);
@@ -67,7 +67,7 @@ describe('Pokemon Service', () => {
       );
     });
 
-    it('should handle error when fetching pokemon list', async () => {
+    it('should handle error when fetching pokemons', async () => {
       axios.get.mockRejectedValue(new Error('API Error'));
 
       await expect(getPokemonList()).rejects.toThrow('API Error');
